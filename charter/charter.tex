@@ -24,22 +24,40 @@
 %	MEMO INFORMATION
 %-------------------------------------------------------------------------------
 
+% Suppress indents
+\setlength\parindent{0pt}
+
+\newcommand{\teamname}{uhhhh wat}
+
 \memoto{Walker White, Traci Nathans-Kelly} % Recipient(s)
 
-\memofrom{uhhhh wat} % Sender(s)
+\memofrom{\teamname} % Sender(s)
 
-\memosubject{Team Charter for wat} % Memo subject
+\memosubject{Team Charter for \teamname} % Memo subject
 
-\memodate{Tuesday, January 27, 2015}
+\memodate{\today}
 % Date, set to \today for automatically printing todays date
 
-\logo{\includegraphics[width=0.3\textwidth]{logo_cornell.png}}
+% \logo{\includegraphics[width=0.15\textwidth]{logo_cornell.jpg}}
 % Institution logo at the top right of the memo,
 % comment out this line for no logo
 
-% Custom environment for team roles:
-% \newenvironment{team}
+% Custom commands for team roles:
+% 1st argument is full name, 2nd argument is role
+\newcommand{\teammember}[2]{ \textbf{#1}\ (#2).\ }
 
+% 1st argument is the team member's preferred name
+\newenvironment{duties}[1]
+               {
+                 #1's duties include the following:
+                 \begin{itemize}
+               }
+               {
+                 \end{itemize}
+               }
+
+% 1st argument is the team member's preferred name
+\newcommand{\preferredemail}[2]{#1's preferred email is \texttt{#2}\\}
 
 %-------------------------------------------------------------------------------
 
@@ -51,6 +69,32 @@
 %	MEMO CONTENT
 %-------------------------------------------------------------------------------
 
+Our group, \textit{\teamname} has come up with the following charter.
+All team members have read and approve of this charter. The team has also
+discussed our individual expectations for a grade in this course.
+
+\section*{Team Roles}
+\teammember{Kylar Henderson}{Project Leader} Kylar has experience working
+with groups both within and outside of other courses. She is a Computer Science
+major and has completed all of the core CS classes, including CS 3110.
+Therefore she will also heavily focus on helping with programming. \\
+\begin{duties}{Kylar}
+  \item Assigning internal deadlines for the group members.
+\end{duties}
+\preferredemail{Kylar}{blah@cornell.edu}
+
+\teammember{Kylar Henderson}{Project Leader} Kylar has experience working
+with groups both within and outside of other courses. She is a Computer Science
+major and has completed all of the core CS classes, including CS 3110.
+Therefore she will also heavily focus on helping with programming. \\
+\begin{duties}{Kylar}
+  \item Assigning internal deadlines for the group members.
+\end{duties}
+\preferredemail{Kylar}{blah@cornell.edu}
+
+\section*{Team Coordination}
+
+\section*{Conflict Resolution}
 
 %-------------------------------------------------------------------------------
 
