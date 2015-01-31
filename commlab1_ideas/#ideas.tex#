@@ -1,0 +1,59 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Memo
+% LaTeX Template
+% Version 1.0 (30/12/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Rob Oakes (http://www.oak-tree.us) with modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[letterpaper,11pt]{texMemo} % Set the paper size (letterpaper, a4paper, etc) and font size (10pt, 11pt or 12pt)
+
+\usepackage{parskip} % Adds spacing between paragraphs
+\setlength{\parindent}{15pt} % Indent paragraphs
+
+%-------------------------------------------------------------------------------
+%	MEMO INFORMATION
+%-------------------------------------------------------------------------------
+
+% Suppress indents
+\setlength\parindent{0pt}
+
+\newcommand{\teamname}{uhhhh wat}
+
+\memoto{Walker White, Traci Nathans-Kelly} % Recipient(s)
+
+\memofrom{\teamname} % Sender(s)
+
+\memosubject{Team Charter for \teamname} % Memo subject
+
+\memodate{\today}
+% Date, set to \today for automatically printing todays date
+
+% \logo{\includegraphics[width=0.15\textwidth]{logo_cornell.jpg}}
+% Institution logo at the top right of the memo,
+% comment out this line for no logo
+
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the memo header information
+
+%-------------------------------------------------------------------------------
+%	MEMO CONTENT
+%-------------------------------------------------------------------------------
+
+Our team has come up with the following ideas for 
+
+%-------------------------------------------------------------------------------
+
+\end{document}
