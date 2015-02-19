@@ -1,0 +1,36 @@
+Gameplay Prototype: First software prototype; a throw-away prototype
+in any language.
+Technical Prototype: An evolutionary prototype of a
+technical component; should be written in LibGDX and Java.
+Alpha Release: Basic code complete with a playable level; should include a
+level editor
+Beta Release: Basic features complete with a several
+playable levels. Plans for user testing.
+Final Release: Levels complete but perhaps not polished.
+Bug fixing only at this point.
+
+Deliverables: What do you expect to show us in class for this
+particular milestone?  Which features are you choosing for for this
+milestone?  Level editor by alpha
+
+Test for Acceptance: How do we measure success?  How would you tell
+that the milestone was a failure?  How would you like for a
+deliverable to be evaluated for a grade?  Concrete goals
+
+Milestone 1: Gameplay Prototype: Deliverables: Test movement on rhythm
+(player and enemy) Test tile-based movement Reach goal: rhythm
+controller prototype Test for Acceptance Game doesn’t crash for 5
+different players Enemies and player are in sync (move at the same
+time)
+Milestone 2: Technical Prototype Deliverables: Prototype of the
+level editor XML parser At least be able to design the layout of a
+level Rhythm controller complete Test for Acceptance: 5 different
+users are able to construct a level Rhythm controller doesn’t desync
+noticeably
+Milestone 3: Alpha Release: Deliverables: minimal features
+Significant amount of music complete (at least 5 tracks?)  Test for
+Acceptance:
+Milestone 4: Beta Release: Deliverables:
+
+Test for Acceptance: Milestone 5: Final Release: Deliverables: Test
+for Acceptance:
