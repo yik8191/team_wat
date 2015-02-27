@@ -1,0 +1,60 @@
+CS 3152
+Group 1
+Idea Formation
+
+Thematic Focus
+What dream are you satisfying?
+I want to be a musician-swordsman slaying monsters and demons
+What is your setting?
+Some kind of dungeon, exact setting is unsure
+What is your perspective?
+Top down, possibly 2.5D
+A perspective that allows us to adequately portray objects,
+dangers,  from four directions (think Binding of Isaac, or
+some of the perspectives in Transistor)
+Gameplay Mechanics
+
+What are the player’s goals?
+Slash, block, dodge, and cast spells to fight off waves of enemies and obstacles
+Match the timing to the beat of the music in order to fill up the “sync” bar
+and gain bonuses
+
+What are the player actions?
+Standard top-down movement, not restricted to a grid (OR turning/changing the
+character’s currently-facing direction) - Primary
+Slash with a sword - Primary
+Use a shield - Secondary
+Cast a spell - Secondary
+What challenges does the player face?
+Effectively fighting enemies (Intrinsic challenge because it relates to
+simply game mechanics)
+Matching abilities with the rhythm of the game for bonuses (Extrinsic challenge
+because it depends on how well the player does it)
+
+Main Ideas
+2.5-D perspective, action-rhythm game
+Knight/warrior character moves around on a stage (OR stands on a platform on
+the center of the screen)
+Able to face 4 directions (No vertical movement off gound plane)
+Slashes, blocks and casts spells to fight waves of enemies/obstacles
+All of these abilities would be synced to a (preferably upbeat) music track--
+matching the rhythm would give the player bonuses
+Attacking enemies to the beat increases a sync meter
+The higher the sync meter, the more of a dance party the game becomes (more
+lights, more intense music)
+Bonuses may include increased damage to enemies
+Filling the bar enables the player to unleash large AoE attack around the
+character
+Discussion between stationary (almost like an action version of DDR/Osu!) and
+movement-based game (where matching the rhythm would still be a secondary objective)
+
+Comments by Walker White:
+
+I have read your idea. You get full credit for completing the communication lab. I have some critiques for your proposed game. These are mostly going to sound negative. That is because I am trying to get you on the right track before Concept Document, because your game idea is much harder to change after the Concept Document.
+
+It sounds like the game is Binding of Issac or Zelda with a rhythm component. There might be something here, but I need to know exactly how the rhythm element fits in with everything. Is it just tacked on to the side, or do I have to work to rhythm on everything I do? This needs clear storyboarding.
+
+You should keep the verbs to a minimum, as more verbs would make matching the rhythm very complex. As we discussed in class "cast a spell" is a very proxy and used as a codeword for "insert a lot of different abilities to be thought about later". Which I do not want.
+movement-based game (where matching the rhythm would still be a secondary
+objective)
+
