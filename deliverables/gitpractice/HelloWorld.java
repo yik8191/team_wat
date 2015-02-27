@@ -21,7 +21,7 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World");
 	System.out.println("Austin says hi!");
-	System.out.println("Charlie says WAT")
+	System.out.println("Charlie says WAT");
     }
 
 }
