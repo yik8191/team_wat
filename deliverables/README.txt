@@ -1,1 +1,1 @@
-wat
+wat.jpg
