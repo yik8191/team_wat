@@ -22,6 +22,7 @@ public class HelloWorld {
         System.out.println("Hello, World");
 	System.out.println("Austin says hi!");
 	System.out.println("Andrew says WAT");
+	System.out.println("Charlie says WAT");
     }
 
 }
