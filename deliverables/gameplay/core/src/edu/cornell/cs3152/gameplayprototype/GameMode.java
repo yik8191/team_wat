@@ -75,7 +75,7 @@ public class GameMode implements Screen{
 
 		// Pre-load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// knight.PreLoadContent(manager);
+		// Knight.PreLoadContent(manager);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class GameMode implements Screen{
 
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// knight.LoadContent(manager);
+		// Knight.LoadContent(manager);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class GameMode implements Screen{
 
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// knight.UnloadContent(manager);
+		// Knight.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -203,10 +203,11 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-				// TODO: intialize/reset the gameplayController
+				// TODO: intialize
 				break;
 			case PLAY:
-				play();
+				if (gameplayController.isGameOver()) reset();
+				else play();
 				break;
 		}
 
@@ -219,6 +220,13 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
+	}
+
+	/** This method resets the game */
+	protected void reset() {
+		gameState = gameState.INTRO;
+		// TODO: take care of other resetting code. E.g. call reset on gameplayController
+		// NO INITIALIZATION CODE HERE. That's taken care of in update.
 	}
 
 	/**
