@@ -3,7 +3,7 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "edu.cornell.cs3152.gameplay.desktop.DesktopLauncher"
+project.ext.mainClassName = "edu.cornell.cs3152.gameplayprototype.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
 task run(dependsOn: classes, type: JavaExec) {

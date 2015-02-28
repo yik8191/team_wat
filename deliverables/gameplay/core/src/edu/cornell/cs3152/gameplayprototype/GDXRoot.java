@@ -1,12 +1,20 @@
-package edu.cornell.cs3152.gameplay;
+package edu.cornell.cs3152.gameplayprototype;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GameEngine extends ApplicationAdapter {
+public class GDXRoot extends ApplicationAdapter {
+	/** AssetManager to load game assets (textures, sounds, etc.) */
+	AssetManager manager;
+
+	/** Drawing context to display graphics (VIEW CLASS) */
+	GameCanvas canvas;
+
+
 	SpriteBatch batch;
 	Texture img;
 	
