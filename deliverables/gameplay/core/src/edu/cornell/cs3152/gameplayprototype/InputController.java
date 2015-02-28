@@ -31,8 +31,16 @@ import edu.cornell.cs3152.gameplayprototype.utils.*;
 public class InputController {
 	/** Whether the exit button was pressed. */
 	protected boolean exitPressed;
+	/** Whether or not the player jumped */
+	boolean didJump;
+	/** Set to +-1 or 0 to indicate vertical movement */
+	int vertical;
+	/** Set to +-1 or 0 to indicate horizontal movement */
+	int horizontal;
+
 
 	private XBox360Controller xbox;
+
 
 
 	/**

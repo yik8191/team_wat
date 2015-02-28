@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c2bae73-1fb4-4609-832e-60f3aa10f631" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Board.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Enemy.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Knight.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameplayController.java" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameplayController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java" afterPath="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java" />
     </list>
     <ignored path="gameplay.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,8 +63,8 @@
       <file leaf-file-name="GameMode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3196" max-vertical-offset="5542">
-              <caret line="231" column="7" selection-start-line="231" selection-start-column="7" selection-end-line="231" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3194" max-vertical-offset="5542">
+              <caret line="216" column="7" selection-start-line="216" selection-start-column="7" selection-end-line="216" selection-end-column="7" />
               <folding>
                 <element signature="e#0#9559#0" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -80,16 +75,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InputController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="InputController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="1615">
-              <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.15686275" vertical-offset="493" max-vertical-offset="1751">
+              <caret line="37" column="58" selection-start-line="37" selection-start-column="58" selection-end-line="37" selection-end-column="58" />
               <folding>
-                <element signature="e#0#2607#0" expanded="true" />
+                <element signature="e#0#2810#0" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#1416#1417#0" expanded="true" />
-                <element signature="e#1441#1442#0" expanded="true" />
+                <element signature="e#1619#1620#0" expanded="true" />
+                <element signature="e#1644#1645#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -140,10 +135,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Knight.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Knight.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Knight.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43137255" vertical-offset="0" max-vertical-offset="1241">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
               <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -790,10 +785,8 @@
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/LoadingMode.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GDXRoot.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameCanvas.java" />
-        <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java" />
         <option value="$PROJECT_DIR$/desktop/src/edu/cornell/cs3152/gameplayprototype/desktop/DesktopLauncher.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java" />
-        <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameplayController.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/entity/GameObject.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/entity/Knight.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/entity/Enemy.java" />
@@ -802,6 +795,8 @@
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Board.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Enemy.java" />
         <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Knight.java" />
+        <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameplayController.java" />
+        <option value="$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java" />
       </list>
     </option>
   </component>
@@ -1831,19 +1826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3196" max-vertical-offset="5542">
-          <caret line="231" column="7" selection-start-line="231" selection-start-column="7" selection-end-line="231" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#9559#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#9524#9525#0" expanded="true" />
-            <element signature="e#9555#9556#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Board.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
@@ -1864,19 +1846,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="1615">
-          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#2607#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1416#1417#0" expanded="true" />
-            <element signature="e#1441#1442#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameplayController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
@@ -1885,12 +1854,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/GameMode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3194" max-vertical-offset="5542">
+          <caret line="216" column="7" selection-start-line="216" selection-start-column="7" selection-end-line="216" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#9559#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#9524#9525#0" expanded="true" />
+            <element signature="e#9555#9556#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/Knight.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43137255" vertical-offset="0" max-vertical-offset="1241">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
           <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15686275" vertical-offset="493" max-vertical-offset="1751">
+          <caret line="37" column="58" selection-start-line="37" selection-start-column="58" selection-end-line="37" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#2810#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1619#1620#0" expanded="true" />
+            <element signature="e#1644#1645#0" expanded="true" />
           </folding>
         </state>
       </provider>
