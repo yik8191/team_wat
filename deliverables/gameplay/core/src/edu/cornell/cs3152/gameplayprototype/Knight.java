@@ -8,7 +8,12 @@ import com.badlogic.gdx.graphics.*;
  * Knight class!
  * Fill in description here!
  * */
-public abstract class Knight{
+public class Knight{
+
+	public Vector2 getPostion() {
+		// TODO: this method
+		return null;
+	}
 
 	public void update() {
 		// TODO: this method

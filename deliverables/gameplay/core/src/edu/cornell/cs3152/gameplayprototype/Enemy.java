@@ -10,6 +10,14 @@ import com.badlogic.gdx.graphics.*;
 public class Enemy{
 
 	// Make sure to add fields for position as well as texture files
+	public Vector2[] path;
+	private int currentStep;
+
+	public Vector2 getPostion() {
+		// TODO: this method
+		return null;
+	}
+
 
 	public void update(){
 		// TODO: this method

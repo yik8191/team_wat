@@ -15,30 +15,18 @@ import com.badlogic.gdx.graphics.*;
  */
 public class Board {
 
+	public TileState[][] tiles;
 
 	public void update(float delta) {
 		// TODO: Update the board; E.g state of each tile
 		// Might not need this method.
 	}
 
-
-	/** Returns the state of the tile at the requested position
-	 *
-	 * @param x x-coordinate of requested tile
-	 * @param y y-coordinate of requested tile
-	 * @return Tile state at (x,y)
-	 */
-	public TileState getBoardState(int x, int y) {
-		// TODO: fill this method
-		return TileState.OOB;
-	}
-
-	public enum TileState {
-		ENEMY,
-		PLAYER,
-		OBSTACLE,
-		START,
-		END,
-		OOB
+	public static class TileState {
+		public boolean goal;
+		public boolean start;
+		public boolean knight;
+		public boolean enemy;
+		public boolean obstacle;
 	}
 }
