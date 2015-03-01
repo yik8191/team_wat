@@ -220,6 +220,7 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
+		inputController.readInput();
 	}
 
 	/** This method resets the game */
