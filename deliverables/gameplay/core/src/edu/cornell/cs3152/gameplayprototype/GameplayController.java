@@ -13,6 +13,8 @@ public class GameplayController {
 	private Board board;
 	private Knight knight;
 	private Enemy enemies[];
+	
+	private InputController inputController;
 
 	private final long startTime;
 	private long currentTime;
@@ -40,6 +42,7 @@ public class GameplayController {
 		board = new Board();
 		knight = new Knight();
 		enemies = new Enemy[numEnemies];
+		inputController = new InputController();
 		for (Enemy e : enemies){
 			e = new Enemy();
 		}
@@ -49,22 +52,25 @@ public class GameplayController {
 		playerMoved = false;
 	}
 
-	
-	public void resolveActions(InputController inputController) {
-		resolvePlayer(inputController);
+	/**
+	 * Main method to handle updating player and enemy actions, as
+	 * well as all interactions that result.
+	 */
+	public void resolveActions() {
+		resolvePlayer();
 		resolveEnemies();
 		updateBoard();
 	}
 
 	/** Resets the level */
 	public void reset() {
-
+		// probably need to print some sort of exit message or lose message
+		initBoard();
 	}
 
 	/** Whether or not it's time to reset the game */
-	public boolean isGameOver(){
-		// TODO: fill in this method.
-		return false;
+	public boolean isGameOver(){ 
+		return inputController.exitPressed;
 	}
 
 	/**
@@ -73,15 +79,15 @@ public class GameplayController {
 	 * Set what is contained in each cell of the board.
 	 * */
 	private void initBoard(){
-
+		
 	}
 
 
 	/**
-	 * Check whether the current game state is on the beat. 
+	 * Check whether the current game state is on the beat for the player. 
 	 * Very crucial method. Must implement correctly.
 	 * */
-	public boolean isOnBeat(){
+	public boolean isPlayerOnBeat(){
 		long modTime = (currentTime - startTime + offset) % period;
 		if (modTime < playerTol || (period - modTime) < playerTol){
 			return true;
@@ -95,11 +101,12 @@ public class GameplayController {
 	 * The player has to restart otherwise
 	 * @param inputController
 	 */
-	private void resolvePlayer(InputController inputController) {
+	private void resolvePlayer() {
 		long modTime = (currentTime - startTime + offset) % period;
 		if (modTime < playerTol || (period - modTime) < playerTol) {
 			if (!playerMoved){
 				playerMoved = true;
+				knight.move(inputController.horizontal, inputController.vertical);
 				knight.update();
 			}
 		} else {
@@ -125,6 +132,9 @@ public class GameplayController {
 		}
 	}
 
+	/**
+	 * Updates the board to handle interactions.
+	 */
 	private void updateBoard(){
 
 	}
