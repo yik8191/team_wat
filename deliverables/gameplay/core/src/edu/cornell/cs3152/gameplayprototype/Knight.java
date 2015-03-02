@@ -46,6 +46,9 @@ public class Knight{
 		// TODO: this method
 	}
 
+	public void move(int horizontal, int vertical){
+		
+	}
 	/**
 	 * Preloads the assets for the Knight.
 	 *
