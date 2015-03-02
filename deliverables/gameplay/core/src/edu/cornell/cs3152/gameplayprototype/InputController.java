@@ -37,6 +37,8 @@ public class InputController {
 	protected boolean exitPressed;
 	/** Whether the jump button was pressed */
 	protected boolean jumpPressed;
+    /** Whether the reset button was pressed */
+    protected boolean resetPressed;
 	/** Set to +-1, +-2, or 0 to indicate vertical movement */
 	protected int vertical;
 	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
@@ -54,6 +56,15 @@ public class InputController {
     public Vector2 getMovement() {
         Vector2 move = new Vector2(horizontal, vertical);
         return move;
+    }
+
+    /**
+     * Returns true if the reset button was pressed.
+     *
+     * @return true if the reset button was pressed.
+     */
+    public boolean didReset() {
+        return resetPressed;
     }
 
 	/**
@@ -105,6 +116,7 @@ public class InputController {
 	private void readGamepad() {
         exitPressed = xbox.getY();
         jumpPressed = xbox.getA();
+        resetPressed = xbox.getStart();
         int jumpMul = 1;
 
         if (jumpPressed == true) {
@@ -135,7 +147,8 @@ public class InputController {
 	 */
 	private void readKeyboard(boolean secondary) {
 		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
-        jumpPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+        jumpPressed = (secondary && jumpPressed) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+        resetPressed = (secondary && resetPressed) || Gdx.input.isKeyPressed(Input.Keys.R);
         int jumpMul = 1;
 
         // Check if the jump key is being held down
