@@ -30,16 +30,16 @@ public class Knight{
 	 *
 	 * @param controlCode The movement controlCode (from InputController).
 	 */
-	public void update(int controlCode) {
+	public void update() {
 		// If we are dead do nothing.
 		if (!isAlive) {
 			return;
 		}
 		// Determine how we are moving.
-		boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
-		boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
-		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
-		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
+		// boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
+		// boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
+		// boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
+		// boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 	}
 
 	public void draw() {
