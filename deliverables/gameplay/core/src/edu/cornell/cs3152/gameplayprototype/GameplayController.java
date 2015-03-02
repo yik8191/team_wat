@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.TimeUtils;
  * Class to process enemies and player input
  *
  * As a major subcontroller, this class must have a reference to all the models.
+ * It contains a reference to inputController to handle inputs from the player
  */
 public class GameplayController {
 
@@ -16,7 +17,7 @@ public class GameplayController {
 	
 	private InputController inputController;
 
-	private final long startTime;
+	private long startTime;   // note that the start time may need to be reset
 	private long currentTime;
 
 	private final int numEnemies = 2;
@@ -79,6 +80,9 @@ public class GameplayController {
 	 * Set what is contained in each cell of the board.
 	 * */
 	private void initBoard(){
+		// set the position of the knight
+		// set the position of the enemy
+		// set the type of each tile on the board
 		
 	}
 
@@ -112,6 +116,7 @@ public class GameplayController {
 		} else {
 			playerMoved = false;
 		}
+		// need to set isAlive() for the knight at the end of this thing
 	}
 
 	
@@ -136,6 +141,6 @@ public class GameplayController {
 	 * Updates the board to handle interactions.
 	 */
 	private void updateBoard(){
-
+		// need to check if board needs to reset
 	}
 }
