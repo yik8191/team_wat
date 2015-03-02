@@ -35,3 +35,4 @@ hs_err_pid*
 *.mtc1
 *.out
 *.synctex.gz 
+deliverables/gameplay/.idea/workspace.xml
