@@ -9,33 +9,48 @@ import com.badlogic.gdx.graphics.*;
  * Fill in description here!
  * */
 public class Knight{
+	
+	public boolean isAlive;
+	public boolean movingLeft;
+	public boolean movingRight;
+	public boolean movingUp;
+	public boolean movingDown;
+	public Vector2 position;
 
 	public Vector2 getPostion() {
-		// TODO: this method
-		return null;
+		return position;
 	}
 
-	public void update() {
-		// TODO: this method
+	public boolean isAlive(){
+		return isAlive;
+	}
+	
+	/**
+	 * Updates this knight position according to the control code.
+	 *
+	 * @param controlCode The movement controlCode (from InputController).
+	 */
+	public void update(int controlCode) {
+		// If we are dead do nothing.
+		if (!isAlive) {
+			return;
+		}
+		// Determine how we are moving.
+		boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
+		boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
+		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
+		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 	}
 
 	public void draw() {
 		// TODO: this method
 	}
 
-	// Update planned moved behavior here, but don't actually move until update!
-	// (see other labs such as lab3's setMovement() for how this is done)
-	public void move(int x, int y) {
-
-	}
-
 	/**
 	 * Preloads the assets for the Knight.
 	 *
-	 * All shell objects use one of two textures, so this is a static method. This keeps us from loading the same images
-	 * multiple times for more than one Shell object.
-	 *
-	 * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
+	 * The asset manager for LibGDX is asynchronous.  That means that 
+	 * you tell it what to load and then wait while it
 	 * loads them.  This is the first step: telling it what to load.
 	 *
 	 * @param manager Reference to global asset manager.
@@ -47,7 +62,8 @@ public class Knight{
 	/**
 	 * Loads the assets for the Knight.
 	 *
-	 * All shell objects use one of two textures, so this is a static method. This keeps us from loading the same images
+	 * All shell objects use one of two textures, so this is a static method. 
+	 * This keeps us from loading the same images
 	 * multiple times for more than one Shell object.
 	 *
 	 * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
