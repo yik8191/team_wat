@@ -15,11 +15,15 @@
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
  *
- * This code has been copied from the above original authors and modified by Gagik Hakobyan.
+ * This code has been copied from the above original authors and modified by
+ * Gagik Hakobyan and Charles Tark.
+ *
  */
 package edu.cornell.cs3152.gameplayprototype;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
 import edu.cornell.cs3152.gameplayprototype.utils.*;
 
 /**
@@ -31,17 +35,26 @@ import edu.cornell.cs3152.gameplayprototype.utils.*;
 public class InputController {
 	/** Whether the exit button was pressed. */
 	protected boolean exitPressed;
-	/** Whether or not the player jumped */
-	boolean didJump;
-	/** Set to +-1 or 0 to indicate vertical movement */
-	int vertical;
-	/** Set to +-1 or 0 to indicate horizontal movement */
-	int horizontal;
-
+	/** Whether the jump button was pressed */
+	protected boolean jumpPressed;
+	/** Set to +-1, +-2, or 0 to indicate vertical movement */
+	protected int vertical;
+	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
+	protected int horizontal;
 
 	private XBox360Controller xbox;
 
-
+    /**
+     * Returns the x and y movement of the player
+     *
+     * -1 or -2 = left/down, 1 or 2 = right/up, 0 = still
+     *
+     * @return the amount of movement in x and y directions
+     */
+    public Vector2 getMovement() {
+        Vector2 move = new Vector2(horizontal, vertical);
+        return move;
+    }
 
 	/**
 	 * Returns true if the exit button was pressed.
@@ -51,6 +64,16 @@ public class InputController {
 	public boolean didExit() {
 		return exitPressed;
 	}
+
+    /**
+     *
+     * Returns true if the jump button was pressed.
+     *
+     * @return true if the jump button was pressed.
+     */
+    public boolean didJump() {
+        return jumpPressed;
+    }
 
 	/**
 	 * Creates a new input controller
@@ -80,7 +103,26 @@ public class InputController {
 	 * Reads input from an X-Box controller connected to this computer.
 	 */
 	private void readGamepad() {
-		// TODO: fill in input code
+        exitPressed = xbox.getY();
+        jumpPressed = xbox.getA();
+        int jumpMul = 1;
+
+        if (jumpPressed == true) {
+           jumpMul = 2;
+        }
+
+        if (xbox.getDPadUp() == true) {
+            vertical = 1*jumpMul;
+        } else if (xbox.getDPadDown() == true) {
+            vertical = -1*jumpMul;
+        } else if (xbox.getDPadRight() == true) {
+            horizontal = 1*jumpMul;
+        } else if (xbox.getDPadLeft() == true) {
+            horizontal = -1*jumpMul;
+        } else {
+            vertical = 0;
+            horizontal = 0;
+        }
 	}
 
 	/**
@@ -92,6 +134,28 @@ public class InputController {
 	 * @param secondary true if the keyboard should give priority to a gamepad
 	 */
 	private void readKeyboard(boolean secondary) {
-		// Todo: fill in input code
+		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
+        jumpPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+        int jumpMul = 1;
+
+        // Check if the jump key is being held down
+        if (jumpPressed == true) {
+            jumpMul = 2;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            horizontal = -1*jumpMul;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            horizontal = 1*jumpMul;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            vertical = 1*jumpMul;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            vertical = -1*jumpMul;
+        } else {
+            vertical = 0;
+            horizontal = 0;
+        }
+
+        // To implement in future update: Double-tap to jump scheme
 	}
 }

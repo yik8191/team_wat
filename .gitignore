@@ -36,7 +36,11 @@ hs_err_pid*
 *.mtc1
 *.out
 *.synctex.gz 
+<<<<<<< HEAD
 
 # temporary files
 *~
 *#
+=======
+deliverables/gameplay/.idea/workspace.xml
+>>>>>>> 546b1da680b00acc5e8c5b2f66aa6b4a7b08f4ed
