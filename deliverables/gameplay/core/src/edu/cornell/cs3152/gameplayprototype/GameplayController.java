@@ -107,8 +107,7 @@ public class GameplayController {
 		if (modTime < playerTol || (period - modTime) < playerTol) {
 			if (!playerMoved){
 				playerMoved = true;
-				knight.move(inputController.horizontal, inputController.vertical);
-				knight.update();
+				knight.update(inputController.getAction());
 			}
 		} else {
 			playerMoved = false;

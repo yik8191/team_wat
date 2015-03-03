@@ -10,22 +10,26 @@ import com.badlogic.gdx.graphics.*;
  * */
 public class Knight{
 	
-	// Constants for the control codes
-	// We would normally use an enum here, but Java enums do not bitmask nicely
-	/** Do not do anything */
-	public static final int NO_ACTION  = 0x00;
-	/** Moving the enemy to the left */
-	public static final int MOVE_LEFT  = 0x01;
-	/** Moving the enemy to the right */
-	public static final int MOVE_RIGHT = 0x02;
-	/** Moving the enemy to the up */
-	public static final int MOVE_UP    = 0x04;
-	/** Moving the enemy to the down */
-	public static final int MOVE_DOWN  = 0x08;
-	
 	public boolean isAlive;
 	public int move;  // encode movement information
 	public Vector2 position;
+	
+	/** Do not do anything */
+	public static final int CONTROL_NO_ACTION  = 0x00;
+	/** Move the knight to the left */
+	public static final int CONTROL_MOVE_LEFT  = 0x01;
+	/** Move the knight to the right */
+	public static final int CONTROL_MOVE_RIGHT = 0x02;
+	/** Move the knight to the up */
+	public static final int CONTROL_MOVE_UP    = 0x04;
+	/** Move the knight to the down */
+	public static final int CONTROL_MOVE_DOWN  = 0x08;
+	/** If the player wants to jump */
+	public static final int CONTROL_JUMP = 0x10;
+	/** If the player wants to reset the game */
+	public static final int CONTROL_RESET  = 0x40;
+	/** If the player wants to exit the game */
+	public static final int CONTROL_EXIT = 0x80;
 
 	public Vector2 getPostion() {
 		return position;
@@ -40,10 +44,27 @@ public class Knight{
 	 *
 	 * @param controlCode The movement controlCode (from InputController).
 	 */
-	public void update() {
+	public void update(int controlCode) {
 		// If we are dead do nothing.
 		if (!isAlive) {
 			return;
+		}
+		// Determine how we are moving.
+		boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
+		boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
+		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
+		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
+		// Process movement command.
+		if (movingLeft) {
+			position.x--;
+		} else if (movingRight) {
+			position.x++;
+		} else if (movingUp) {
+			position.y--;
+		} else if (movingDown) {
+			position.y++;
+		} else {
+			
 		}
 	}
 
@@ -52,7 +73,9 @@ public class Knight{
 		//canvas.draw(sprite, this.position.x, this.position.y);
 	}
 
-	public void move(int horizontal, int vertical){
+	/**
+	 * Moves the knight based on the input code*/
+	public void move(int code){
 		
 	}
 	/**
