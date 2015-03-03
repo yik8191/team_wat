@@ -67,14 +67,26 @@ public class Knight{
 		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
 		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 		// Process movement command.
+		// Hard code bounds for now
+		// VERY IMPORTANT - Movement must not be done in this class!
+		// ENSURE THAT THIS CODE DOES NOT CAUSE POSITION UPDATES IN TECHNICAL
+		// PROTOTYPE
 		if (movingLeft) {
-			position.x --;
+			if (position.x > 0) {
+				position.x --;
+			}
 		} else if (movingRight) {
-			position.x ++;
+			if (position.x < 8){
+				position.x++;
+			}
 		} else if (movingUp) {
-			position.y --;
+			if ((position.x == 1 || position.x == 8) && position.y < 2){
+				position.y++;
+			}
 		} else if (movingDown) {
-			position.y ++;
+			if ((position.x == 1 || position.x == 8) && position.y > 0){
+				position.y--;
+			}
 		}
 	}
 
