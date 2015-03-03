@@ -18,7 +18,7 @@ public class Enemy{
 	public static Texture enemyTexture;
 	public Vector2 position;
     /** Move cooldown time for the enemy in frames */
-    public static final int MOVE_COOLDOWN = 30;
+    public static final int MOVE_COOLDOWN = 1;
     public int moveCooldown;
 
 	public Enemy(Vector2 position, Vector2[] path){
