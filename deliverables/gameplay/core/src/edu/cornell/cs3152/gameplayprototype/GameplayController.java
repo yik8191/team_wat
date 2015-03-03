@@ -78,9 +78,9 @@ public class GameplayController {
 		// probably need to print some sort of exit message or lose message
 		initBoard();
 		knight.position = new Vector2(0,1);
-		enemies[0].position = new Vector2(5,2);
+		enemies[0].position = new Vector2(5,0);
 		enemies[0].currentStep = 1;
-		enemies[1].position = new Vector2(4,0);
+		enemies[1].position = new Vector2(4,2);
 		enemies[1].currentStep = 1;
 	}
 
