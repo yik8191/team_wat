@@ -75,7 +75,7 @@ public class GameMode implements Screen{
 
 		// Pre-load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// Knight.PreLoadContent(manager);
+		// s.PreLoadContent(manager);
 	}
 
 	/**
@@ -243,6 +243,11 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+		canvas.drawBackground(background, 0, 0);
+		gameplayController.knight.draw(canvas);
+		for (Enemy e : gameplayController.enemies) {
+			e.draw(canvas);
+		}
 		canvas.end();
 	}
 

@@ -1,0 +1,81 @@
+package edu.cornell.cs3152.gameplayprototype;
+
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.assets.*;
+import com.badlogic.gdx.graphics.*;
+
+/** Enemy class!
+ *  Fill in description here!
+ */
+public class Enemy{
+
+	// Make sure to add fields for position as well as texture files
+	public Vector2[] path;
+	private int currentStep;
+	public static final String ENEMY_FILE = "images/enemy.png";
+	public static Texture enemyTexture;
+
+	public Vector2 getPostion() {
+		// TODO: this method
+		return null;
+	}
+
+
+	public void update(){
+		// TODO: this method
+	}
+
+	public void draw(GameCanvas canvas) {
+		// TODO: this method
+		canvas.draw(sprite, this.path[this.currentStep].x, this.path[this.currentStep].y);
+	}
+
+	/**
+	 * Preloads the assets for this Enemy.
+	 *
+	 * All shell objects use one of two textures, so this is a static method. This keeps us from loading the same images
+	 * multiple times for more than one Shell object.
+	 *
+	 * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
+	 * loads them.  This is the first step: telling it what to load.
+	 *
+	 * @param manager Reference to global asset manager.
+	 */
+	public static void PreLoadContent(AssetManager manager) {
+		manager.load(ENEMY_FILE, Texture.class);
+	}
+
+	/**
+	 * Loads the assets for this Enemy.
+	 *
+	 * All shell objects use one of two textures, so this is a static method. This keeps us from loading the same images
+	 * multiple times for more than one Shell object.
+	 *
+	 * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
+	 * loads them.  This is the second step: extracting assets from the manager after it has finished loading them.
+	 *
+	 * @param manager Reference to global asset manager.
+	 */
+	public static void LoadContent(AssetManager manager) {
+		if (manager.isLoaded(ENEMY_FILE)) {
+			enemyTexture = manager.get(ENEMY_FILE,Texture.class);
+			enemyTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			enemyTexture = null;  // Failed to load
+		}
+	}
+
+	/**
+	 * Unloads the assets for this Enemy
+	 *
+	 * This method erases the static variables.  It also deletes the associated textures from the assert manager.
+	 *
+	 * @param manager Reference to global asset manager.
+	 */
+	public static void UnloadContent(AssetManager manager) {
+		if (enemyTexture != null) {
+			enemyTexture = null;
+			manager.unload(ENEMY_FILE);
+		}
+	}
+}

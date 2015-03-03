@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.TimeUtils;
  */
 public class GameplayController {
 
-	private Board board;
-	private Knight knight;
-	private Enemy enemies[];
+	public Board board;
+	public Knight knight;
+	public Enemy enemies[];
 	
 	private InputController inputController;
 
@@ -44,8 +44,8 @@ public class GameplayController {
 		knight = new Knight();
 		enemies = new Enemy[numEnemies];
 		inputController = new InputController();
-		for (Enemy e : enemies){
-			e = new Enemy();
+		for (int i=0; i<numEnemies; i++){
+			enemies[i] = new Enemy();
 		}
 		startTime = TimeUtils.millis();
 		currentTime = TimeUtils.millis();
