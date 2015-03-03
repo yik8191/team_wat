@@ -44,3 +44,6 @@ hs_err_pid*
 
 # Eclipse stuff we don't want
 .metadata
+
+# IntelliJ stuff we don't want
+.idea
