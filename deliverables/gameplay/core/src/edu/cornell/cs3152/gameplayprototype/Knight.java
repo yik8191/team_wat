@@ -18,13 +18,15 @@ public class Knight{
 	public boolean movingUp;
 	public boolean movingDown;
 	public Vector2 position;
-	
+    public int moveCooldown;
+
 	public static final String KNIGHT_FILE = "images/knight.png";
 	public static Texture knightTexture;
 	
 	public Knight(Vector2 position){
-		this.position = position;
-	}
+        this.position = position;
+        this.moveCooldown = 0;
+    }
 	
 	/** Do not do anything */
 	public static final int CONTROL_NO_ACTION  = 0x00;
@@ -42,6 +44,8 @@ public class Knight{
 	public static final int CONTROL_RESET  = 0x40;
 	/** If the player wants to exit the game */
 	public static final int CONTROL_EXIT = 0x80;
+    /** Move cooldown time for the knight in frames */
+    public static final int MOVE_COOLDOWN = 10;
 
 	public Vector2 getPostion() {
 		return position;
@@ -67,15 +71,22 @@ public class Knight{
 		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
 		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 		// Process movement command.
-		if (movingLeft) {
-			position.x--;
-		} else if (movingRight) {
-			position.x++;
-		} else if (movingUp) {
-			position.y--;
-		} else if (movingDown) {
-			position.y++;
-		}
+        if (moveCooldown == 0) {
+            if (movingLeft) {
+                position.x--;
+            } else if (movingRight) {
+                position.x++;
+            } else if (movingUp) {
+                position.y--;
+            } else if (movingDown) {
+                position.y++;
+            }
+        }
+        if (controlCode != 0) {
+            moveCooldown = MOVE_COOLDOWN;
+        } else {
+            moveCooldown = Math.max(0, moveCooldown - 1);
+        }
 	}
 
 	public void draw(GameCanvas canvas) {
