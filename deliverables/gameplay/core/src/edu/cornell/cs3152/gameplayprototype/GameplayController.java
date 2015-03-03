@@ -49,13 +49,13 @@ public class GameplayController {
 		path0[1] = new Vector2(4,0); 
 		path0[2] = new Vector2(3,0); 
 		path0[3] = new Vector2(4,0); 
-		enemies[0] = new Enemy(new Vector2(5,0), path0);
+		enemies[1] = new Enemy(new Vector2(5,0), path0);
 		
 		path1[0] = new Vector2(4,2); 
 		path1[1] = new Vector2(5,2); 
 		path1[2] = new Vector2(4,2); 
 		path1[3] = new Vector2(3,2); 
-		enemies[1] = new Enemy(new Vector2(4,2), path1);
+		enemies[0] = new Enemy(new Vector2(4,2), path1);
 
 		startTime = TimeUtils.millis();
 		currentTime = TimeUtils.millis();
