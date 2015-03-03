@@ -70,13 +70,16 @@ public class GameplayController {
 	public void resolveActions(InputController inputController) {
 		resolvePlayer(inputController);
 		resolveEnemies();
-		updateBoard();
+		updateBoard(inputController);
 	}
 
 	/** Resets the level */
 	public void reset() {
 		// probably need to print some sort of exit message or lose message
 		initBoard();
+		knight.position = new Vector2(0,1);
+		enemies[0].position = new Vector2(5,0);
+		enemies[1].position = new Vector2(4,2);
 	}
 
 	/** Whether or not it's time to reset the game */
@@ -149,8 +152,11 @@ public class GameplayController {
 	/**
 	 * Updates the board to handle interactions.
 	 */
-	private void updateBoard(){
-		// need to check if board needs to reset
+	private void updateBoard(InputController inputController){
+		if ((inputController.getAction()& InputController.CONTROL_RESET) == 
+				InputController.CONTROL_RESET){
+			reset();
+		}
 	}
 
 	/** Initializes the board, enemy, and character positions. Sets time to 0. */
