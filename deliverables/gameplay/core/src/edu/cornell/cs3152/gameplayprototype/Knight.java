@@ -47,7 +47,7 @@ public class Knight{
     /** Move cooldown time for the knight in frames */
     public static final int MOVE_COOLDOWN = 15;
 
-	public Vector2 getPostion() {
+	public Vector2 getPosition() {
 		return position;
 	}
 
