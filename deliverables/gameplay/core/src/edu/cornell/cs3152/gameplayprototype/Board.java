@@ -23,10 +23,16 @@ public class Board {
 	}
 
 	public static class TileState {
+		/** Is this a goal tile?*/
 		public boolean goal;
+		/** Is this a start tile?*/
 		public boolean start;
+		/** Is the knight on this tile?*/
 		public boolean knight;
+		/** Is an enemy on this tile?*/
 		public boolean enemy;
+		/** Is there an obstacle on this tile?*/
 		public boolean obstacle;
 	}
+	
 }

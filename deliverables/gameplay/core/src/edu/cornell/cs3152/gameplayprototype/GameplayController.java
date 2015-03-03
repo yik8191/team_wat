@@ -45,7 +45,7 @@ public class GameplayController {
 		enemies = new Enemy[numEnemies];
 		inputController = new InputController();
 		for (Enemy e : enemies){
-			e = new Enemy();
+			e = new Enemy(null, null);
 		}
 		startTime = TimeUtils.millis();
 		currentTime = TimeUtils.millis();

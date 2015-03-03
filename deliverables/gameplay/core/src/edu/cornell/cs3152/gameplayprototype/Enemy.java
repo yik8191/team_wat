@@ -12,17 +12,36 @@ public class Enemy{
 	// Make sure to add fields for position as well as texture files
 	public Vector2[] path;
 	private int currentStep;
+	public Vector2 position;
 
+	public Enemy(Vector2 position, Vector2[] path){
+		this.position = position;
+		this.path = path;
+	}
+	
+	/**
+	 * Return the position of the enemy
+	 */
 	public Vector2 getPostion() {
-		// TODO: this method
-		return null;
+		return position;
 	}
 
 
+	/**
+	 * For now, just move the enemy to its new position manually
+	 */
 	public void update(){
-		// TODO: this method
+		position = path[currentStep];
+		currentStep++;
+		int arraySize = path.length;
+		if (currentStep >= arraySize){
+			currentStep = currentStep % arraySize; 
+		}				
 	}
 
+	/**
+	 * For now, just move the enemy to its new position manually
+	 */
 	public void draw() {
 		// TODO: this method
 	}

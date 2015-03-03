@@ -22,6 +22,7 @@
 package edu.cornell.cs3152.gameplayprototype;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import edu.cornell.cs3152.gameplayprototype.utils.*;
@@ -33,6 +34,7 @@ import edu.cornell.cs3152.gameplayprototype.utils.*;
  * start-up.  This class allows us to hot-swap in a controller via the new XBox360Controller class.
  */
 public class InputController {
+	
 	/** Whether the exit button was pressed. */
 	protected boolean exitPressed;
 	/** Whether the jump button was pressed */
@@ -42,8 +44,81 @@ public class InputController {
 	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
 	protected int horizontal;
 
+	// Constants for the control codes
+	// We would normally use an enum here, but Java enums do not bitmask nicely
+	/** Do not do anything */
+	public static final int CONTROL_NO_ACTION  = 0x00;
+	/** Move the knight to the left */
+	public static final int CONTROL_MOVE_LEFT  = 0x01;
+	/** Move the knight to the right */
+	public static final int CONTROL_MOVE_RIGHT = 0x02;
+	/** Move the knight to the up */
+	public static final int CONTROL_MOVE_UP    = 0x04;
+	/** Move the knight to the down */
+	public static final int CONTROL_MOVE_DOWN  = 0x08;
+	/** If the player wants to jump */
+	public static final int CONTROL_JUMP = 0x10;
+	/** If the player wants to reset the game */
+	public static final int CONTROL_RESET  = 0x40;
+	/** If the player wants to exit the game */
+	public static final int CONTROL_EXIT = 0x80;
+	
 	private XBox360Controller xbox;
+	/** Whether to enable keyboard control (as opposed to X-Box) */
+	private boolean keyboard;
+	
+	/**
+	 * Return the action of this ship (but do not process)
+	 * 
+	 * The value returned must be some bitmasked combination of the static ints 
+	 * in the implemented interface.  For example, if the ship moves left and fires, 
+	 * it returns CONTROL_MOVE_LEFT | CONTROL_FIRE
+	 *
+	 * @return the action of this ship
+	 */
+    public int getAction() {
+		int code = CONTROL_NO_ACTION;
+		
+		if (keyboard) {
+			if (Gdx.input.isKeyPressed(Keys.W))    code |= CONTROL_MOVE_UP;
+			if (Gdx.input.isKeyPressed(Keys.A))  code |= CONTROL_MOVE_LEFT;
+			if (Gdx.input.isKeyPressed(Keys.S))  code |= CONTROL_MOVE_DOWN;
+			if (Gdx.input.isKeyPressed(Keys.D)) code |= CONTROL_MOVE_RIGHT;
+			if (Gdx.input.isKeyPressed(Keys.R)) code |= CONTROL_EXIT;
+		} else {
+			// TODO: X-Box
+		}
 
+		// Prevent diagonal movement.
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+            code ^= CONTROL_MOVE_UP;
+        }
+
+		if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+			code ^= CONTROL_MOVE_RIGHT;
+        }
+
+		if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+			code ^= CONTROL_MOVE_DOWN;
+        }
+
+		if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+			code ^= CONTROL_MOVE_LEFT;
+        }
+
+		// Cancel out conflicting movements.
+		if ((code & CONTROL_MOVE_LEFT) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+			code ^= (CONTROL_MOVE_LEFT | CONTROL_MOVE_RIGHT);
+        }
+
+		if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_DOWN) != 0) {
+			code ^= (CONTROL_MOVE_UP | CONTROL_MOVE_DOWN);
+        }
+
+		return code;
+	}
+	
+	
     /**
      * Returns the x and y movement of the player
      *
@@ -51,10 +126,10 @@ public class InputController {
      *
      * @return the amount of movement in x and y directions
      */
-    public Vector2 getMovement() {
-        Vector2 move = new Vector2(horizontal, vertical);
-        return move;
-    }
+//    public Vector2 getMovement() {
+//        Vector2 move = new Vector2(horizontal, vertical);
+//        return move;
+//    }
 
 	/**
 	 * Returns true if the exit button was pressed.

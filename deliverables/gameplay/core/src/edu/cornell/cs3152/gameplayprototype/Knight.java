@@ -10,11 +10,21 @@ import com.badlogic.gdx.graphics.*;
  * */
 public class Knight{
 	
+	// Constants for the control codes
+	// We would normally use an enum here, but Java enums do not bitmask nicely
+	/** Do not do anything */
+	public static final int NO_ACTION  = 0x00;
+	/** Moving the enemy to the left */
+	public static final int MOVE_LEFT  = 0x01;
+	/** Moving the enemy to the right */
+	public static final int MOVE_RIGHT = 0x02;
+	/** Moving the enemy to the up */
+	public static final int MOVE_UP    = 0x04;
+	/** Moving the enemy to the down */
+	public static final int MOVE_DOWN  = 0x08;
+	
 	public boolean isAlive;
-	public boolean movingLeft;
-	public boolean movingRight;
-	public boolean movingUp;
-	public boolean movingDown;
+	public int move;  // encode movement information
 	public Vector2 position;
 
 	public Vector2 getPostion() {
@@ -35,11 +45,6 @@ public class Knight{
 		if (!isAlive) {
 			return;
 		}
-		// Determine how we are moving.
-		// boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
-		// boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
-		// boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
-		// boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 	}
 
 	public void draw() {
