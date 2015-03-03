@@ -13,7 +13,7 @@ public class Enemy{
 
 	// Make sure to add fields for position as well as texture files
 	public Vector2[] path;
-	private int currentStep;
+	public int currentStep;
 	public static final String ENEMY_FILE = "images/enemy.png";
 	public static Texture enemyTexture;
 	public Vector2 position;
