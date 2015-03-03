@@ -11,7 +11,10 @@ import com.badlogic.gdx.graphics.*;
 public class Knight{
 	
 	public boolean isAlive;
-	public int move;  // encode movement information
+	public boolean movingLeft;
+	public boolean movingRight;
+	public boolean movingUp;
+	public boolean movingDown;
 	public Vector2 position;
 	
 	/** Do not do anything */
@@ -63,8 +66,6 @@ public class Knight{
 			position.y--;
 		} else if (movingDown) {
 			position.y++;
-		} else {
-			
 		}
 	}
 
@@ -73,11 +74,11 @@ public class Knight{
 		//canvas.draw(sprite, this.position.x, this.position.y);
 	}
 
-	/**
-	 * Moves the knight based on the input code*/
-	public void move(int code){
-		
-	}
+//	/**
+//	 * Moves the knight based on the input code*/
+//	public void move(int code){
+//		
+//	}
 	/**
 	 * Preloads the assets for the Knight.
 	 *

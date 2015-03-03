@@ -197,7 +197,7 @@ public class GameMode implements Screen{
 	 */
 	private void update(float delta){
 		// Process the game input
-		inputController.readInput();
+		inputController.getAction();
 
 		// Test whether to reset the game.
 		switch (gameState) {
@@ -221,7 +221,7 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
-		inputController.readInput();
+		inputController.getAction();
 		gameplayController.resolveActions(inputController);
 
 	}
