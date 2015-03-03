@@ -11,11 +11,10 @@ import com.badlogic.gdx.utils.TimeUtils;
  */
 public class GameplayController {
 
-	private Board board;
-	private Knight knight;
-	private Enemy enemies[];
-
-
+	public Board board;
+	public Knight knight;
+	public Enemy enemies[];
+	
 	private long startTime;   // note that the start time may need to be reset
 	private long currentTime;
 

@@ -42,8 +42,9 @@ public class Knight{
 		// boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
 	}
 
-	public void draw() {
+	public void draw(GameCanvas canvas) {
 		// TODO: this method
+		//canvas.draw(sprite, this.position.x, this.position.y);
 	}
 
 	public void move(int horizontal, int vertical){

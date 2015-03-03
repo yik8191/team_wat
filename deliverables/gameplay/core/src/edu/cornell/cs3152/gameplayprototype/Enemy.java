@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.cornell.cs3152.gameplayprototype.utils.FilmStrip;
+
 /** Enemy class!
  *  Fill in description here!
  */
@@ -12,6 +14,8 @@ public class Enemy{
 	// Make sure to add fields for position as well as texture files
 	public Vector2[] path;
 	private int currentStep;
+	public static final String ENEMY_FILE = "images/beam.png";
+	public static Texture enemyTexture;
 	public Vector2 position;
 
 	public Enemy(Vector2 position, Vector2[] path){
@@ -42,8 +46,11 @@ public class Enemy{
 	/**
 	 * For now, just move the enemy to its new position manually
 	 */
-	public void draw() {
+	public void draw(GameCanvas canvas) {
 		// TODO: this method
+		FilmStrip sprite = new FilmStrip(enemyTexture, 1, 1);
+		Vector2 curPos = this.path[this.currentStep];
+		canvas.draw(sprite, curPos.x, curPos.y);
 	}
 
 	/**
@@ -58,7 +65,7 @@ public class Enemy{
 	 * @param manager Reference to global asset manager.
 	 */
 	public static void PreLoadContent(AssetManager manager) {
-		// TODO: this method
+		manager.load(ENEMY_FILE, Texture.class);
 	}
 
 	/**
@@ -73,7 +80,12 @@ public class Enemy{
 	 * @param manager Reference to global asset manager.
 	 */
 	public static void LoadContent(AssetManager manager) {
-		// TODO: this method
+		if (manager.isLoaded(ENEMY_FILE)) {
+			enemyTexture = manager.get(ENEMY_FILE,Texture.class);
+			enemyTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			enemyTexture = null;  // Failed to load
+		}
 	}
 
 	/**
@@ -84,6 +96,9 @@ public class Enemy{
 	 * @param manager Reference to global asset manager.
 	 */
 	public static void UnloadContent(AssetManager manager) {
-		// TODO: this method
+		if (enemyTexture != null) {
+			enemyTexture = null;
+			manager.unload(ENEMY_FILE);
+		}
 	}
 }
