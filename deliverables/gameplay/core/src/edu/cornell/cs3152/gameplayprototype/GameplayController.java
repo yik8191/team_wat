@@ -14,8 +14,7 @@ public class GameplayController {
 	private Board board;
 	private Knight knight;
 	private Enemy enemies[];
-	
-	private InputController inputController;
+
 
 	private long startTime;   // note that the start time may need to be reset
 	private long currentTime;
@@ -40,10 +39,9 @@ public class GameplayController {
 	 * This controller must have a reference to all models.
 	 */
 	public GameplayController() {
-		board = new Board();
+		board = new Board(9,3);
 		knight = new Knight();
 		enemies = new Enemy[numEnemies];
-		inputController = new InputController();
 		for (Enemy e : enemies){
 			e = new Enemy(null, null);
 		}
@@ -57,8 +55,8 @@ public class GameplayController {
 	 * Main method to handle updating player and enemy actions, as
 	 * well as all interactions that result.
 	 */
-	public void resolveActions() {
-		resolvePlayer();
+	public void resolveActions(InputController inputController) {
+		resolvePlayer(inputController);
 		resolveEnemies();
 		updateBoard();
 	}
@@ -71,7 +69,7 @@ public class GameplayController {
 
 	/** Whether or not it's time to reset the game */
 	public boolean isGameOver(){ 
-		return inputController.exitPressed;
+		return false;
 	}
 
 	/**
@@ -105,7 +103,7 @@ public class GameplayController {
 	 * The player has to restart otherwise
 	 * @param inputController
 	 */
-	private void resolvePlayer() {
+	private void resolvePlayer(InputController inputController) {
 		long modTime = (currentTime - startTime + offset) % period;
 		if (modTime < playerTol || (period - modTime) < playerTol) {
 			if (!playerMoved){
@@ -142,5 +140,28 @@ public class GameplayController {
 	 */
 	private void updateBoard(){
 		// need to check if board needs to reset
+	}
+
+	/** Initializes the board, enemy, and character positions. Sets time to 0. */
+	public void initialize() {
+
+		board.clear();
+
+		// Start tile
+		board.tiles[0][1].start = true;
+
+		// Goal tile
+		board.tiles[8][1].goal = true;
+
+		// Obstacles
+		board.tiles[0][0].obstacle = true;
+		board.tiles[0][2].obstacle = true;
+		board.tiles[8][0].obstacle = true;
+		board.tiles[8][2].obstacle = true;
+		board.tiles[2][1].obstacle = true;
+		board.tiles[3][1].obstacle = true;
+		board.tiles[4][1].obstacle = true;
+		board.tiles[5][1].obstacle = true;
+		board.tiles[6][1].obstacle = true;
 	}
 }

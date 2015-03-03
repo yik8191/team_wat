@@ -203,6 +203,7 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
+				gameplayController.initialize();
 				// TODO: intialize
 				break;
 			case PLAY:
@@ -221,6 +222,8 @@ public class GameMode implements Screen{
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
 		inputController.readInput();
+		gameplayController.resolveActions(inputController);
+
 	}
 
 	/** This method resets the game */
