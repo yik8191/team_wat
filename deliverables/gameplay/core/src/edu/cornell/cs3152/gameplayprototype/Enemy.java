@@ -47,7 +47,6 @@ public class Enemy{
 	 * For now, just move the enemy to its new position manually
 	 */
 	public void draw(GameCanvas canvas) {
-		// TODO: this method
 		FilmStrip sprite = new FilmStrip(enemyTexture, 1, 1);
 		Vector2 curPos = this.path[this.currentStep];
 		canvas.draw(sprite, curPos.x, curPos.y);

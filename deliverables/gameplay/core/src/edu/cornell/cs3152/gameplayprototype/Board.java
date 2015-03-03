@@ -11,7 +11,7 @@ import java.security.PublicKey;
 
 
 /**
- * Board class for storing information about board tiles.
+ * Board class for storing information about board of 2D tiles.
  *
  * As well as other things :P Fill in description here.
  */
@@ -49,7 +49,9 @@ public class Board {
 	}
 
 
-
+	/**
+	 * Each tile on the board has a set of attributes associated with it.
+	 */
 	public static class TileState {
 		/** Is this a goal tile?*/
 		public boolean goal;
