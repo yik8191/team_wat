@@ -61,10 +61,10 @@ public class InputController {
 	public int getAction() {
 
         int code = CONTROL_NO_ACTION;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  code |= CONTROL_MOVE_LEFT;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) code |= CONTROL_MOVE_RIGHT;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))    code |= CONTROL_MOVE_UP;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  code |= CONTROL_MOVE_DOWN;
+        if (Gdx.input.isKeyPressed(Input.Keys.A))  code |= CONTROL_MOVE_LEFT;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) code |= CONTROL_MOVE_RIGHT;
+        if (Gdx.input.isKeyPressed(Input.Keys.W))    code |= CONTROL_MOVE_UP;
+        if (Gdx.input.isKeyPressed(Input.Keys.S))  code |= CONTROL_MOVE_DOWN;
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))  code |= CONTROL_JUMP;
         if (Gdx.input.isKeyPressed(Input.Keys.R))  code |= CONTROL_RESET;
