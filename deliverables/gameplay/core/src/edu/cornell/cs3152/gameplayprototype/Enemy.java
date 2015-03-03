@@ -14,7 +14,7 @@ public class Enemy{
 	// Make sure to add fields for position as well as texture files
 	public Vector2[] path;
 	private int currentStep;
-	public static final String ENEMY_FILE = "images/beam.png";
+	public static final String ENEMY_FILE = "images/enemy.png";
 	public static Texture enemyTexture;
 	public Vector2 position;
 
@@ -49,8 +49,11 @@ public class Enemy{
 	public void draw(GameCanvas canvas) {
 		// TODO: this method
 		FilmStrip sprite = new FilmStrip(enemyTexture, 1, 1);
-		Vector2 curPos = this.path[this.currentStep];
-		canvas.draw(sprite, curPos.x, curPos.y);
+		Vector2 curPos = this.position;
+		Vector2 loc = new Vector2();
+		loc.x = curPos.x*80 + 35;
+		loc.y = curPos.y*80 + 185;
+		canvas.draw(sprite, loc.x, loc.y);
 	}
 
 	/**
