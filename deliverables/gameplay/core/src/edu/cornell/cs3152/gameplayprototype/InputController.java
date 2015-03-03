@@ -33,58 +33,76 @@ import edu.cornell.cs3152.gameplayprototype.utils.*;
  * start-up.  This class allows us to hot-swap in a controller via the new XBox360Controller class.
  */
 public class InputController {
-	/** Whether the exit button was pressed. */
-	protected boolean exitPressed;
-	/** Whether the jump button was pressed */
-	protected boolean jumpPressed;
-    /** Whether the reset button was pressed */
-    protected boolean resetPressed;
-	/** Set to +-1, +-2, or 0 to indicate vertical movement */
-	protected int vertical;
-	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
-	protected int horizontal;
+    // Constants for the control codes
+    /** Do not do anything */
+    public static final int CONTROL_NO_ACTION  = 0x00;
+    /** Move the player to the left */
+    public static final int CONTROL_MOVE_LEFT  = 0x01;
+    /** Move the player to the right */
+    public static final int CONTROL_MOVE_RIGHT = 0x02;
+    /** Move the player to the up */
+    public static final int CONTROL_MOVE_UP    = 0x04;
+    /** Move the player to the down */
+    public static final int CONTROL_MOVE_DOWN  = 0x08;
+    /** Apply the jump modifier */
+    public static final int CONTROL_JUMP = 0x10;
+    /** Reset the game */
+    public static final int CONTROL_RESET = 0x20;
+    /** Exit the game */
+    public static final int CONTROL_EXIT = 0x40;
+
+//	/** Whether the exit button was pressed. */
+//	protected boolean exitPressed;
+//	/** Whether the jump button was pressed */
+//	protected boolean jumpPressed;
+//    /** Whether the reset button was pressed */
+//    protected boolean resetPressed;
+//	/** Set to +-1, +-2, or 0 to indicate vertical movement */
+//	protected int vertical;
+//	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
+//	protected int horizontal;
 
 	private XBox360Controller xbox;
 
-    /**
-     * Returns the x and y movement of the player
-     *
-     * -1 or -2 = left/down, 1 or 2 = right/up, 0 = still
-     *
-     * @return the amount of movement in x and y directions
-     */
-    public Vector2 getMovement() {
-        Vector2 move = new Vector2(horizontal, vertical);
-        return move;
-    }
+//    /**
+//     * Returns the x and y movement of the player
+//     *
+//     * -1 or -2 = left/down, 1 or 2 = right/up, 0 = still
+//     *
+//     * @return the amount of movement in x and y directions
+//     */
+//    public Vector2 getMovement() {
+//        Vector2 move = new Vector2(horizontal, vertical);
+//        return move;
+//    }
 
-    /**
-     * Returns true if the reset button was pressed.
-     *
-     * @return true if the reset button was pressed.
-     */
-    public boolean didReset() {
-        return resetPressed;
-    }
+//    /**
+//     * Returns true if the reset button was pressed.
+//     *
+//     * @return true if the reset button was pressed.
+//     */
+//    public boolean didReset() {
+//        return resetPressed;
+//    }
 
-	/**
-	 * Returns true if the exit button was pressed.
-	 *
-	 * @return true if the exit button was pressed.
-	 */
-	public boolean didExit() {
-		return exitPressed;
-	}
+//	/**
+//	 * Returns true if the exit button was pressed.
+//	 *
+//	 * @return true if the exit button was pressed.
+//	 */
+//	public boolean didExit() {
+//		return exitPressed;
+//	}
 
-    /**
-     *
-     * Returns true if the jump button was pressed.
-     *
-     * @return true if the jump button was pressed.
-     */
-    public boolean didJump() {
-        return jumpPressed;
-    }
+//    /**
+//     *
+//     * Returns true if the jump button was pressed.
+//     *
+//     * @return true if the jump button was pressed.
+//     */
+//    public boolean didJump() {
+//        return jumpPressed;
+//    }
 
 	/**
 	 * Creates a new input controller
@@ -102,40 +120,41 @@ public class InputController {
 	 */
 	public void readInput() {
 		// Check to see if a GamePad is connected
-		if (xbox.isConnected()) {
-			readGamepad();
-			readKeyboard(true); // Read as a back-up
-		} else {
-			readKeyboard(false);
-		}
+//		if (xbox.isConnected()) {
+//			readGamepad();
+//			readKeyboard(true); // Read as a back-up
+//		} else {
+//			readKeyboard(false);
+//		}
+        readKeyboard(false);
 	}
 
-	/**
-	 * Reads input from an X-Box controller connected to this computer.
-	 */
-	private void readGamepad() {
-        exitPressed = xbox.getY();
-        jumpPressed = xbox.getA();
-        resetPressed = xbox.getStart();
-        int jumpMul = 1;
-
-        if (jumpPressed == true) {
-           jumpMul = 2;
-        }
-
-        if (xbox.getDPadUp() == true) {
-            vertical = 1*jumpMul;
-        } else if (xbox.getDPadDown() == true) {
-            vertical = -1*jumpMul;
-        } else if (xbox.getDPadRight() == true) {
-            horizontal = 1*jumpMul;
-        } else if (xbox.getDPadLeft() == true) {
-            horizontal = -1*jumpMul;
-        } else {
-            vertical = 0;
-            horizontal = 0;
-        }
-	}
+//	/**
+//	 * Reads input from an X-Box controller connected to this computer.
+//	 */
+//	private void readGamepad() {
+//        exitPressed = xbox.getY();
+//        jumpPressed = xbox.getA();
+//        resetPressed = xbox.getStart();
+//        int jumpMul = 1;
+//
+//        if (jumpPressed == true) {
+//           jumpMul = 2;
+//        }
+//
+//        if (xbox.getDPadUp() == true) {
+//            vertical = 1*jumpMul;
+//        } else if (xbox.getDPadDown() == true) {
+//            vertical = -1*jumpMul;
+//        } else if (xbox.getDPadRight() == true) {
+//            horizontal = 1*jumpMul;
+//        } else if (xbox.getDPadLeft() == true) {
+//            horizontal = -1*jumpMul;
+//        } else {
+//            vertical = 0;
+//            horizontal = 0;
+//        }
+//	}
 
 	/**
 	 * Reads input from the keyboard.
@@ -146,28 +165,28 @@ public class InputController {
 	 * @param secondary true if the keyboard should give priority to a gamepad
 	 */
 	private void readKeyboard(boolean secondary) {
-		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
-        jumpPressed = (secondary && jumpPressed) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-        resetPressed = (secondary && resetPressed) || Gdx.input.isKeyPressed(Input.Keys.R);
-        int jumpMul = 1;
-
-        // Check if the jump key is being held down
-        if (jumpPressed == true) {
-            jumpMul = 2;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            horizontal = -1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            horizontal = 1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            vertical = 1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            vertical = -1*jumpMul;
-        } else {
-            vertical = 0;
-            horizontal = 0;
-        }
+//		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
+//        jumpPressed = (secondary && jumpPressed) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+//        resetPressed = (secondary && resetPressed) || Gdx.input.isKeyPressed(Input.Keys.R);
+//        int jumpMul = 1;
+//
+//        // Check if the jump key is being held down
+//        if (jumpPressed == true) {
+//            jumpMul = 2;
+//        }
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+//            horizontal = -1*jumpMul;
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+//            horizontal = 1*jumpMul;
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+//            vertical = 1*jumpMul;
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+//            vertical = -1*jumpMul;
+//        } else {
+//            vertical = 0;
+//            horizontal = 0;
+//        }
 
         // To implement in future update: Double-tap to jump scheme
 	}
