@@ -43,7 +43,7 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
 	// TODO: replace the assets in these paths with the correct files
-	private static String BKGD_FILE = "images/background.png";
+	private static String BKGD_FILE = "images/loading.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables
@@ -203,6 +203,7 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
+				gameplayController.initialize();
 				// TODO: intialize
 				break;
 			case PLAY:
@@ -221,6 +222,8 @@ public class GameMode implements Screen{
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
 		inputController.readInput();
+		gameplayController.resolveActions(inputController);
+
 	}
 
 	/** This method resets the game */
