@@ -51,142 +51,48 @@ public class InputController {
     /** Exit the game */
     public static final int CONTROL_EXIT = 0x40;
 
-//	/** Whether the exit button was pressed. */
-//	protected boolean exitPressed;
-//	/** Whether the jump button was pressed */
-//	protected boolean jumpPressed;
-//    /** Whether the reset button was pressed */
-//    protected boolean resetPressed;
-//	/** Set to +-1, +-2, or 0 to indicate vertical movement */
-//	protected int vertical;
-//	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
-//	protected int horizontal;
-
-	private XBox360Controller xbox;
-
-//    /**
-//     * Returns the x and y movement of the player
-//     *
-//     * -1 or -2 = left/down, 1 or 2 = right/up, 0 = still
-//     *
-//     * @return the amount of movement in x and y directions
-//     */
-//    public Vector2 getMovement() {
-//        Vector2 move = new Vector2(horizontal, vertical);
-//        return move;
-//    }
-
-//    /**
-//     * Returns true if the reset button was pressed.
-//     *
-//     * @return true if the reset button was pressed.
-//     */
-//    public boolean didReset() {
-//        return resetPressed;
-//    }
-
-//	/**
-//	 * Returns true if the exit button was pressed.
-//	 *
-//	 * @return true if the exit button was pressed.
-//	 */
-//	public boolean didExit() {
-//		return exitPressed;
-//	}
-
-//    /**
-//     *
-//     * Returns true if the jump button was pressed.
-//     *
-//     * @return true if the jump button was pressed.
-//     */
-//    public boolean didJump() {
-//        return jumpPressed;
-//    }
-
-	/**
-	 * Creates a new input controller
-	 *
-	 * The input controller attempts to connect to the X-Box controller at device 0, if it exists.  Otherwise, it falls
-	 * back to the keyboard control.
-	 */
-	public InputController() {
-		// If we have a game-pad for id, then use it.
-		xbox = new XBox360Controller(0);
-	}
-
-	/**
-	 * Reads the input for the player and converts the result into game logic.
-	 */
-	public void readInput() {
-		// Check to see if a GamePad is connected
-//		if (xbox.isConnected()) {
-//			readGamepad();
-//			readKeyboard(true); // Read as a back-up
-//		} else {
-//			readKeyboard(false);
-//		}
-        readKeyboard(false);
-	}
-
-//	/**
-//	 * Reads input from an X-Box controller connected to this computer.
-//	 */
-//	private void readGamepad() {
-//        exitPressed = xbox.getY();
-//        jumpPressed = xbox.getA();
-//        resetPressed = xbox.getStart();
-//        int jumpMul = 1;
-//
-//        if (jumpPressed == true) {
-//           jumpMul = 2;
-//        }
-//
-//        if (xbox.getDPadUp() == true) {
-//            vertical = 1*jumpMul;
-//        } else if (xbox.getDPadDown() == true) {
-//            vertical = -1*jumpMul;
-//        } else if (xbox.getDPadRight() == true) {
-//            horizontal = 1*jumpMul;
-//        } else if (xbox.getDPadLeft() == true) {
-//            horizontal = -1*jumpMul;
-//        } else {
-//            vertical = 0;
-//            horizontal = 0;
-//        }
-//	}
-
 	/**
 	 * Reads input from the keyboard.
 	 *
-	 * This controller reads from the keyboard regardless of whether or not an X-Box controller is connected.  However,
-	 * if a controller is connected, this method gives priority to the X-Box controller.
-	 *
-	 * @param secondary true if the keyboard should give priority to a gamepad
+	 * This controller reads from the keyboard.
+     *
+     * @return bit masked code for the action.
 	 */
-	private void readKeyboard(boolean secondary) {
-//		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
-//        jumpPressed = (secondary && jumpPressed) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-//        resetPressed = (secondary && resetPressed) || Gdx.input.isKeyPressed(Input.Keys.R);
-//        int jumpMul = 1;
-//
-//        // Check if the jump key is being held down
-//        if (jumpPressed == true) {
-//            jumpMul = 2;
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            horizontal = -1*jumpMul;
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            horizontal = 1*jumpMul;
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            vertical = 1*jumpMul;
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            vertical = -1*jumpMul;
-//        } else {
-//            vertical = 0;
-//            horizontal = 0;
-//        }
+	public int getAction() {
+
+        int code = CONTROL_NO_ACTION;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  code |= CONTROL_MOVE_LEFT;
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) code |= CONTROL_MOVE_RIGHT;
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))    code |= CONTROL_MOVE_UP;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  code |= CONTROL_MOVE_DOWN;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))  code |= CONTROL_JUMP;
+        if (Gdx.input.isKeyPressed(Input.Keys.R))  code |= CONTROL_RESET;
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))  code |= CONTROL_EXIT;
+
+        // Prevent diagonal movement.
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+            code ^= CONTROL_MOVE_UP;
+        }
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= CONTROL_MOVE_RIGHT;
+        }
+        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= CONTROL_MOVE_DOWN;
+        }
+        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+            code ^= CONTROL_MOVE_LEFT;
+        }
+
+        // Cancel out conflicting movements.
+        if ((code & CONTROL_MOVE_LEFT) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= (CONTROL_MOVE_LEFT | CONTROL_MOVE_RIGHT);
+        }
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_DOWN) != 0) {
+            code ^= (CONTROL_MOVE_UP | CONTROL_MOVE_DOWN);
+        }
+
+        return code;
 
         // To implement in future update: Double-tap to jump scheme
 	}
