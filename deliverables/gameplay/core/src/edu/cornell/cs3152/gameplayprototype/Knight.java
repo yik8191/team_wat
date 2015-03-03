@@ -118,8 +118,8 @@ public class Knight{
 		FilmStrip sprite = new FilmStrip(knightTexture, 1, 1);
 		Vector2 curPos = this.position;
 		Vector2 loc = new Vector2();
-		loc.x = curPos.x*80 + 35;
-		loc.y = curPos.y*80 + 185;
+		loc.x = curPos.x*79 + 45;
+		loc.y = curPos.y*79 + 182;
 		canvas.draw(sprite, loc.x, loc.y);
 	}
 
