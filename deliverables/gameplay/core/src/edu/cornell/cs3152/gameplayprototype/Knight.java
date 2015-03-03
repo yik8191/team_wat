@@ -77,19 +77,21 @@ public class Knight{
 		// PROTOTYPE
         if (moveCooldown == 0) {
             if (movingLeft) {
-    			if (position.x > 0) {
+    			if ((position.x == 1 && position.y == 1)||
+    				(position.x > 1 && position.x < 8 && position.y != 1)){
     				position.x --;
     			}
             } else if (movingRight) {
-            	if (position.x < 8){
+            	if (((position.x == 0 || position.x == 7) && position.y == 1)||
+        			(position.x < 7 && position.y != 1)){
     				position.x++;
     			}
             } else if (movingUp) {
-            	if ((position.x == 1 || position.x == 8) && position.y < 2){
+            	if ((position.x == 1 || position.x == 7) && position.y < 2){
     				position.y++;
     			}
             } else if (movingDown) {
-            	if ((position.x == 1 || position.x == 8) && position.y > 0){
+            	if ((position.x == 1 || position.x == 7) && position.y > 0){
     				position.y--;
     			}
             }
