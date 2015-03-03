@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.cornell.cs3152.gameplayprototype.utils.FilmStrip;
+
 /**
  * Knight class!
  * Fill in description here!
@@ -16,6 +18,13 @@ public class Knight{
 	public boolean movingUp;
 	public boolean movingDown;
 	public Vector2 position;
+	
+	public static final String KNIGHT_FILE = "images/knight.png";
+	public static Texture knightTexture;
+	
+	public Knight(Vector2 position){
+		this.position = position;
+	}
 	
 	/** Do not do anything */
 	public static final int CONTROL_NO_ACTION  = 0x00;
@@ -71,7 +80,12 @@ public class Knight{
 
 	public void draw(GameCanvas canvas) {
 		// TODO: this method
-		//canvas.draw(sprite, this.position.x, this.position.y);
+		FilmStrip sprite = new FilmStrip(knightTexture, 1, 1);
+		Vector2 curPos = this.position;
+		Vector2 loc = new Vector2();
+		loc.x = curPos.x*80 + 35;
+		loc.y = curPos.y*80 + 185;
+		canvas.draw(sprite, loc.x, loc.y);
 	}
 
 //	/**
@@ -90,6 +104,7 @@ public class Knight{
 	 */
 	public static void PreLoadContent(AssetManager manager) {
 		// TODO: this method
+		manager.load(KNIGHT_FILE, Texture.class);
 	}
 
 	/**
@@ -106,6 +121,12 @@ public class Knight{
 	 */
 	public static void LoadContent(AssetManager manager) {
 		// TODO: this method
+		if (manager.isLoaded(KNIGHT_FILE)) {
+			knightTexture = manager.get(KNIGHT_FILE,Texture.class);
+			knightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			knightTexture = null;  // Failed to load
+		}
 	}
 
 	/**
@@ -117,5 +138,9 @@ public class Knight{
 	 */
 	public static void UnloadContent(AssetManager manager) {
 		// TODO: this method
+		if (knightTexture != null) {
+			knightTexture = null;
+			manager.unload(KNIGHT_FILE);
+		}
 	}
 }
