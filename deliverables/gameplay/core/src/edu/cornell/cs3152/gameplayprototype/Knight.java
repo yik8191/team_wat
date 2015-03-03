@@ -45,7 +45,7 @@ public class Knight{
 	/** If the player wants to exit the game */
 	public static final int CONTROL_EXIT = 0x80;
     /** Move cooldown time for the knight in frames */
-    public static final int MOVE_COOLDOWN = 10;
+    public static final int MOVE_COOLDOWN = 15;
 
 	public Vector2 getPostion() {
 		return position;
@@ -60,10 +60,10 @@ public class Knight{
 	 *
 	 * @param controlCode The movement controlCode (from InputController).
 	 */
-	public void update(int controlCode) {
+	public boolean update(int controlCode) {
         // If we are dead do nothing.
 		if (!isAlive) {
-			return;
+			return false;
 		}
 		// Determine how we are moving.
 		boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
@@ -75,30 +75,42 @@ public class Knight{
 		// VERY IMPORTANT - Movement must not be done in this class!
 		// ENSURE THAT THIS CODE DOES NOT CAUSE POSITION UPDATES IN TECHNICAL
 		// PROTOTYPE
+        boolean moveHappened = false;
         if (moveCooldown == 0) {
             if (movingLeft) {
-    			if (position.x > 0) {
+    			if ((position.x == 1 && position.y == 1)||
+    				(position.x > 1 && position.x < 8 && position.y != 1)){
     				position.x --;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
     			}
             } else if (movingRight) {
-            	if (position.x < 8){
+            	if (((position.x == 0 || position.x == 7) && position.y == 1)||
+        			(position.x < 7 && position.y != 1)){
     				position.x++;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
     			}
             } else if (movingUp) {
-            	if ((position.x == 1 || position.x == 8) && position.y < 2){
+            	if ((position.x == 1 || position.x == 7) && position.y < 2){
     				position.y++;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened=true;
     			}
             } else if (movingDown) {
-            	if ((position.x == 1 || position.x == 8) && position.y > 0){
+            	if ((position.x == 1 || position.x == 7) && position.y > 0){
     				position.y--;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
     			}
             }
         }
-        if (controlCode != 0) {
-            moveCooldown = MOVE_COOLDOWN;
+        if (moveHappened) {
+            return true;
         } else {
             moveCooldown = Math.max(0, moveCooldown - 1);
         }
+        return false;
 	}
 
 	public void draw(GameCanvas canvas) {

@@ -218,7 +218,11 @@ public class GameMode implements Screen{
 		// Process the game input
 		int action = inputController.getAction();
 
-        gameplayController.knight.update(action);
+        boolean hacky = gameplayController.knight.update(action);
+        if (hacky == true) {
+            gameplayController.enemies[0].update();
+            gameplayController.enemies[1].update();
+        }
 
 		// Test whether to reset the game.
 		switch (gameState) {
