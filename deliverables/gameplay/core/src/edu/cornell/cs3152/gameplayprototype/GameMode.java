@@ -216,7 +216,11 @@ public class GameMode implements Screen{
 	 */
 	private void update(float delta){
 		// Process the game input
-		inputController.getAction();
+		int action = inputController.getAction();
+
+        System.out.println(gameplayController.knight.getPostion());
+        gameplayController.knight.update(action);
+        System.out.println(gameplayController.knight.getPostion());
 
 		// Test whether to reset the game.
 		switch (gameState) {
