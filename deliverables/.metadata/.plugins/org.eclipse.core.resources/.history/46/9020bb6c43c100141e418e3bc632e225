@@ -40,23 +40,14 @@ public class GameplayController {
 	 */
 	public GameplayController() {
 		board = new Board(9,3);
-		knight = new Knight(new Vector2(0,1));
+		knight = new Knight();
 		enemies = new Enemy[numEnemies];
-		Vector2[] path0 = new Vector2[4];
-		Vector2[] path1 = new Vector2[4];
-		
-		path0[0] = new Vector2(5,2); 
-		path0[1] = new Vector2(4,2); 
-		path0[2] = new Vector2(3,2); 
-		path0[3] = new Vector2(4,2); 
-		enemies[0] = new Enemy(new Vector2(5,2), path0);
-		
-		path1[0] = new Vector2(4,0); 
-		path1[1] = new Vector2(5,0); 
-		path1[2] = new Vector2(4,0); 
-		path1[3] = new Vector2(3,0); 
-		enemies[1] = new Enemy(new Vector2(4,0), path1);
-		
+		Vector2[] path = new Vector2[3];
+		path[0] = new Vector2 (5,0); path[1] = new Vector2 (4,0); path[2] = new Vector2 (3,0); 
+		enemies[0] = new Enemy(new Vector2(5,0), path);
+		for (Enemy e : enemies){
+			e = new Enemy(null, null);
+		}
 		startTime = TimeUtils.millis();
 		currentTime = TimeUtils.millis();
 		enemiesMoved = false;
@@ -70,18 +61,13 @@ public class GameplayController {
 	public void resolveActions(InputController inputController) {
 		resolvePlayer(inputController);
 		resolveEnemies();
-		updateBoard(inputController);
+		updateBoard();
 	}
 
 	/** Resets the level */
 	public void reset() {
 		// probably need to print some sort of exit message or lose message
 		initBoard();
-		knight.position = new Vector2(0,1);
-		enemies[0].position = new Vector2(5,2);
-		enemies[0].currentStep = 1;
-		enemies[1].position = new Vector2(4,0);
-		enemies[1].currentStep = 1;
 	}
 
 	/** Whether or not it's time to reset the game */
@@ -125,7 +111,8 @@ public class GameplayController {
 		if (modTime < playerTol || (period - modTime) < playerTol) {
 			if (!playerMoved){
 				playerMoved = true;
-				knight.update(inputController.getAction());
+				knight.move(inputController.horizontal, inputController.vertical);
+				knight.update();
 			}
 		} else {
 			playerMoved = false;
@@ -154,11 +141,8 @@ public class GameplayController {
 	/**
 	 * Updates the board to handle interactions.
 	 */
-	private void updateBoard(InputController inputController){
-		if ((inputController.getAction()& InputController.CONTROL_RESET) == 
-				InputController.CONTROL_RESET){
-			reset();
-		}
+	private void updateBoard(){
+		// need to check if board needs to reset
 	}
 
 	/** Initializes the board, enemy, and character positions. Sets time to 0. */

@@ -4,30 +4,50 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.cornell.cs3152.gameplayprototype.utils.FilmStrip;
+
 /**
  * Knight class!
  * Fill in description here!
  * */
 public class Knight{
 	
-	// Constants for the control codes
-	// We would normally use an enum here, but Java enums do not bitmask nicely
-	/** Do not do anything */
-	public static final int NO_ACTION  = 0x00;
-	/** Moving the enemy to the left */
-	public static final int MOVE_LEFT  = 0x01;
-	/** Moving the enemy to the right */
-	public static final int MOVE_RIGHT = 0x02;
-	/** Moving the enemy to the up */
-	public static final int MOVE_UP    = 0x04;
-	/** Moving the enemy to the down */
-	public static final int MOVE_DOWN  = 0x08;
-	
-	public boolean isAlive;
-	public int move;  // encode movement information
+	public boolean isAlive = true;
+	public boolean movingLeft;
+	public boolean movingRight;
+	public boolean movingUp;
+	public boolean movingDown;
 	public Vector2 position;
+    public int moveCooldown;
 
-	public Vector2 getPostion() {
+	public static final String KNIGHT_FILE = "images/knight.png";
+	public static Texture knightTexture;
+	
+	public Knight(Vector2 position){
+        this.position = position;
+        this.moveCooldown = 0;
+    }
+	
+	/** Do not do anything */
+	public static final int CONTROL_NO_ACTION  = 0x00;
+	/** Move the knight to the left */
+	public static final int CONTROL_MOVE_LEFT  = 0x01;
+	/** Move the knight to the right */
+	public static final int CONTROL_MOVE_RIGHT = 0x02;
+	/** Move the knight to the up */
+	public static final int CONTROL_MOVE_UP    = 0x04;
+	/** Move the knight to the down */
+	public static final int CONTROL_MOVE_DOWN  = 0x08;
+	/** If the player wants to jump */
+	public static final int CONTROL_JUMP = 0x10;
+	/** If the player wants to reset the game */
+	public static final int CONTROL_RESET  = 0x40;
+	/** If the player wants to exit the game */
+	public static final int CONTROL_EXIT = 0x80;
+    /** Move cooldown time for the knight in frames */
+    public static final int MOVE_COOLDOWN = 15;
+
+	public Vector2 getPosition() {
 		return position;
 	}
 
@@ -40,20 +60,74 @@ public class Knight{
 	 *
 	 * @param controlCode The movement controlCode (from InputController).
 	 */
-	public void update() {
-		// If we are dead do nothing.
+	public boolean update(int controlCode) {
+        // If we are dead do nothing.
 		if (!isAlive) {
-			return;
+			return false;
 		}
+		// Determine how we are moving.
+		boolean movingLeft  = (controlCode & InputController.CONTROL_MOVE_LEFT) != 0;
+		boolean movingRight = (controlCode & InputController.CONTROL_MOVE_RIGHT) != 0;
+		boolean movingUp    = (controlCode & InputController.CONTROL_MOVE_UP) != 0;
+		boolean movingDown  = (controlCode & InputController.CONTROL_MOVE_DOWN) != 0;
+		// Process movement command.
+		// Hard code bounds for now
+		// VERY IMPORTANT - Movement must not be done in this class!
+		// ENSURE THAT THIS CODE DOES NOT CAUSE POSITION UPDATES IN TECHNICAL
+		// PROTOTYPE
+        boolean moveHappened = false;
+        if (moveCooldown == 0) {
+            if (movingLeft) {
+    			if ((position.x == 1 && position.y == 1)||
+    				(position.x > 1 && position.x < 8 && position.y != 1)){
+    				position.x --;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
+    			}
+            } else if (movingRight) {
+            	if (((position.x == 0 || position.x == 7) && position.y == 1)||
+        			(position.x < 7 && position.y != 1)){
+    				position.x++;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
+    			}
+            } else if (movingUp) {
+            	if ((position.x == 1 || position.x == 7) && position.y < 2){
+    				position.y++;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened=true;
+    			}
+            } else if (movingDown) {
+            	if ((position.x == 1 || position.x == 7) && position.y > 0){
+    				position.y--;
+                    moveCooldown = MOVE_COOLDOWN;
+                    moveHappened = true;
+    			}
+            }
+        }
+        if (moveHappened) {
+            return true;
+        } else {
+            moveCooldown = Math.max(0, moveCooldown - 1);
+        }
+        return false;
 	}
 
-	public void draw() {
+	public void draw(GameCanvas canvas) {
 		// TODO: this method
+		FilmStrip sprite = new FilmStrip(knightTexture, 1, 1);
+		Vector2 curPos = this.position;
+		Vector2 loc = new Vector2();
+		loc.x = curPos.x*79 + 45;
+		loc.y = curPos.y*79 + 182;
+		canvas.draw(sprite, loc.x, loc.y);
 	}
 
-	public void move(int horizontal, int vertical){
-		
-	}
+//	/**
+//	 * Moves the knight based on the input code*/
+//	public void move(int code){
+//		
+//	}
 	/**
 	 * Preloads the assets for the Knight.
 	 *
@@ -65,6 +139,7 @@ public class Knight{
 	 */
 	public static void PreLoadContent(AssetManager manager) {
 		// TODO: this method
+		manager.load(KNIGHT_FILE, Texture.class);
 	}
 
 	/**
@@ -81,6 +156,12 @@ public class Knight{
 	 */
 	public static void LoadContent(AssetManager manager) {
 		// TODO: this method
+		if (manager.isLoaded(KNIGHT_FILE)) {
+			knightTexture = manager.get(KNIGHT_FILE,Texture.class);
+			knightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			knightTexture = null;  // Failed to load
+		}
 	}
 
 	/**
@@ -92,5 +173,9 @@ public class Knight{
 	 */
 	public static void UnloadContent(AssetManager manager) {
 		// TODO: this method
+		if (knightTexture != null) {
+			knightTexture = null;
+			manager.unload(KNIGHT_FILE);
+		}
 	}
 }

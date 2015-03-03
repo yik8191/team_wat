@@ -44,11 +44,14 @@ public class GameMode implements Screen{
 	// Path names to texture and sound assets
 	// TODO: replace the assets in these paths with the correct files
 	private static String BKGD_FILE = "images/loading.png";
+	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture background;
+	/**backgroung image for level 1 */
+	private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
 
@@ -66,6 +69,7 @@ public class GameMode implements Screen{
 	public static void PreLoadContent(AssetManager manager){
 		// Load the background
 		manager.load(BKGD_FILE, Texture.class);
+		manager.load(LVL1_FILE, Texture.class);
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -75,7 +79,9 @@ public class GameMode implements Screen{
 
 		// Pre-load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// Knight.PreLoadContent(manager);
+		// s.PreLoadContent(manager);
+		Knight.PreLoadContent(manager);
+		Enemy.PreLoadContent(manager);
 	}
 
 	/**
@@ -99,6 +105,13 @@ public class GameMode implements Screen{
 		} else {
 			displayFont = null;
 		}
+		
+		if (manager.isLoaded(LVL1_FILE)) {
+			level1 = manager.get(LVL1_FILE, Texture.class);
+			level1.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			displayFont = null;
+		}
 
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
@@ -109,7 +122,8 @@ public class GameMode implements Screen{
 
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// Knight.LoadContent(manager);
+		Knight.LoadContent(manager);
+		Enemy.LoadContent(manager);
 	}
 
 	/**
@@ -125,6 +139,10 @@ public class GameMode implements Screen{
 			background = null;
 			manager.unload(BKGD_FILE);
 		}
+		if (level1 != null) {
+			level1 = null;
+			manager.unload(LVL1_FILE);
+		}
 		if (displayFont != null) {
 			displayFont = null;
 			manager.unload(FONT_FILE);
@@ -132,7 +150,8 @@ public class GameMode implements Screen{
 
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// Knight.UnloadContent(manager);
+		Knight.UnloadContent(manager);
+		Enemy.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -197,7 +216,13 @@ public class GameMode implements Screen{
 	 */
 	private void update(float delta){
 		// Process the game input
-		inputController.readInput();
+		int action = inputController.getAction();
+
+        boolean hacky = gameplayController.knight.update(action);
+        if (hacky == true) {
+            gameplayController.enemies[0].update();
+            gameplayController.enemies[1].update();
+        }
 
 		// Test whether to reset the game.
 		switch (gameState) {
@@ -221,7 +246,7 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
-		inputController.readInput();
+		inputController.getAction();
 		gameplayController.resolveActions(inputController);
 
 	}
@@ -246,6 +271,15 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+		if (gameState == GameState.INTRO){
+			canvas.drawBackground(background, 0, 0);
+		}else{
+			canvas.drawBackground(level1, 0, 0);
+		}
+		gameplayController.knight.draw(canvas);
+		for (Enemy e : gameplayController.enemies) {
+			e.draw(canvas);
+		}
 		canvas.end();
 	}
 

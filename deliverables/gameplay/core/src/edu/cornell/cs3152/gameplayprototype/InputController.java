@@ -22,7 +22,6 @@
 package edu.cornell.cs3152.gameplayprototype;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import edu.cornell.cs3152.gameplayprototype.utils.*;
@@ -34,203 +33,71 @@ import edu.cornell.cs3152.gameplayprototype.utils.*;
  * start-up.  This class allows us to hot-swap in a controller via the new XBox360Controller class.
  */
 public class InputController {
-	
-	/** Whether the exit button was pressed. */
-	protected boolean exitPressed;
-	/** Whether the jump button was pressed */
-	protected boolean jumpPressed;
-	/** Set to +-1, +-2, or 0 to indicate vertical movement */
-	protected int vertical;
-	/** Set to +-1, +-2, or 0 to indicate horizontal movement */
-	protected int horizontal;
-
-	// Constants for the control codes
-	// We would normally use an enum here, but Java enums do not bitmask nicely
-	/** Do not do anything */
-	public static final int CONTROL_NO_ACTION  = 0x00;
-	/** Move the knight to the left */
-	public static final int CONTROL_MOVE_LEFT  = 0x01;
-	/** Move the knight to the right */
-	public static final int CONTROL_MOVE_RIGHT = 0x02;
-	/** Move the knight to the up */
-	public static final int CONTROL_MOVE_UP    = 0x04;
-	/** Move the knight to the down */
-	public static final int CONTROL_MOVE_DOWN  = 0x08;
-	/** If the player wants to jump */
-	public static final int CONTROL_JUMP = 0x10;
-	/** If the player wants to reset the game */
-	public static final int CONTROL_RESET  = 0x40;
-	/** If the player wants to exit the game */
-	public static final int CONTROL_EXIT = 0x80;
-	
-	private XBox360Controller xbox;
-	/** Whether to enable keyboard control (as opposed to X-Box) */
-	private boolean keyboard;
-	
-	/**
-	 * Return the action of this ship (but do not process)
-	 * 
-	 * The value returned must be some bitmasked combination of the static ints 
-	 * in the implemented interface.  For example, if the ship moves left and fires, 
-	 * it returns CONTROL_MOVE_LEFT | CONTROL_FIRE
-	 *
-	 * @return the action of this ship
-	 */
-    public int getAction() {
-		int code = CONTROL_NO_ACTION;
-		
-		if (keyboard) {
-			if (Gdx.input.isKeyPressed(Keys.W))    code |= CONTROL_MOVE_UP;
-			if (Gdx.input.isKeyPressed(Keys.A))  code |= CONTROL_MOVE_LEFT;
-			if (Gdx.input.isKeyPressed(Keys.S))  code |= CONTROL_MOVE_DOWN;
-			if (Gdx.input.isKeyPressed(Keys.D)) code |= CONTROL_MOVE_RIGHT;
-			if (Gdx.input.isKeyPressed(Keys.R)) code |= CONTROL_EXIT;
-		} else {
-			// TODO: X-Box
-		}
-
-		// Prevent diagonal movement.
-        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
-            code ^= CONTROL_MOVE_UP;
-        }
-
-		if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-			code ^= CONTROL_MOVE_RIGHT;
-        }
-
-		if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-			code ^= CONTROL_MOVE_DOWN;
-        }
-
-		if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
-			code ^= CONTROL_MOVE_LEFT;
-        }
-
-		// Cancel out conflicting movements.
-		if ((code & CONTROL_MOVE_LEFT) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-			code ^= (CONTROL_MOVE_LEFT | CONTROL_MOVE_RIGHT);
-        }
-
-		if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_DOWN) != 0) {
-			code ^= (CONTROL_MOVE_UP | CONTROL_MOVE_DOWN);
-        }
-
-		return code;
-	}
-	
-	
-    /**
-     * Returns the x and y movement of the player
-     *
-     * -1 or -2 = left/down, 1 or 2 = right/up, 0 = still
-     *
-     * @return the amount of movement in x and y directions
-     */
-//    public Vector2 getMovement() {
-//        Vector2 move = new Vector2(horizontal, vertical);
-//        return move;
-//    }
-
-	/**
-	 * Returns true if the exit button was pressed.
-	 *
-	 * @return true if the exit button was pressed.
-	 */
-	public boolean didExit() {
-		return exitPressed;
-	}
-
-    /**
-     *
-     * Returns true if the jump button was pressed.
-     *
-     * @return true if the jump button was pressed.
-     */
-    public boolean didJump() {
-        return jumpPressed;
-    }
-
-	/**
-	 * Creates a new input controller
-	 *
-	 * The input controller attempts to connect to the X-Box controller at device 0, if it exists.  Otherwise, it falls
-	 * back to the keyboard control.
-	 */
-	public InputController() {
-		// If we have a game-pad for id, then use it.
-		xbox = new XBox360Controller(0);
-	}
-
-	/**
-	 * Reads the input for the player and converts the result into game logic.
-	 */
-	public void readInput() {
-		// Check to see if a GamePad is connected
-		if (xbox.isConnected()) {
-			readGamepad();
-			readKeyboard(true); // Read as a back-up
-		} else {
-			readKeyboard(false);
-		}
-	}
-
-	/**
-	 * Reads input from an X-Box controller connected to this computer.
-	 */
-	private void readGamepad() {
-        exitPressed = xbox.getY();
-        jumpPressed = xbox.getA();
-        int jumpMul = 1;
-
-        if (jumpPressed == true) {
-           jumpMul = 2;
-        }
-
-        if (xbox.getDPadUp() == true) {
-            vertical = 1*jumpMul;
-        } else if (xbox.getDPadDown() == true) {
-            vertical = -1*jumpMul;
-        } else if (xbox.getDPadRight() == true) {
-            horizontal = 1*jumpMul;
-        } else if (xbox.getDPadLeft() == true) {
-            horizontal = -1*jumpMul;
-        } else {
-            vertical = 0;
-            horizontal = 0;
-        }
-	}
+    // Constants for the control codes
+    /** Do not do anything */
+    public static final int CONTROL_NO_ACTION  = 0x00;
+    /** Move the player to the left */
+    public static final int CONTROL_MOVE_LEFT  = 0x01;
+    /** Move the player to the right */
+    public static final int CONTROL_MOVE_RIGHT = 0x02;
+    /** Move the player to the up */
+    public static final int CONTROL_MOVE_UP    = 0x04;
+    /** Move the player to the down */
+    public static final int CONTROL_MOVE_DOWN  = 0x08;
+    /** Apply the jump modifier */
+    public static final int CONTROL_JUMP = 0x10;
+    /** Reset the game */
+    public static final int CONTROL_RESET = 0x20;
+    /** Exit the game */
+    public static final int CONTROL_EXIT = 0x40;
 
 	/**
 	 * Reads input from the keyboard.
 	 *
-	 * This controller reads from the keyboard regardless of whether or not an X-Box controller is connected.  However,
-	 * if a controller is connected, this method gives priority to the X-Box controller.
-	 *
-	 * @param secondary true if the keyboard should give priority to a gamepad
+	 * This controller reads from the keyboard.
+     *
+     * @return bit masked code for the action.
 	 */
-	private void readKeyboard(boolean secondary) {
-		exitPressed = (secondary && exitPressed) || (Gdx.input.isKeyPressed(Input.Keys.ESCAPE));
-        jumpPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-        int jumpMul = 1;
+	public int getAction() {
 
-        // Check if the jump key is being held down
-        if (jumpPressed == true) {
-            jumpMul = 2;
+        int code = CONTROL_NO_ACTION;
+        if (Gdx.input.isKeyPressed(Input.Keys.A))  code |= CONTROL_MOVE_LEFT;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) code |= CONTROL_MOVE_RIGHT;
+        if (Gdx.input.isKeyPressed(Input.Keys.W))    code |= CONTROL_MOVE_UP;
+        if (Gdx.input.isKeyPressed(Input.Keys.S))  code |= CONTROL_MOVE_DOWN;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))  code |= CONTROL_JUMP;
+        if (Gdx.input.isKeyPressed(Input.Keys.R))  code |= CONTROL_RESET;
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))  code |= CONTROL_EXIT;
+
+        // Prevent diagonal movement.
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+            code ^= CONTROL_MOVE_UP;
+        }
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= CONTROL_MOVE_RIGHT;
+        }
+        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= CONTROL_MOVE_DOWN;
+        }
+        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
+            code ^= CONTROL_MOVE_LEFT;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            horizontal = -1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            horizontal = 1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            vertical = 1*jumpMul;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            vertical = -1*jumpMul;
-        } else {
-            vertical = 0;
-            horizontal = 0;
+        // Cancel out conflicting movements.
+        if ((code & CONTROL_MOVE_LEFT) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
+            code ^= (CONTROL_MOVE_LEFT | CONTROL_MOVE_RIGHT);
         }
+        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_DOWN) != 0) {
+            code ^= (CONTROL_MOVE_UP | CONTROL_MOVE_DOWN);
+        }
+
+        return code;
 
         // To implement in future update: Double-tap to jump scheme
+	}
+	
+	public boolean didExit() {
+		return ((CONTROL_EXIT&getAction()) == CONTROL_EXIT);
 	}
 }
