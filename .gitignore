@@ -41,3 +41,9 @@ hs_err_pid*
 # temporary files
 *~
 *#
+
+# Eclipse stuff we don't want
+.metadata
+
+# IntelliJ stuff we don't want
+.idea
