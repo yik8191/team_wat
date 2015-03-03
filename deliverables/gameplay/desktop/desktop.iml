@@ -17,7 +17,11 @@
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-backend-lwjgl:1.5.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-platform:1.5.4:natives-desktop" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-freetype-platform:1.5.4:natives-desktop" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers-desktop:1.5.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers-platform:1.5.4:natives-desktop" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx:1.5.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers:1.5.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.lwjgl.lwjgl:lwjgl:2.9.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.lwjgl.lwjgl:lwjgl_util:2.9.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.jlayer:jlayer:1.0.1-gdx" level="project" />
@@ -30,9 +34,5 @@
     <orderEntry type="library" exported="" name="Gradle: net.java.jinput:jinput-platform:2.0.5:natives-linux" level="project" />
     <orderEntry type="library" exported="" name="Gradle: net.java.jinput:jinput-platform:2.0.5:natives-windows" level="project" />
     <orderEntry type="library" exported="" name="Gradle: net.java.jinput:jinput-platform:2.0.5:natives-osx" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-freetype-platform:1.5.4:natives-desktop" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers-desktop:1.5.4" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers-platform:1.5.4:natives-desktop" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.badlogicgames.gdx:gdx-controllers:1.5.4" level="project" />
   </component>
 </module>

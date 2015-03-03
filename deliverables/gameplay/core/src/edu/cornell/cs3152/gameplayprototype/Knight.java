@@ -12,7 +12,7 @@ import edu.cornell.cs3152.gameplayprototype.utils.FilmStrip;
  * */
 public class Knight{
 	
-	public boolean isAlive;
+	public boolean isAlive = true;
 	public boolean movingLeft;
 	public boolean movingRight;
 	public boolean movingUp;
@@ -57,7 +57,7 @@ public class Knight{
 	 * @param controlCode The movement controlCode (from InputController).
 	 */
 	public void update(int controlCode) {
-		// If we are dead do nothing.
+        // If we are dead do nothing.
 		if (!isAlive) {
 			return;
 		}
