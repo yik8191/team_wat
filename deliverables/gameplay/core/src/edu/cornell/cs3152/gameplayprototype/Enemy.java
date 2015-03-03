@@ -17,10 +17,14 @@ public class Enemy{
 	public static final String ENEMY_FILE = "images/enemy.png";
 	public static Texture enemyTexture;
 	public Vector2 position;
+    /** Move cooldown time for the enemy in frames */
+    public static final int MOVE_COOLDOWN = 30;
+    public int moveCooldown;
 
 	public Enemy(Vector2 position, Vector2[] path){
 		this.position = position;
 		this.path = path;
+        this.moveCooldown = MOVE_COOLDOWN;
 	}
 	
 	/**
@@ -35,12 +39,19 @@ public class Enemy{
 	 * For now, just move the enemy to its new position manually
 	 */
 	public void update(){
-		position = path[currentStep];
-		currentStep++;
-		int arraySize = path.length;
-		if (currentStep >= arraySize){
-			currentStep = currentStep % arraySize; 
-		}				
+        if (moveCooldown == MOVE_COOLDOWN) {
+            position = path[currentStep];
+            currentStep++;
+            int arraySize = path.length;
+            if (currentStep >= arraySize){
+                currentStep = currentStep % arraySize;
+            }
+        }
+
+        moveCooldown -= 1;
+        if (moveCooldown == 0) {
+            moveCooldown = MOVE_COOLDOWN;
+        }
 	}
 
 	/**
@@ -51,8 +62,10 @@ public class Enemy{
 		FilmStrip sprite = new FilmStrip(enemyTexture, 1, 1);
 		Vector2 curPos = this.position;
 		Vector2 loc = new Vector2();
-		loc.x = curPos.x*80 + 35;
-		loc.y = curPos.y*80 + 185;
+        if (curPos != null) {
+            loc.x = curPos.x*80 + 35;
+            loc.y = curPos.y*80 + 185;
+        }
 		canvas.draw(sprite, loc.x, loc.y);
 	}
 
