@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: edu.cornell.cs3152.gameplayprototype.desktop.DesktopLaunch
+ er
+

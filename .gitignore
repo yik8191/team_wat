@@ -40,9 +40,11 @@ hs_err_pid*
 # temporary files
 *~
 *#
-
-# Eclipse stuff we don't want
-.metadata
-
-# IntelliJ stuff we don't want
-.idea
+=======
+deliverables/gameplay/.idea/workspace.xml
+>>>>>>> 546b1da680b00acc5e8c5b2f66aa6b4a7b08f4ed
+deliverables/gameplay/.idea/workspace.xml
+deliverables/gameplay/.idea/workspace.xml
+deliverables/gameplay/core/src/edu/cornell/cs3152/gameplayprototype/InputController.java
+deliverables/gameplay/.idea/workspace.xml
+deliverables/gameplay/.idea/workspace.xml
