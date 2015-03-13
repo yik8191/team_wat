@@ -44,3 +44,6 @@ hs_err_pid*
 # ignore Eclipse and IntelliJ configuration files
 .metadata
 .idea
+.mf
+.MF
+.iml
