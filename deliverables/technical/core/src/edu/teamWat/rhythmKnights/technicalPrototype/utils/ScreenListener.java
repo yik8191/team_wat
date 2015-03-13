@@ -21,7 +21,7 @@
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
  */
-package edu.cornell.cs3152.gameplayprototype.utils;
+package edu.teamWat.rhythmKnights.technicalPrototype.utils;
 
 import com.badlogic.gdx.Screen;
 

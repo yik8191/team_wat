@@ -18,16 +18,16 @@
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
  */
-package edu.cornell.cs3152.gameplayprototype.utils;
+package edu.teamWat.rhythmKnights.technicalPrototype.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Texture class providing flipbook animation. <p/> The class breaks up the image into regions, according the number of
+ * Texture class providing flipbook animation.  The class breaks up the image into regions, according the number of
  * rows and columns in the image.  It then indexes each region by frame, starting from the top-left and processing one
- * row at a time. <p/> This is a subclass of TextureRegion, and so it keeps a rectangle region that tracks the active
+ * row at a time.  This is a subclass of TextureRegion, and so it keeps a rectangle region that tracks the active
  * part of the image to use for drawing.  See the API for that class to understand how a TextureRegion.  The primary
  * advantage of this class is that it can quickly compute the new region from the frame number.
  */
@@ -69,7 +69,7 @@ public class FilmStrip extends TextureRegion {
 	}
 
 	/**
-	 * Creates a new filmstrip from the given texture. <p/> The parameter size is to indicate that there are unused
+	 * Creates a new filmstrip from the given texture.  The parameter size is to indicate that there are unused
 	 * frames in the filmstrip.  The value size must be less than or equal to rows*cols, or this constructor will raise
 	 * an error.
 	 *
@@ -110,7 +110,7 @@ public class FilmStrip extends TextureRegion {
 	}
 
 	/**
-	 * Sets the active frame as the given index. <p/> If the frame index is invalid, an error is raised.
+	 * Sets the active frame as the given index.  If the frame index is invalid, an error is raised.
 	 *
 	 * @param frame the index to make the active frame
 	 */
