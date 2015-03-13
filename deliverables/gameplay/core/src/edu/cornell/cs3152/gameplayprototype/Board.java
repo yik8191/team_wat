@@ -1,13 +1,5 @@
 package edu.cornell.cs3152.gameplayprototype;
 
-import edu.cornell.cs3152.gameplayprototype.*;
-import edu.cornell.cs3152.gameplayprototype.utils.*;
-
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.assets.*;
-import com.badlogic.gdx.graphics.*;
-
-import java.security.PublicKey;
 
 
 /**

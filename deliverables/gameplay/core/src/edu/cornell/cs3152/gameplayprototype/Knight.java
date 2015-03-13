@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
-import edu.cornell.cs3152.gameplayprototype.utils.FilmStrip;
+import edu.cornell.cs3152.gameplayprototype.utils.*;
 
 /**
  * Knight class!

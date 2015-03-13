@@ -1,6 +1,5 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
-public class RhythmController {
 
-
+public class GameplayController {
 }

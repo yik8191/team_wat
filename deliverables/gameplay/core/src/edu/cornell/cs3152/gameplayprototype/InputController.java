@@ -22,8 +22,6 @@
 package edu.cornell.cs3152.gameplayprototype;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.math.Vector;
-import com.badlogic.gdx.math.Vector2;
 import edu.cornell.cs3152.gameplayprototype.utils.*;
 
 /**

@@ -3,7 +3,8 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "edu.teamWat.rhythmKnights.gameplayPrototype.desktop.DesktopLauncher"
+project.ext.mainClassName = "edu.teamWat.rhythmKnights.technicalPrototype.desktop.DesktopLauncher"
+
 project.ext.assetsDir = new File("../core/assets");
 
 task run(dependsOn: classes, type: JavaExec) {
