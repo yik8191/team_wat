@@ -31,6 +31,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
@@ -41,6 +42,8 @@ public class LoadingMode implements Screen, InputProcessor {
 	private static final String BACKGROUND_FILE = "images/loading.png";
 	private static final String PROGRESS_FILE = "images/progressbar.png";
 	private static final String PLAY_BTN_FILE = "images/play.png";
+
+	RhythmController rhythmController;
 
 	/** Background texture for start-up */
 	private Texture background;
@@ -200,6 +203,8 @@ public class LoadingMode implements Screen, InputProcessor {
 		startButton = (System.getProperty("os.name").equals("Mac OS X") ? MAC_OS_X_START : WINDOWS_START);
 		Gdx.input.setInputProcessor(this);
 		active = true;
+
+		rhythmController = new RhythmController();
 	}
 
 	/** Called when this screen should release all resources. */
@@ -300,7 +305,9 @@ public class LoadingMode implements Screen, InputProcessor {
 
 			// We are are ready, notify our listener
 			if (isReady() && listener != null) {
-				listener.exitScreen(this, 0);
+				//TODO: remove rhythm controller and launch exit screen
+				rhythmController.launch(144);
+//				listener.exitScreen(this, 0);
 			}
 		}
 	}

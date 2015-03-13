@@ -1,19 +1,57 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
-public class RhythmController {
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.*;
+import com.badlogic.gdx.utils.TimeUtils;
 
-	private float tempo;
-	private float period;
+public class RhythmController{
 
+	private long period;
 
+	final float actionWindowRadius = 0.125f;
+	final float totalOffset = 0;
+	final float finalActionOffset = 0.5f;
 
+	private boolean beatComplete;
+	private boolean begun = false;
 
+	private long startTime;
+	Music music;
 
+	public RhythmController() {
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.mp3"));
+		music.setLooping(true);
+	}
+
+	public void launch(float tempo) {
+		if (!begun) {
+			period = (long)(60000.0f / tempo);
+			startTime = TimeUtils.millis();
+			begun = true;
+			music.play();
+		}
+	}
+
+	public BeatState getBeatRegion() {
+		long time = TimeUtils.timeSinceMillis(startTime);
+		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
+		if (beatTime < actionWindowRadius || (1.0f - beatTime) > actionWindowRadius) {
+			return BeatState.PlayerAction;
+		} else if (beatTime > finalActionOffset && !beatComplete){
+			beatComplete = true;
+			return BeatState.FinalAction;
+		} else {
+			return BeatState.None;
+		}
+	}
+
+	public void reset() {
+		startTime = TimeUtils.millis();
+	}
 
 	public enum BeatState {
 		PlayerAction,
 		FinalAction,
-		Cleanup,
 		None
 	}
 }

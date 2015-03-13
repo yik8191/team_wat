@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController;
 
 /**
  * Primary view class for the game, abstracting the basic graphics calls.
@@ -262,6 +263,7 @@ public class GameCanvas {
 	 * Nothing is flushed to the graphics card until the method end() is called.
 	 */
 	public void begin() {
+
 		spriteBatch.begin();
 		active = true;
 
