@@ -1,4 +1,4 @@
-package edu.teamWat.rhythmKnights.technicalPrototype;
+package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
 // TODO: doc
 public abstract class InputController {

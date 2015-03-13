@@ -31,8 +31,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class LoadingMode implements Screen, InputProcessor {
 	// Textures necessary to support the loading screen

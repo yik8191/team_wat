@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.*;
 import com.badlogic.gdx.assets.loaders.*;
 import com.badlogic.gdx.assets.loaders.resolvers.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 
 public class GDXRoot extends Game implements ScreenListener {

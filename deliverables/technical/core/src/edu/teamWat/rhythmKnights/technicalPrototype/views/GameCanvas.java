@@ -18,7 +18,7 @@
  * his code has been copied from the above original authors and modified by Gagik Hakobyan.
  */
 
-package edu.teamWat.rhythmKnights.technicalPrototype;
+package edu.teamWat.rhythmKnights.technicalPrototype.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

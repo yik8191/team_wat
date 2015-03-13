@@ -13,14 +13,17 @@
  */
 
 package edu.teamWat.rhythmKnights.technicalPrototype;
-// TODO: Import the package that contains our GameObjects
+// TODO: Import the package that contains our gameObjects
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
+import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 
 /**
