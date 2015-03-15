@@ -22,6 +22,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
@@ -150,7 +153,6 @@ public class GameMode implements Screen{
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		//Knight.UnloadContent(manager);
-
 	}
 
 	// CONSTANTS
@@ -192,8 +194,6 @@ public class GameMode implements Screen{
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
 //		inputController = new InputController();
-		gameplayController = new GameplayController(null, null);
-		// TODO: Fill in other initialization code
 	}
 
 	/**
@@ -214,8 +214,33 @@ public class GameMode implements Screen{
 	 *
 	 * @param delta Number of seconds since last animation frame
 	 */
-	private void update(float delta){
+	private void update(float delta) {
 		// TODO: Main game loop
+
+		switch (gameState) {
+			case INTRO:
+				Board board = new Board(14, 7);
+				GameObjectList gameObjects = new GameObjectList(13);
+				gameObjects.add(new Knight(0, 0, 3));
+				gameObjects.add(new DynamicTile(1, 3, 3));
+				gameObjects.add(new Skeleton(2, 5, 0));
+				gameObjects.add(new Skeleton(3, 5, 6));
+				gameObjects.add(new Slime(4, 7, 0));
+				gameObjects.add(new Slime(5, 7, 6));
+				gameObjects.add(new Slime(6, 9, 3));
+				gameObjects.add(new Slime(6, 9, 5));
+				gameObjects.add(new Slime(6, 11, 4));
+
+				// Hard coded initialization code
+
+				gameplayController = new GameplayController(board, gameObjects);
+				// TODO: Fill in other initialization code
+
+
+				break;
+			case PLAY:
+				break;
+		}
 	}
 
 	/**
@@ -246,6 +271,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+		canvas.end();
 	}
 
 	/**

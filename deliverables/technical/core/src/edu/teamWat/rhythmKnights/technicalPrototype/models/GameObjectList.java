@@ -2,12 +2,13 @@ package edu.teamWat.rhythmKnights.technicalPrototype.models;
 
 import java.util.*;
 
+import com.badlogic.gdx.Game;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.GameObject;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class GameObjectList implements Iterable<GameObject>{
 	/** The list of ships managed by this object. */
-	private GameObject[] gameobjs;
+	public GameObject[] gameobjs;
 	/** The amount of time that has passed since creation (for animation) */
 	private float time;
 	/** Custom iterator so we can use this object in for-each loops */
@@ -41,6 +42,13 @@ public class GameObjectList implements Iterable<GameObject>{
 	public GameObject get(int id) {
 		return gameobjs[id];
 	}
+
+	/** Adds a gameObject to the list at the gameObject's ID
+	 *  Careful not to add a gameObject whose ID is already taken. That would be bad.
+	 *
+	 * @param gameObject gameObject to be added
+	 */
+	public void add(GameObject gameObject) { gameobjs[gameObject.getId()] = gameObject; }
 
 	public GameObject getPlayer() {
 		return gameobjs[0];
