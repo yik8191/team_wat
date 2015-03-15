@@ -254,7 +254,7 @@ public class LoadingMode implements Screen, InputProcessor {
 	 */
 	private void draw() {
 		canvas.begin();
-		canvas.draw(background, 0, -100);
+		canvas.draw(background, 0, 0);
 		if (playButton == null) {
 			drawProgress(canvas);
 		} else {
