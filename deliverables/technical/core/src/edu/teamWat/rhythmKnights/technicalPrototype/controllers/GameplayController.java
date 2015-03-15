@@ -7,24 +7,10 @@ public class GameplayController {
 	/** Reference to the game board */
 	public Board board;
 	/** Reference to all the game objects in the game */	
-	public GameObjectList gameobjs;
+	public GameObjectList gameObjects;
 	/** List of all the input (both player and AI) controllers */
 	protected InputController[] controls;
-	/**
-	* Creates a GameplayController for the given models.
-	*
-	* @param board The game board
-	*/
-	public GameplayController(Board board, GameObjectList gameobjs) {
-		this.board = board;
-		this.gameobjs = gameobjs;
-		initGameObjectPositions();
-		controls = new InputController[gameobjs.size()];
-		controls[0] = new PlayerController();
-		for(int ii = 1; ii < gameobjs.size(); ii++) {
-			controls[ii] = new AIController(ii,board,gameobjs);
-		}
-	}
+
 	/**
 	* Initializes the ships to new random locations.
 	*
@@ -40,4 +26,29 @@ public class GameplayController {
 		// Assign positions
 	}
 
+	public GameplayController() {
+		initialize();
+	}
+
+	public void initialize() {
+
+		board = new Board(14, 7);
+		gameObjects = new GameObjectList(13);
+
+		gameObjects.add(new Knight(0, 0, 3));
+		gameObjects.add(new DynamicTile(1, 3, 3));
+		gameObjects.add(new Skeleton(2, 5, 0));
+		gameObjects.add(new Skeleton(3, 5, 6));
+		gameObjects.add(new Slime(4, 7, 0));
+		gameObjects.add(new Slime(5, 7, 6));
+		gameObjects.add(new Slime(6, 9, 3));
+		gameObjects.add(new Slime(6, 9, 5));
+		gameObjects.add(new Slime(6, 11, 4));
+
+		controls = new InputController[gameObjects.size()];
+		controls[0] = new PlayerController();
+		for (int ii = 1; ii < gameObjects.size(); ii++) {
+			controls[ii] = new AIController(ii, board, gameObjects);
+		}
+	}
 }

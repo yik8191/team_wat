@@ -60,6 +60,8 @@ public class GameMode implements Screen{
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
 
+
+
 	/**
 	 * Preloads the assets for this game.
 	 *
@@ -84,7 +86,7 @@ public class GameMode implements Screen{
 
 		// Pre-load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// s.PreLoadContent(manager);
+		Board.PreLoadContent(manager);
 	}
 
 	/**
@@ -125,7 +127,7 @@ public class GameMode implements Screen{
 
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		// Knight.LoadContent(manager);
+		Board.LoadContent(manager);
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class GameMode implements Screen{
 
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
-		//Knight.UnloadContent(manager);
+		Board.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -219,22 +221,7 @@ public class GameMode implements Screen{
 
 		switch (gameState) {
 			case INTRO:
-				Board board = new Board(14, 7);
-				GameObjectList gameObjects = new GameObjectList(13);
-
-				gameObjects.add(new Knight(0, 0, 3));
-				gameObjects.add(new DynamicTile(1, 3, 3));
-				gameObjects.add(new Skeleton(2, 5, 0));
-				gameObjects.add(new Skeleton(3, 5, 6));
-				gameObjects.add(new Slime(4, 7, 0));
-				gameObjects.add(new Slime(5, 7, 6));
-				gameObjects.add(new Slime(6, 9, 3));
-				gameObjects.add(new Slime(6, 9, 5));
-				gameObjects.add(new Slime(6, 11, 4));
-
-				// Hard coded initialization code
-
-				gameplayController = new GameplayController(board, gameObjects);
+				gameplayController = new GameplayController();
 
 				// TODO: Fill in other initialization code
 
@@ -273,6 +260,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+		gameplayController.board.draw(canvas);
 		canvas.end();
 	}
 
