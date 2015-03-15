@@ -38,6 +38,11 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController
  * primitives will be present in future labs.
  */
 public class GameCanvas {
+
+    private final int TILE_SIZE = 80;
+    private final int X_OFFSET = 45;
+    private final int Y_OFFSET = 182;
+
 	/** Drawing context to handle textures as sprites */
 	private SpriteBatch spriteBatch;
 
@@ -505,6 +510,12 @@ public class GameCanvas {
 		font.setColor(Color.WHITE);
 		font.draw(spriteBatch, text, x, y + offset);
 	}
+
+    public Vector2 boardToScreen(float x, float y){
+        return new Vector2(x*TILE_SIZE + X_OFFSET, y*TILE_SIZE + Y_OFFSET);
+    }
+
+
 
 	/**
 	 * Enumeration of supported BlendStates.

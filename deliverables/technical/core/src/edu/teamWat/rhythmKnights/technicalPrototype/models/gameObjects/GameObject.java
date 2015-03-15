@@ -1,48 +1,38 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects;
 
 import com.badlogic.gdx.math.Vector2;
+import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public abstract class GameObject {
-	
-	// Instance Attributes
-	/** A unique identifier; used to decouple classes. */
-	private int id;
-	/** Object position */
-	private Vector2 position;
-	/** Object velocity */
-	private Vector2 velocity;
-	/** Boolean to track if we are dead yet */
-	private boolean isAlive;
-	
 
-	/**
-	 * Create ship # id at the given position.
-	 *
-	 * @param id The unique ship id
-	 * @param x The initial x-coordinate of the ship
-	 * @param y The initial y-coordinate of the ship
-	 */
-	public GameObject(int id, float x, float y) {
-		this.id = id;
-		
-		position = new Vector2(x,y);
-		velocity = new Vector2();
-	}
+    protected int id;
+    private boolean isAlive = false;
+    private boolean isActive = false;
+    private Vector2 position;
+    private Vector2 velocity;
 
+    /* Draw the sprite on the board*/
+    public abstract void draw(GameCanvas canvas);
 
-	public boolean isActive() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    /* Returns boolean stating if this object is alive*/
+    public boolean isAlive(){
+        return this.isAlive;
+    }
 
-	public boolean isAlive() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    /* Returns a boolean stating if this object is active*/
+    public boolean isActive(){
+        return this.isActive;
+    }
 
+    /* Updates objects appropriately on each frame*/
+    public abstract void update();
 
-	public Vector2 getPosition() {
-		// TODO Auto-generated method stub
-		return position;
-	}
+    /* Returns 2D array containing this object's position on the board*/
+    public Vector2 getPosition(){
+        return this.position;
+    }
+
+    /* Pass in relative vector of which direction this object should move */
+    public void move(Vector2 direction){this.position.add(direction);}
+
 }

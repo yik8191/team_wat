@@ -1,5 +1,15 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects;
 
-public class DynamicTile {
+import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
+
+public class DynamicTile extends GameObject {
+
+    public void draw(GameCanvas canvas) {
+
+    }
+
+    public void update() {
+
+    }
 
 }
