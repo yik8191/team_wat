@@ -149,13 +149,11 @@ public class Board {
     }
 
     public int getWidth() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.width;
     }
 
     public int getHeight() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.height;
     }
 
     public float boardToScreen(int i) {

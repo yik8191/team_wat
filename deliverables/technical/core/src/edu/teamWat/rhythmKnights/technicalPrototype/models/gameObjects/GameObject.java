@@ -35,4 +35,7 @@ public abstract class GameObject {
     /* Pass in relative vector of which direction this object should move */
     public void move(Vector2 direction){this.position.add(direction);}
 
+    /* Get the ID of this GameObject */
+    public int getId(){ return this.id;}
+
 }

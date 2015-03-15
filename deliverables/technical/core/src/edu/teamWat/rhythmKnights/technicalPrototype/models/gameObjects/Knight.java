@@ -13,6 +13,7 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
  * */
 public class Knight extends GameObject {
 
+    private KnightState state = KnightState.NORMAL;
     private boolean isAlive = false;
     private boolean isActive = false;
 
@@ -24,8 +25,10 @@ public class Knight extends GameObject {
     public Vector2 position;
     public int moveCooldown;
 
-    public static final String KNIGHT_FILE = "images/knight.png";
+    public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
+    public static final String KNIGHT_NORMAL_FILE = "images/knight.png";
     public static Texture knightTexture;
+    public static Texture knightDashTexture;
 
     public Knight(int id, float x, float y){
         this.id = id;
@@ -64,11 +67,23 @@ public class Knight extends GameObject {
 
     }
 
+    public void setState(KnightState ks){
+        this.state = ks;
+    }
 
+    public KnightState getState(){
+        return this.state;
+    }
 
 
     public void draw(GameCanvas canvas) {
-        FilmStrip sprite = new FilmStrip(knightTexture, 1, 1);
+        FilmStrip sprite;
+        if (this.state == KnightState.NORMAL) {
+            sprite = new FilmStrip(knightTexture, 1, 1);
+        } else {
+            //TODO: Update this to use a dashing texture
+            sprite = new FilmStrip(knightTexture, 1, 1);
+        }
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
         canvas.draw(sprite, loc.x, loc.y);
     }
@@ -89,7 +104,8 @@ public class Knight extends GameObject {
      * @param manager Reference to global asset manager.
      */
     public static void PreLoadContent(AssetManager manager) {
-        manager.load(KNIGHT_FILE, Texture.class);
+        manager.load(KNIGHT_NORMAL_FILE, Texture.class);
+        manager.load(KNIGHT_DASH_FILE, Texture.class);
     }
 
     /**
@@ -105,11 +121,19 @@ public class Knight extends GameObject {
      * @param manager Reference to global asset manager.
      */
     public static void LoadContent(AssetManager manager) {
-        if (manager.isLoaded(KNIGHT_FILE)) {
-            knightTexture = manager.get(KNIGHT_FILE,Texture.class);
+        //load normal file
+        if (manager.isLoaded(KNIGHT_NORMAL_FILE)) {
+            knightTexture = manager.get(KNIGHT_DASH_FILE,Texture.class);
             knightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             knightTexture = null;  // Failed to load
+        }
+        //load dash file
+        if (manager.isLoaded(KNIGHT_DASH_FILE)) {
+            knightDashTexture = manager.get(KNIGHT_DASH_FILE,Texture.class);
+            knightDashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            knightDashTexture = null;  // Failed to load
         }
     }
 
@@ -123,7 +147,23 @@ public class Knight extends GameObject {
     public static void UnloadContent(AssetManager manager) {
         if (knightTexture != null) {
             knightTexture = null;
-            manager.unload(KNIGHT_FILE);
+            manager.unload(KNIGHT_NORMAL_FILE);
+        }
+        if (knightDashTexture != null) {
+            knightDashTexture = null;
+            manager.unload(KNIGHT_DASH_FILE);
         }
     }
+
+    public enum KnightState {
+        /** Alpha blending on, assuming the colors have pre-multipled alpha (DEFAULT) */
+        NORMAL,
+        /** Alpha blending on, assuming the colors have no pre-multipled alpha */
+        DASHING,
+        /** Color values are added together, causing a white-out effect */
+        ATTACKING,
+        /** Color values are draw on top of one another with no transparency support */
+        FREEZING
+    }
+
 }
