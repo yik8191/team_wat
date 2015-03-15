@@ -22,6 +22,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.GameObject;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.Knight;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
@@ -150,7 +154,6 @@ public class GameMode implements Screen{
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		//Knight.UnloadContent(manager);
-
 	}
 
 	// CONSTANTS
@@ -192,8 +195,6 @@ public class GameMode implements Screen{
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
 //		inputController = new InputController();
-		gameplayController = new GameplayController(null, null);
-		// TODO: Fill in other initialization code
 	}
 
 	/**
@@ -216,6 +217,22 @@ public class GameMode implements Screen{
 	 */
 	private void update(float delta){
 		// TODO: Main game loop
+
+		switch (gameState) {
+			case INTRO:
+				Board board = new Board(14, 7);
+				GameObjectList gameObjects = new GameObjectList(13);
+
+				// Hard coded initialization code
+
+				gameplayController = new GameplayController(board, null);
+				// TODO: Fill in other initialization code
+
+
+				break;
+			case PLAY:
+				break;
+		}
 	}
 
 	/**
