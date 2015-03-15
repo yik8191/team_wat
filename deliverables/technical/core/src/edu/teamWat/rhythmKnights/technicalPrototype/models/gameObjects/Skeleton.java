@@ -8,19 +8,12 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class Skeleton extends GameObject {
 
-    private boolean isAlive = false;
-    private boolean isActive = false;
-
-    public Vector2 position;
-    public int moveCooldown;
-
     public static final String SKELETON_FILE = "images/skeleton.png";
     public static Texture skeletonTexture;
 
     public Skeleton(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
-        this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
     }

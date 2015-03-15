@@ -14,8 +14,6 @@ public class GameplayController {
 	* Creates a GameplayController for the given models.
 	*
 	* @param board The game board
-	* @param ships The list of ships
-	* @param TODO: add projectile list
 	*/
 	public GameplayController(Board board, GameObjectList gameobjs) {
 		this.board = board;
@@ -34,9 +32,10 @@ public class GameplayController {
 	*/
 	private void initGameObjectPositions() {
 		// Set the player position
-		float px = board.boardToScreen(board.getWidth() / 2);
-		float py = board.boardToScreen(board.getHeight() / 2);
-		gameobjs.get(0).getPosition().set(px,py);
+//		float px = board.boardToScreen(board.getWidth() / 2);
+//		float py = board.boardToScreen(board.getHeight() / 2);
+//		gameobjs.get(0).getPosition().set(px,py);
+
 		// Create a list of available AI positions
 		// Assign positions
 	}

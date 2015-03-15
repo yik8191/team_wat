@@ -19,7 +19,7 @@ public class RhythmController{
 	Music music;
 
 	public RhythmController() {
-		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.mp3"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.wav"));
 		music.setLooping(true);
 	}
 

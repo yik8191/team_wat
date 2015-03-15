@@ -221,6 +221,7 @@ public class GameMode implements Screen{
 			case INTRO:
 				Board board = new Board(14, 7);
 				GameObjectList gameObjects = new GameObjectList(13);
+
 				gameObjects.add(new Knight(0, 0, 3));
 				gameObjects.add(new DynamicTile(1, 3, 3));
 				gameObjects.add(new Skeleton(2, 5, 0));
@@ -234,6 +235,7 @@ public class GameMode implements Screen{
 				// Hard coded initialization code
 
 				gameplayController = new GameplayController(board, gameObjects);
+
 				// TODO: Fill in other initialization code
 
 

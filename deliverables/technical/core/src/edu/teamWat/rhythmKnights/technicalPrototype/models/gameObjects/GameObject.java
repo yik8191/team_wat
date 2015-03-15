@@ -6,10 +6,10 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 public abstract class GameObject {
 
     protected int id;
-    private boolean isAlive = false;
-    private boolean isActive = false;
+    protected boolean isAlive = false;
+    protected boolean isActive = false;
     protected Vector2 position;
-    private Vector2 velocity;
+    protected Vector2 velocity;
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -37,5 +37,4 @@ public abstract class GameObject {
 
     /* Get the ID of this GameObject */
     public int getId(){ return this.id;}
-
 }
