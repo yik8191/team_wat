@@ -13,7 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 
-public class KnightController implements InputController {
+public class PlayerController implements InputController {
 
 	/**
 	 * Return the action of this knight (but do not process)
