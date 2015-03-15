@@ -16,7 +16,7 @@ public class Board {
     private final int TILE_SIZE = 80;
 
     /* Variables for tile sprite */
-    public static final String TILE_FILE = "images/tile.png";
+    public static final String TILE_FILE = "images/tileFull.png";
     public static Texture tileTexture;
 
     /* Holds the array of tiles that make up this board */
@@ -63,8 +63,6 @@ public class Board {
     }
 
     public void draw(GameCanvas canvas){
-        int xOff;
-        int yOff;
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
