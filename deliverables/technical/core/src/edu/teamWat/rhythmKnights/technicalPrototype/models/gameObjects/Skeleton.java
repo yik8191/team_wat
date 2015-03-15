@@ -17,8 +17,9 @@ public class Skeleton extends GameObject {
     public static final String SKELETON_FILE = "images/skeleton.png";
     public static Texture skeletonTexture;
 
-    public Skeleton(Vector2 position){
-        this.position = position;
+    public Skeleton(int id, float x, float y){
+        this.id = id;
+        this.position = new Vector2(x,y);
         this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
@@ -92,5 +93,4 @@ public class Skeleton extends GameObject {
             manager.unload(SKELETON_FILE);
         }
     }
-
 }

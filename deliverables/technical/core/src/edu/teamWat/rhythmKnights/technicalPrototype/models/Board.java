@@ -148,6 +148,23 @@ public class Board {
         }
     }
 
+    public int getWidth() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public int getHeight() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public float boardToScreen(int i) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
+
     /**
      * Each tile on the board has a set of attributes associated with it.
      */
@@ -192,4 +209,6 @@ public class Board {
             return Color.MAGENTA;
         }
     }
+
+
 }

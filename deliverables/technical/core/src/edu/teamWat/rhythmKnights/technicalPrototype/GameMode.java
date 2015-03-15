@@ -192,7 +192,7 @@ public class GameMode implements Screen{
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
 //		inputController = new InputController();
-		gameplayController = new GameplayController();
+		gameplayController = new GameplayController(null, null);
 		// TODO: Fill in other initialization code
 	}
 

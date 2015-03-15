@@ -8,7 +8,6 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class Slime extends GameObject{
 
-
     private boolean isAlive = false;
     private boolean isActive = false;
 
@@ -18,8 +17,9 @@ public class Slime extends GameObject{
     public static final String SLIME_FILE = "images/skeleton.png";
     public static Texture slimeTexture;
 
-    public Slime(Vector2 position){
-        this.position = position;
+    public Slime(int id, float x, float y){
+        this.id = id;
+        this.position = new Vector2(x,y);
         this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
@@ -93,5 +93,6 @@ public class Slime extends GameObject{
             manager.unload(SLIME_FILE);
         }
     }
+
 
 }

@@ -5,9 +5,11 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public abstract class GameObject {
 
+    protected int id;
     private boolean isAlive = false;
     private boolean isActive = false;
     private Vector2 position;
+    private Vector2 velocity;
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -32,4 +34,5 @@ public abstract class GameObject {
 
     /* Pass in relative vector of which direction this object should move */
     public void move(Vector2 direction){this.position.add(direction);}
+
 }

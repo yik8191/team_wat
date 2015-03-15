@@ -27,8 +27,9 @@ public class Knight extends GameObject {
     public static final String KNIGHT_FILE = "images/knight.png";
     public static Texture knightTexture;
 
-    public Knight(Vector2 position){
-        this.position = position;
+    public Knight(int id, float x, float y){
+        this.id = id;
+        this.position = new Vector2(x,y);
         this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
