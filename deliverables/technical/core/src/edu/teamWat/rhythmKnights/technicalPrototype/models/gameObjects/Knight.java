@@ -14,16 +14,6 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
-    private boolean isAlive = false;
-    private boolean isActive = false;
-
-    private boolean movingLeft;
-    private boolean movingRight;
-    private boolean movingUp;
-    private boolean movingDown;
-
-    public Vector2 position;
-    public int moveCooldown;
 
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/knight.png";
@@ -33,7 +23,6 @@ public class Knight extends GameObject {
     public Knight(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
-        this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
     }
@@ -54,9 +43,6 @@ public class Knight extends GameObject {
     public static final int CONTROL_RESET  = 0x40;
     /** If the player wants to exit the game */
     public static final int CONTROL_EXIT = 0x80;
-    /** Move cooldown time for the knight in frames */
-    public static final int MOVE_COOLDOWN = 15;
-
 
     public void update() {
         // If we are dead do nothing.
@@ -156,14 +142,16 @@ public class Knight extends GameObject {
     }
 
     public enum KnightState {
-        /** Alpha blending on, assuming the colors have pre-multipled alpha (DEFAULT) */
+        /** Draw the knight normally */
         NORMAL,
-        /** Alpha blending on, assuming the colors have no pre-multipled alpha */
+        /** Knight is dashing */
         DASHING,
-        /** Color values are added together, causing a white-out effect */
+        /** Knight is attacking */
         ATTACKING,
-        /** Color values are draw on top of one another with no transparency support */
-        FREEZING
+        /** Knight is using freeze spell */
+        FREEZING,
+        /** Knight is falling off board */
+        FALLING
     }
 
 }

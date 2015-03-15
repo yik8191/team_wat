@@ -7,20 +7,13 @@ import edu.teamWat.rhythmKnights.technicalPrototype.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class Slime extends GameObject{
-
-    private boolean isAlive = false;
-    private boolean isActive = false;
-
-    public Vector2 position;
-    public int moveCooldown;
-
+    
     public static final String SLIME_FILE = "images/skeleton.png";
     public static Texture slimeTexture;
 
     public Slime(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
-        this.moveCooldown = 0;
         isAlive = true;
         isActive = true;
     }
