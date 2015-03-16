@@ -67,19 +67,12 @@ public class Knight extends GameObject {
         if (this.state == KnightState.NORMAL) {
             sprite = new FilmStrip(knightTexture, 1, 1);
         } else {
-            //TODO: Update this to use a dashing texture
-            sprite = new FilmStrip(knightTexture, 1, 1);
+            sprite = new FilmStrip(knightDashTexture, 1, 1);
         }
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.TILE_SIZE, canvas.TILE_SIZE);
     }
 
-
-    //	/**
-//	 * Moves the knight based on the input code*/
-//	public void move(int code){
-//
-//	}
     /**
      * Preloads the assets for the Knight.
      *
