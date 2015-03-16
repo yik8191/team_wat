@@ -191,23 +191,27 @@ public class Board {
 
         public void setColor(){
             if (this.isStart){
-                col = Color.CYAN;
+                //bright blue
+                col = new Color(7f/255f, 82f/255f, 1,1);
             }else if (this.isObstacle){
+                //dark gray
                 col = Color.DARK_GRAY;
             }else if (this.isGoal){
+                //bright green
+                col = new Color(27f/255f, 253f/255f,34f/255f, 1);
                 col = Color.GREEN;
             }else {
-                col = Color.MAGENTA;
                 Random r = new Random();
-                int i = r.nextInt(5);
+                int i = r.nextInt(3);
                 if (i == 0) {
-                    col = Color.MAGENTA;
+                    //pinkish
+                    col = new Color(223f/255f, 157f/255f, 233f/255f, 1);
                 } else if (i == 1) {
-                    col = Color.PURPLE;
-                } else if (i == 2) {
-                    col = Color.ORANGE;
-                } else {
-                    col = Color.TEAL;
+                    //blueish
+                    col = new Color(157f/255f, 192f/255f, 233f/255f, 1);
+                } else{
+                    //greenish
+                    col = new Color(157f/255f, 233f/255f, 162f/255f, 1);
                 }
             }
         }

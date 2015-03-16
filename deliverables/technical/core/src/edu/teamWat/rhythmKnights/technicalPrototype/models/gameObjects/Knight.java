@@ -109,7 +109,7 @@ public class Knight extends GameObject {
     public static void LoadContent(AssetManager manager) {
         //load normal file
         if (manager.isLoaded(KNIGHT_NORMAL_FILE)) {
-            knightTexture = manager.get(KNIGHT_DASH_FILE,Texture.class);
+            knightTexture = manager.get(KNIGHT_NORMAL_FILE,Texture.class);
             knightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             knightTexture = null;  // Failed to load
