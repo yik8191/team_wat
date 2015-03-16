@@ -6,24 +6,26 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class RhythmController{
 
-	private long period;
+	static private long period;
 
-	final float actionWindowRadius = 0.125f;
-	final float totalOffset = 0;
-	final float finalActionOffset = 0.5f;
+	static final float actionWindowRadius = 0.125f;
+	static final float totalOffset = 0;
+	static final float finalActionOffset = 0.5f;
 
-	private boolean beatComplete;
-	private boolean begun = false;
+	private static boolean beatComplete;
+	private static boolean begun = false;
 
-	private long startTime;
-	Music music;
+	private static long startTime;
+	static Music music;
 
-	public RhythmController() {
+	private RhythmController() {};
+
+	public static void init() {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.wav"));
 		music.setLooping(true);
 	}
 
-	public void launch(float tempo) {
+	public static void launch(float tempo) {
 		if (!begun) {
 			period = (long)(60000.0f / tempo);
 			startTime = TimeUtils.millis();
@@ -32,7 +34,7 @@ public class RhythmController{
 		}
 	}
 
-	public BeatState getBeatRegion() {
+	public static BeatState getBeatRegion() {
 		long time = TimeUtils.timeSinceMillis(startTime);
 		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
 		if (beatTime < actionWindowRadius || (1.0f - beatTime) > actionWindowRadius) {
@@ -45,8 +47,10 @@ public class RhythmController{
 		}
 	}
 
-	public void reset() {
+	public static void reset() {
 		startTime = TimeUtils.millis();
+		music.stop();
+		music.play();
 	}
 
 	public enum BeatState {

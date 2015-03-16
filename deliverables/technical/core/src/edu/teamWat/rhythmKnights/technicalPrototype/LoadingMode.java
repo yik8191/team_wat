@@ -43,7 +43,6 @@ public class LoadingMode implements Screen, InputProcessor {
 	private static final String PROGRESS_FILE = "images/progressbar.png";
 	private static final String PLAY_BTN_FILE = "images/play.png";
 
-	RhythmController rhythmController;
 
 	/** Background texture for start-up */
 	private Texture background;
@@ -204,7 +203,7 @@ public class LoadingMode implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		active = true;
 
-		rhythmController = new RhythmController();
+		RhythmController.init();
 	}
 
 	/** Called when this screen should release all resources. */
@@ -306,7 +305,7 @@ public class LoadingMode implements Screen, InputProcessor {
 			// We are are ready, notify our listener
 			if (isReady() && listener != null) {
 				//TODO: remove rhythm controller and launch exit screen
-				rhythmController.launch(144);
+				RhythmController.launch(144);
 				listener.exitScreen(this, 0);
 			}
 		}

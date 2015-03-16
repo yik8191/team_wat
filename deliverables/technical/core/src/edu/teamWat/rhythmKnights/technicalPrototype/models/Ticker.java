@@ -62,7 +62,7 @@ public class Ticker {
 	}
 
 	public TickerAction getAction() {
-		return TickerAction.MOVE;
+		return tickerActions[beat];
 	}
 
 	public void advance() {
