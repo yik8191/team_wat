@@ -88,6 +88,8 @@ public class GameMode implements Screen{
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.PreLoadContent(manager);
 		Knight.PreLoadContent(manager);
+		Slime.PreLoadContent(manager);
+		Skeleton.PreLoadContent(manager);
 	}
 
 	/**
@@ -129,7 +131,9 @@ public class GameMode implements Screen{
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.LoadContent(manager);
-		Knight.UnloadContent(manager);
+		Knight.LoadContent(manager);
+		Slime.LoadContent(manager);
+		Skeleton.LoadContent(manager);
 	}
 
 	/**
@@ -158,6 +162,8 @@ public class GameMode implements Screen{
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.UnloadContent(manager);
 		Knight.UnloadContent(manager);
+		Slime.UnloadContent(manager);
+		Skeleton.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -263,6 +269,7 @@ public class GameMode implements Screen{
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
 		gameplayController.board.draw(canvas);
+		gameplayController.gameObjects.draw(canvas);
 		canvas.end();
 	}
 

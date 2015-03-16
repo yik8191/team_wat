@@ -94,6 +94,9 @@ public class GameObjectList implements Iterable<GameObject>{
 	 */
 	public void draw(GameCanvas canvas) {
 		//draw all objects
+		for (GameObject gameObject : gameobjs) {
+			gameObject.draw(canvas);
+		}
 	}
 	
 

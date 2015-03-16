@@ -31,7 +31,7 @@ public class GameplayController {
 	public void initialize() {
 
 		board = new Board(13, 7);
-		gameObjects = new GameObjectList(13);
+		gameObjects = new GameObjectList(9);
 
 		gameObjects.add(new Knight(0, 0, 3));
 		gameObjects.add(new DynamicTile(1, 3, 3));
@@ -39,9 +39,9 @@ public class GameplayController {
 		gameObjects.add(new Skeleton(3, 5, 6));
 		gameObjects.add(new Slime(4, 7, 0));
 		gameObjects.add(new Slime(5, 7, 6));
-		gameObjects.add(new Slime(6, 9, 3));
-		gameObjects.add(new Slime(6, 9, 5));
-		gameObjects.add(new Slime(6, 11, 4));
+		gameObjects.add(new Slime(6, 9, 2));
+		gameObjects.add(new Slime(7, 9, 4));
+		gameObjects.add(new Slime(8, 11, 3));
 
 		board.setTile(0, 3, false, true, false);
 		board.setTile(3, 1, false, false, true);
