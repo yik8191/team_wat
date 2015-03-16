@@ -24,6 +24,7 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayControll
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
@@ -90,6 +91,7 @@ public class GameMode implements Screen{
 		Knight.PreLoadContent(manager);
 		Slime.PreLoadContent(manager);
 		Skeleton.PreLoadContent(manager);
+		Ticker.PreLoadContent(manager);
 	}
 
 	/**
@@ -134,6 +136,7 @@ public class GameMode implements Screen{
 		Knight.LoadContent(manager);
 		Slime.LoadContent(manager);
 		Skeleton.LoadContent(manager);
+		Ticker.LoadContent(manager);
 	}
 
 	/**
@@ -164,6 +167,7 @@ public class GameMode implements Screen{
 		Knight.UnloadContent(manager);
 		Slime.UnloadContent(manager);
 		Skeleton.UnloadContent(manager);
+		Ticker.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -274,6 +278,7 @@ public class GameMode implements Screen{
 		// NO UPDATE CODE HERE
 		gameplayController.board.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);
+		gameplayController.ticker.draw(canvas);
 		canvas.end();
 	}
 

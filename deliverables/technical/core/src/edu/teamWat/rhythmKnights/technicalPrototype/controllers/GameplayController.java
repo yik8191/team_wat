@@ -10,6 +10,8 @@ public class GameplayController {
 	public GameObjectList gameObjects;
 	/** List of all the input (both player and AI) controllers */
 	protected InputController[] controls;
+	/** Ticker */
+	public Ticker ticker;
 
 	private boolean gameOver = false;
 
@@ -63,6 +65,8 @@ public class GameplayController {
 		board.setTile(12, 2, false, false, true);
 		board.setTile(12, 3, true, false, false);
 		board.setTile(12, 4, false, false, true);
+
+		ticker = new Ticker(new Ticker.TickerAction[] {Ticker.TickerAction.MOVE, Ticker.TickerAction.MOVE, Ticker.TickerAction.MOVE, Ticker.TickerAction.DASH});
 
 		controls = new InputController[gameObjects.size()];
 		controls[0] = new PlayerController();
