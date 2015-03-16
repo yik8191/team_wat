@@ -207,6 +207,7 @@ public class GameplayController {
 	private void advanceGameState () {
 		if (!gameStateAdvanced) {
 			ticker.advance();
+			board.updateColors();
 			gameStateAdvanced = true;
 		}
 	}
