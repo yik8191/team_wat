@@ -32,7 +32,7 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = new Board(14, 7);
+		board = new Board(13, 7);
 		gameObjects = new GameObjectList(13);
 
 		gameObjects.add(new Knight(0, 0, 3));
@@ -44,6 +44,25 @@ public class GameplayController {
 		gameObjects.add(new Slime(6, 9, 3));
 		gameObjects.add(new Slime(6, 9, 5));
 		gameObjects.add(new Slime(6, 11, 4));
+
+		board.setTile(0, 3, false, true, false);
+		board.setTile(3, 1, false, false, true);
+		board.setTile(3, 2, false, false, true);
+		board.setTile(3, 3, false, false, true);
+		board.setTile(3, 4, false, false, true);
+		board.setTile(3, 5, false, false, true);
+		board.setTile(4, 1, false, false, true);
+		board.setTile(4, 2, false, false, true);
+		board.setTile(4, 3, false, false, true);
+		board.setTile(4, 4, false, false, true);
+		board.setTile(4, 5, false, false, true);
+		board.setTile(7, 3, false, false, true);
+		board.setTile(8, 3, false, false, true);
+		board.setTile(9, 3, false, false, true);
+		board.setTile(10, 3, false, false, true);
+		board.setTile(12, 2, false, false, true);
+		board.setTile(12, 3, true, false, false);
+		board.setTile(12, 4, false, false, true);
 
 		controls = new InputController[gameObjects.size()];
 		controls[0] = new PlayerController();

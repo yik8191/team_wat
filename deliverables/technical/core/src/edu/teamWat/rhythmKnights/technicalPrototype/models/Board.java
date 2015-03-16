@@ -54,7 +54,7 @@ public class Board {
     }
 
     /*Set a certain tile to have all listed variables*/
-    public void setTile(int x, int y, boolean goal, boolean start, boolean knight, boolean enemy, boolean obstacle){
+    public void setTile(int x, int y, boolean goal, boolean start, boolean obstacle){
         this.tiles[x][y].isGoal = goal;
         this.tiles[x][y].isStart = start;
         //this.tiles[x][y].isKnight = knight;
