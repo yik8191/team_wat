@@ -201,7 +201,7 @@ public class Board {
                 col = Color.GREEN;
             }else {
                 Random r = new Random();
-                int i = r.nextInt(5);
+                int i = r.nextInt(4);
                 if (i == 0) {
                     //pinkish
                     col = new Color(145f/255f, 55f/255f, 82f/255f, 1);
@@ -212,9 +212,6 @@ public class Board {
                     //greenish
                     col = new Color(32f/120f, 120f/255f, 82f/255f, 1);
                 } else if (i == 3) {
-                    //lightblue
-                    col = new Color(27f/255f, 156f/255f, 154f/255f, 1);
-                } else if (i == 4) {
                     //yellowish
                     col = new Color(143f/255f, 138f/255f, 91f/255f, 1);
                 }
