@@ -1,7 +1,12 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
+import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker.*;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 public class GameplayController {
 	/** Reference to the game board */
@@ -12,6 +17,12 @@ public class GameplayController {
 	protected InputController[] controls;
 	/** Ticker */
 	public Ticker ticker;
+
+	private ArrayList<Integer> playerActionQueue = new ArrayList<Integer>();
+
+	boolean playerMoved = false;
+
+	boolean playerInvolnerable = false;
 
 	private boolean gameOver = false;
 
@@ -66,7 +77,7 @@ public class GameplayController {
 		board.setTile(12, 3, true, false, false);
 		board.setTile(12, 4, false, false, true);
 
-		ticker = new Ticker(new Ticker.TickerAction[] {Ticker.TickerAction.MOVE, Ticker.TickerAction.MOVE, Ticker.TickerAction.MOVE, Ticker.TickerAction.DASH});
+		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.DASH});
 
 		controls = new InputController[gameObjects.size()];
 		controls[0] = new PlayerController();
@@ -77,8 +88,26 @@ public class GameplayController {
 
 
 	public void update() {
-		int action = controls[0].getAction();
-		
+		int code = controls[0].getAction();
+		switch (RhythmController.getBeatRegion()) {
+			case PlayerAction:
+				playerActionQueue.add(code);
+				Vector2 direction = new Vector2();
+				TickerAction action = ticker.getAction();
+				switch (action) {
+					case MOVE:
+
+						break;
+					case DASH:
+
+						break;
+				}
+				break;
+			case FinalAction:
+				break;
+			case None:
+				break;
+		}
 	}
 
 	public boolean isGameOver() {

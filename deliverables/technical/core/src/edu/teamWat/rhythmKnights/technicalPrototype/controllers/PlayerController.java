@@ -30,31 +30,6 @@ public class PlayerController implements InputController {
         if (Gdx.input.isKeyPressed(Input.Keys.W))    code |= CONTROL_MOVE_UP;
         if (Gdx.input.isKeyPressed(Input.Keys.S))  code |= CONTROL_MOVE_DOWN;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.R))  code |= CONTROL_RESET;
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))  code |= CONTROL_EXIT;
-
-        // Prevent diagonal movement.
-        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
-            code ^= CONTROL_MOVE_UP;
-        }
-        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-            code ^= CONTROL_MOVE_RIGHT;
-        }
-        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-            code ^= CONTROL_MOVE_DOWN;
-        }
-        if ((code & CONTROL_MOVE_DOWN) != 0 && (code & CONTROL_MOVE_LEFT) != 0) {
-            code ^= CONTROL_MOVE_LEFT;
-        }
-
-        // Cancel out conflicting movements.
-        if ((code & CONTROL_MOVE_LEFT) != 0 && (code & CONTROL_MOVE_RIGHT) != 0) {
-            code ^= (CONTROL_MOVE_LEFT | CONTROL_MOVE_RIGHT);
-        }
-        if ((code & CONTROL_MOVE_UP) != 0 && (code & CONTROL_MOVE_DOWN) != 0) {
-            code ^= (CONTROL_MOVE_UP | CONTROL_MOVE_DOWN);
-        }
-
         return code;
     }
 }

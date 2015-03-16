@@ -117,6 +117,10 @@ public class Knight extends GameObject {
         }
     }
 
+	public void takeDamage() {
+
+	}
+
     public enum KnightState {
         /** Draw the knight normally */
         NORMAL,
