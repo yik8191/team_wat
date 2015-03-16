@@ -26,9 +26,7 @@ public class GameplayController {
 		// Assign positions
 	}
 
-	public GameplayController() {
-		initialize();
-	}
+	public GameplayController() {	}
 
 	public void initialize() {
 

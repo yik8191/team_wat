@@ -60,6 +60,7 @@ public class Board {
         //this.tiles[x][y].isKnight = knight;
         //this.tiles[x][y].isEnemy = enemy;
         this.tiles[x][y].isObstacle = obstacle;
+        this.tiles[x][y].setColor();
     }
 
     public void draw(GameCanvas canvas){
@@ -185,25 +186,29 @@ public class Board {
             isKnight = false;
             isEnemy = false;
             isObstacle = false;
+            setColor();
+        }
+
+        public void setColor(){
             if (this.isStart){
                 col = Color.CYAN;
-            }
-            if (this.isObstacle){
+            }else if (this.isObstacle){
                 col = Color.DARK_GRAY;
-            }
-            if (this.isGoal){
+            }else if (this.isGoal){
                 col = Color.GREEN;
-            }
-            Random r = new Random();
-            int i = r.nextInt(5);
-            if (i == 0){
+            }else {
                 col = Color.MAGENTA;
-            }else if (i == 1){
-                col = Color.PURPLE;
-            }else if (i == 2){
-                col = Color.ORANGE;
-            }else{
-                col = Color.TEAL;
+                Random r = new Random();
+                int i = r.nextInt(5);
+                if (i == 0) {
+                    col = Color.MAGENTA;
+                } else if (i == 1) {
+                    col = Color.PURPLE;
+                } else if (i == 2) {
+                    col = Color.ORANGE;
+                } else {
+                    col = Color.TEAL;
+                }
             }
         }
 
