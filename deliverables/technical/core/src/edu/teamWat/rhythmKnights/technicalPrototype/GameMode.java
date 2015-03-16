@@ -43,7 +43,9 @@ public class GameMode implements Screen{
 		/** Before the game has started */
 		INTRO,
 		/** While we are playing the game */
-		PLAY
+		PLAY,
+        /** Player has won the game */
+        WIN
 	}
 
 	// GRAPHICS AND SOUND RESOURCES
@@ -245,8 +247,14 @@ public class GameMode implements Screen{
 				break;
 			case PLAY:
 				if (gameplayController.isGameOver()) reset();
+                else if (!gameplayController.gameObjects.get(1).isAlive()) reset();
+                else if (gameplayController.gameObjects.get(1).getPosition() ==
+                        canvas.boardToScreen(12, 3)) gameState = GameState.WIN;
 				else play();
 				break;
+            case WIN:
+                // Print level complete message!
+                break;
 		}
 	}
 
