@@ -51,7 +51,7 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
 	// TODO: replace the assets in these paths with the correct files
-	private static String BKGD_FILE = "images/loading.png";
+	private static String BKGD_FILE = "images/background.png";
 	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
@@ -288,6 +288,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+        canvas.draw(background, 0, 0);
 		gameplayController.board.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);
 		gameplayController.ticker.draw(canvas);
