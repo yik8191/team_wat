@@ -11,8 +11,17 @@ package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.TimeUtils;
 
-public class PlayerController implements InputController {
+public class PlayerController implements InputController, InputProcessor {
+
+	public int controlCode = CONTROL_NO_ACTION;
+	public long lastEventTime = 0;
+	public long startTime = TimeUtils.millis();
+
+
 
 	/**
 	 * Return the action of this knight (but do not process)
@@ -23,13 +32,85 @@ public class PlayerController implements InputController {
 	 * @return the action of this ship
 	 */
     public int getAction() {
-
-        int code = CONTROL_NO_ACTION;
-        if (Gdx.input.isKeyPressed(Input.Keys.A))  code |= CONTROL_MOVE_LEFT;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) code |= CONTROL_MOVE_RIGHT;
-        if (Gdx.input.isKeyPressed(Input.Keys.W))    code |= CONTROL_MOVE_UP;
-        if (Gdx.input.isKeyPressed(Input.Keys.S))  code |= CONTROL_MOVE_DOWN;
-
-        return code;
+	    return controlCode;
     }
+
+	public void clear() {
+		controlCode = CONTROL_NO_ACTION;
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		switch (keycode) {
+			case Keys.A:
+				controlCode |= CONTROL_MOVE_LEFT;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.D:
+				controlCode |= CONTROL_MOVE_RIGHT;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.W:
+				controlCode |= CONTROL_MOVE_UP;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.S:
+				controlCode |= CONTROL_MOVE_DOWN;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.LEFT:
+				controlCode |= CONTROL_MOVE_LEFT;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.RIGHT:
+				controlCode |= CONTROL_MOVE_RIGHT;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.UP:
+				controlCode |= CONTROL_MOVE_UP;
+				lastEventTime = TimeUtils.millis();
+				break;
+			case Keys.DOWN:
+				controlCode |= CONTROL_MOVE_DOWN;
+				lastEventTime = TimeUtils.millis();
+				break;
+
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
+	}
 }

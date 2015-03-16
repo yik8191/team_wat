@@ -28,16 +28,44 @@ public class RhythmController{
 	public static void launch(float tempo) {
 		if (!begun) {
 			period = (long)(60000.0f / tempo);
-			startTime = TimeUtils.millis();
 			begun = true;
 			music.play();
+			startTime = TimeUtils.millis();
 		}
 	}
 
+	public static boolean isWithinActionWindow(long actionTime) {
+		float beatTime = (float)(actionTime - (long)(totalOffset * period) % period) / (float)period;
+		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
+	}
+
+	/**
+	 * Method for checking whether or not it's time to move on to the next beat.
+	 * If we're past the final action point but the beat isn't complete, returns true and sets beat to complete.
+	 * If we're within the action window, sets to beat to incomplete.
+	 * Assumes that this method will be called at least once per action window. (If it's not, something else is wrong).
+	 * This method should only be used to check whether or not it's time to take care of final actions. It should not be
+	 * used to check if the player has moved within the beat. Use isWithinActionWindow() for that.
+	 *
+	 * @return returns whether or not it's time to take final actions.
+	 */
+	public static boolean updateBeat() {
+		long time = TimeUtils.timeSinceMillis(startTime);
+		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
+		if (beatTime > finalActionOffset && !beatComplete) {
+			beatComplete = true;
+			return true;
+		}
+
+		return false;
+	}
+
+	@Deprecated
 	public static BeatState getBeatRegion() {
 		long time = TimeUtils.timeSinceMillis(startTime);
 		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
-		if (beatTime < actionWindowRadius || (1.0f - beatTime) > actionWindowRadius) {
+		if (beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius) {
+			beatComplete = false;
 			return BeatState.PlayerAction;
 		} else if (beatTime > finalActionOffset && !beatComplete){
 			beatComplete = true;

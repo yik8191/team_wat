@@ -26,6 +26,8 @@ public class Knight extends GameObject {
     private static int HP_SIZE = 100;
     protected int knightHP;
 
+	private boolean isInvulnerable;
+
     public Knight(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
@@ -181,6 +183,10 @@ public class Knight extends GameObject {
             this.isAlive = false;
         }
 	}
+
+	public boolean isInvulnerable() {return isInvulnerable;}
+
+	public void setInvulnerable(boolean invulnerable) {this.isInvulnerable = invulnerable;}
 
     public enum KnightState {
         /** Draw the knight normally */

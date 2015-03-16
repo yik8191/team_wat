@@ -305,7 +305,6 @@ public class LoadingMode implements Screen, InputProcessor {
 			// We are are ready, notify our listener
 			if (isReady() && listener != null) {
 				//TODO: remove rhythm controller and launch exit screen
-				RhythmController.launch(144);
 				listener.exitScreen(this, 0);
 			}
 		}

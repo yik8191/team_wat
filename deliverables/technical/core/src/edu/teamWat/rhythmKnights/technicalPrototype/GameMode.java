@@ -15,15 +15,18 @@
 package edu.teamWat.rhythmKnights.technicalPrototype;
 // TODO: Import the package that contains our gameObjects
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.utils.TimeUtils;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.PlayerController;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
@@ -185,7 +188,7 @@ public class GameMode implements Screen{
 	/** Reference to drawing context to display graphics (VIEW CLASS) */
 	private GameCanvas canvas;
 	/** Reads input from keyboard or game pad (CONTROLLER CLASS) */
-	private InputController inputController;
+	private PlayerController playerController;
 	/** Constructs the game models and handle basic gameplay (CONTROLLER CLASS) */
 	private GameplayController gameplayController;
 
@@ -213,15 +216,19 @@ public class GameMode implements Screen{
 
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
-//		inputController = new InputController();
 		gameplayController = new GameplayController();
+		gameplayController.playerController = playerController;
+		playerController = new PlayerController();
+		RhythmController.launch(144);
+		playerController.startTime = TimeUtils.millis();
+		Gdx.input.setInputProcessor(playerController);
 	}
 
 	/**
 	 * Dispose of all (non-static) resources allocated to this mode.
 	 */
 	public void dispose() {
-		inputController = null;
+		playerController = null;
 		gameplayController = null;
 		canvas = null;
 	}
@@ -264,7 +271,7 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
-
+		gameplayController.update();
 
 	}
 

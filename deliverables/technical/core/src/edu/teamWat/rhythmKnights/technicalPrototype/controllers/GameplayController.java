@@ -18,11 +18,13 @@ public class GameplayController {
 	/** Ticker */
 	public Ticker ticker;
 
+	private Knight knight;
+
+	public PlayerController playerController;
+
 	private ArrayList<Integer> playerActionQueue = new ArrayList<Integer>();
 
 	boolean playerMoved = false;
-
-	boolean playerInvolnerable = false;
 
 	private boolean gameOver = false;
 
@@ -80,7 +82,7 @@ public class GameplayController {
 		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.DASH});
 
 		controls = new InputController[gameObjects.size()];
-		controls[0] = new PlayerController();
+		controls[0] = playerController;
 		for (int ii = 1; ii < gameObjects.size(); ii++) {
 			controls[ii] = new AIController(ii, board, gameObjects);
 		}
@@ -88,13 +90,9 @@ public class GameplayController {
 
 
 	public void update() {
-		int code = controls[0].getAction();
 		switch (RhythmController.getBeatRegion()) {
 			case PlayerAction:
-				playerActionQueue.add(code);
-				Vector2 direction = new Vector2();
-				TickerAction action = ticker.getAction();
-				switch (action) {
+				switch (ticker.getAction()) {
 					case MOVE:
 
 						break;
@@ -108,6 +106,8 @@ public class GameplayController {
 			case None:
 				break;
 		}
+
+		playerController.clear();
 	}
 
 	public boolean isGameOver() {
