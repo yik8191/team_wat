@@ -8,9 +8,9 @@ public class RhythmController{
 
 	static private long period;
 
-	static final float actionWindowRadius = 0.125f;
-	static final float totalOffset = 0;
-	static final float finalActionOffset = 0.5f;
+	static float actionWindowRadius = 0.15f;
+	static float totalOffset = 0f;
+	static float finalActionOffset = 0.5f;
 
 	private static boolean beatComplete;
 	private static boolean begun = false;
@@ -18,7 +18,7 @@ public class RhythmController{
 	private static long startTime;
 	static Music music;
 
-	private RhythmController() {};
+	private RhythmController() {}
 
 	public static void init() {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.wav"));
@@ -26,16 +26,18 @@ public class RhythmController{
 	}
 
 	public static void launch(float tempo) {
-		if (!begun) {
-			period = (long)(60000.0f / tempo);
-			begun = true;
-			music.play();
-			startTime = TimeUtils.millis();
+		period = (long)(60000.0f / tempo);
+		if (begun) {
+			music.stop();
 		}
+		begun = true;
+		music.play();
+		startTime = TimeUtils.millis();
 	}
 
-	public static boolean isWithinActionWindow(long actionTime) {
-		float beatTime = (float)(actionTime - (long)(totalOffset * period) % period) / (float)period;
+	public static boolean isWithinActionWindow(long actionTime, boolean out) {
+		float beatTime = toBeatTime(actionTime);
+		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
 
@@ -51,8 +53,10 @@ public class RhythmController{
 	 */
 	public static boolean updateBeat() {
 		long time = TimeUtils.timeSinceMillis(startTime);
-		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
-		if (beatTime > finalActionOffset && !beatComplete) {
+		float beatTime = toBeatTime(time);
+		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius) ) {
+			beatComplete = false;
+		} else if (beatTime > finalActionOffset && !beatComplete) {
 			beatComplete = true;
 			return true;
 		}
@@ -60,30 +64,15 @@ public class RhythmController{
 		return false;
 	}
 
-	@Deprecated
-	public static BeatState getBeatRegion() {
-		long time = TimeUtils.timeSinceMillis(startTime);
-		float beatTime = (float)(time - (long)(totalOffset * period) % period) / (float)period;
-		if (beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius) {
-			beatComplete = false;
-			return BeatState.PlayerAction;
-		} else if (beatTime > finalActionOffset && !beatComplete){
-			beatComplete = true;
-			return BeatState.FinalAction;
-		} else {
-			return BeatState.None;
-		}
+
+	public static void sendCalibrationBeat(long time) {
+		float beatTime = toBeatTime(time);
+		if (beatTime > 0.5) beatTime--;
+		totalOffset += 0.1 * beatTime;
+		if (totalOffset > 0.5) totalOffset--;
 	}
 
-	public static void reset() {
-		startTime = TimeUtils.millis();
-		music.stop();
-		music.play();
-	}
-
-	public enum BeatState {
-		PlayerAction,
-		FinalAction,
-		None
+	private static float toBeatTime(long time) {
+		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
 	}
 }

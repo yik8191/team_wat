@@ -217,10 +217,8 @@ public class GameMode implements Screen{
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
 		gameplayController = new GameplayController();
-		gameplayController.playerController = playerController;
 		playerController = new PlayerController();
-		RhythmController.launch(144);
-		playerController.startTime = TimeUtils.millis();
+		gameplayController.playerController = playerController;
 		Gdx.input.setInputProcessor(playerController);
 	}
 
@@ -248,15 +246,17 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-				gameplayController.initialize();
 				// TODO: Fill in other initialization code
+				gameplayController.initialize();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
+				RhythmController.launch(144);//143.882f
 				break;
 			case PLAY:
+				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
-                else if (!gameplayController.gameObjects.get(1).isAlive()) reset();
-                else if (gameplayController.gameObjects.get(1).getPosition() ==
-                        canvas.boardToScreen(12, 3)) gameState = GameState.WIN;
+                else if (!knight.isAlive()) reset();
+                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y))
+					gameState = GameState.WIN;
 				else play();
 				break;
             case WIN:
@@ -277,7 +277,7 @@ public class GameMode implements Screen{
 
 	/** This method resets the game */
 	protected void reset() {
-		gameState = gameState.INTRO;
+		gameState = GameState.INTRO;
 		// TODO: take care of other resetting code. E.g. call reset on gameplayController
 		// NO INITIALIZATION CODE HERE. That's taken care of in update.
 	}

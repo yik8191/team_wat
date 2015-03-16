@@ -6,7 +6,7 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 public abstract class GameObject {
 
     protected int id;
-    protected boolean isAlive = false;
+    public boolean isAlive = false;
     protected boolean isActive = false;
     protected Vector2 position;
     protected Vector2 velocity;

@@ -516,11 +516,11 @@ public class GameCanvas {
     }
 
     /* Takes in width and height of board and appropriately sets offsets. */
-    public void setOffsets(int boardW, int boardH){
-        float startX = getWidth()/2 - (TILE_SIZE*boardW)/2;
-        float startY = getHeight()/2 - (TILE_SIZE*boardH)/2 - 50;
-        X_OFFSET = (int)startX;
-        Y_OFFSET = (int)startY;
+    public void setOffsets(int boardW, int boardH) {
+	    float startX = getWidth() / 2 - (TILE_SIZE * boardW) / 2;
+	    float startY = getHeight() / 2 - (TILE_SIZE * boardH) / 2 - 50;
+	    X_OFFSET = (int)startX;
+	    Y_OFFSET = (int)startY;
     }
 
 

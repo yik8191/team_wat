@@ -1,11 +1,13 @@
 package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker.*;
 
 import javax.swing.*;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 public class GameplayController {
@@ -25,6 +27,10 @@ public class GameplayController {
 	private ArrayList<Integer> playerActionQueue = new ArrayList<Integer>();
 
 	boolean playerMoved = false;
+
+	boolean gameStateAdvanced;
+
+	boolean calibrationBeatSent;
 
 	private boolean gameOver = false;
 
@@ -81,6 +87,12 @@ public class GameplayController {
 
 		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.DASH});
 
+		knight = (Knight)gameObjects.getPlayer();
+		knight.setInvulnerable(true);
+		playerMoved = true;
+		calibrationBeatSent = true;
+		gameStateAdvanced = true;
+
 		controls = new InputController[gameObjects.size()];
 		controls[0] = playerController;
 		for (int ii = 1; ii < gameObjects.size(); ii++) {
@@ -90,24 +102,120 @@ public class GameplayController {
 
 
 	public void update() {
-		switch (RhythmController.getBeatRegion()) {
-			case PlayerAction:
-				switch (ticker.getAction()) {
-					case MOVE:
+		// DEBUGGING CODE
+		gameObjects.get(1).isAlive = false;
+		if (RhythmController.isWithinActionWindow(TimeUtils.millis(), false)){
+			gameObjects.get(1).isAlive = true;
+		}
 
-						break;
-					case DASH:
 
-						break;
+		int code = playerController.getAction();
+
+		if (RhythmController.updateBeat()) {
+			//Final actions
+			if (!playerMoved) {
+				damagePlayer();
+				advanceGameState();
+			}
+
+			// Cleanup
+			gameStateAdvanced = false;
+			playerMoved = false;
+			calibrationBeatSent = false;
+		} else {
+			if (code != InputController.CONTROL_NO_ACTION) {
+
+				RhythmController.isWithinActionWindow(playerController.lastEventTime, true);
+
+				// Send a calibration beat
+				if (!calibrationBeatSent) {
+					if (ticker.getAction() == TickerAction.MOVE) {
+						RhythmController.sendCalibrationBeat(playerController.lastEventTime);
+						calibrationBeatSent = true;
+					}
 				}
-				break;
-			case FinalAction:
-				break;
-			case None:
-				break;
+
+				if (playerMoved) {
+					damagePlayer();
+				} else {
+					if (RhythmController.isWithinActionWindow(playerController.lastEventTime, false)) {
+						switch (ticker.getAction()) {
+							case MOVE:
+								Vector2 moveDirection = new Vector2(0, 0);
+								boolean wasInv = knight.isInvulnerable();
+								if (code == InputController.CONTROL_MOVE_RIGHT) {
+									moveDirection.x = 1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_UP) {
+									moveDirection.y = 1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_LEFT) {
+									moveDirection.x = -1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_DOWN) {
+									moveDirection.y = -1;
+									knight.setInvulnerable(false);
+								} else {
+									damagePlayer();
+								}
+
+								knight.move(moveDirection);
+								if (knight.getPosition().x < 0 || knight.getPosition().x >= board.getWidth()
+										|| knight.getPosition().y < 0 || knight.getPosition().y >= board.getHeight()){
+									knight.move(moveDirection.scl(-1));
+									if (wasInv) knight.setInvulnerable(true);
+								}
+								playerMoved = true;
+								advanceGameState();
+								break;
+							case DASH:
+								// debugging
+								moveDirection = new Vector2(0, 0);
+								if (code == InputController.CONTROL_MOVE_RIGHT) {
+									moveDirection.x = 1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_UP) {
+									moveDirection.y = 1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_LEFT) {
+									moveDirection.x = -1;
+									knight.setInvulnerable(false);
+								} else if (code == InputController.CONTROL_MOVE_DOWN) {
+									moveDirection.y = -1;
+									knight.setInvulnerable(false);
+								} else {
+									damagePlayer();
+								}
+
+								knight.move(moveDirection);
+								if (knight.getPosition().x < 0 || knight.getPosition().x >= board.getWidth()
+										|| knight.getPosition().y < 0 || knight.getPosition().y >= board.getHeight()) {
+									knight.move(moveDirection.scl(-1));
+								}
+								playerMoved = true;
+								advanceGameState();
+								break;
+						}
+					}
+				}
+			}
 		}
 
 		playerController.clear();
+	}
+
+	private void advanceGameState () {
+		if (!gameStateAdvanced) {
+			ticker.advance();
+			gameStateAdvanced = true;
+		}
+	}
+
+	private void damagePlayer() {
+		if (!knight.isInvulnerable()) {
+			knight.takeDamage();
+			knight.setInvulnerable(true);
+		}
 	}
 
 	public boolean isGameOver() {

@@ -19,7 +19,6 @@ public class PlayerController implements InputController, InputProcessor {
 
 	public int controlCode = CONTROL_NO_ACTION;
 	public long lastEventTime = 0;
-	public long startTime = TimeUtils.millis();
 
 
 
