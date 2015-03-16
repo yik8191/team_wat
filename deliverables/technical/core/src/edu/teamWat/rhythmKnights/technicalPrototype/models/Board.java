@@ -154,12 +154,13 @@ public class Board {
         return this.height;
     }
 
-    public float boardToScreen(int i) {
-        // TODO Auto-generated method stub
-        return 0;
+    public void updateColors(){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                tiles[i][j].setColor();
+            }
+        }
     }
-
-
 
     /**
      * Each tile on the board has a set of attributes associated with it.
