@@ -102,13 +102,6 @@ public class GameplayController {
 
 
 	public void update() {
-		// DEBUGGING CODE
-		gameObjects.get(1).isAlive = false;
-		if (RhythmController.isWithinActionWindow(TimeUtils.millis(), false)){
-			gameObjects.get(1).isAlive = true;
-		}
-
-
 		int code = playerController.getAction();
 
 		if (RhythmController.updateBeat()) {
