@@ -131,9 +131,9 @@ public class GameMode implements Screen{
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.LoadContent(manager);
-		Knight.UnloadContent(manager);
-		Slime.UnloadContent(manager);
-		Skeleton.UnloadContent(manager);
+		Knight.LoadContent(manager);
+		Slime.LoadContent(manager);
+		Skeleton.LoadContent(manager);
 	}
 
 	/**
