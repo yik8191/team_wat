@@ -39,9 +39,9 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController
  */
 public class GameCanvas {
 
-    private final int TILE_SIZE = 80;
-    private final int X_OFFSET = 45;
-    private final int Y_OFFSET = 182;
+    public final int TILE_SIZE = 100;
+    private final int X_OFFSET = 225;
+    private final int Y_OFFSET = 152;
 
 	/** Drawing context to handle textures as sprites */
 	private SpriteBatch spriteBatch;
