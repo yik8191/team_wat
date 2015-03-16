@@ -16,10 +16,12 @@ public class Ticker {
     public static final String DASH_FILE = "images/tickerDash.png";
     public static final String FREEZE_FILE = "images/tickerFreeze.png";
     public static final String FIREBALL_FILE = "images/tickerFireball.png";
+    public static final String INDICATOR_FILE = "images/tickerCurrent.png";
     public static Texture blankTexture;
     public static Texture dashTexture;
     public static Texture freezeTexture;
     public static Texture fireballTexture;
+    public static Texture indicatorTexture;
 
 	private TickerAction[] tickerActions;
 	private int beat;
@@ -27,6 +29,8 @@ public class Ticker {
     //how spaced out ticker squares should be
     private static int SPACING = 10;
     private static int TICK_SQUARE_SIZE = 115;
+    private static int INDICATOR_HEIGHT = 145;
+    private static int INDICATOR_WIDTH = 420;
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
@@ -42,6 +46,7 @@ public class Ticker {
         float width = TICK_SQUARE_SIZE + SPACING;
         float startX = canvas.getWidth()/2 - (TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1))/2;
         FilmStrip sprite;
+        FilmStrip spriteIndicator;
         Vector2 loc = new Vector2(0,canvas.getHeight()-(TICK_SQUARE_SIZE + 70));
         for (int i=0; i < tickerActions.length; i++){
 
@@ -57,8 +62,12 @@ public class Ticker {
             loc.x = startX + (width*i);
 
             canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+            if (beat == i) {
+                // draw the indicator for current action
+                spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
+                canvas.draw(spriteIndicator, loc.x-TICK_SQUARE_SIZE*1.34f, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+            }
         }
-
 	}
 
 	public TickerAction getAction() {
@@ -84,6 +93,7 @@ public class Ticker {
         manager.load(DASH_FILE, Texture.class);
         manager.load(FREEZE_FILE, Texture.class);
         manager.load(FIREBALL_FILE, Texture.class);
+        manager.load(INDICATOR_FILE, Texture.class);
     }
 
     /**
@@ -127,6 +137,13 @@ public class Ticker {
         } else {
             fireballTexture = null;  // Failed to load
         }
+        //load indicator file
+        if (manager.isLoaded(INDICATOR_FILE)) {
+            indicatorTexture = manager.get(INDICATOR_FILE, Texture.class);
+            indicatorTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            indicatorTexture = null; // Failed to load
+        }
 
     }
 
@@ -153,6 +170,10 @@ public class Ticker {
         if (fireballTexture != null) {
             fireballTexture = null;
             manager.unload(FIREBALL_FILE);
+        }
+        if (indicatorTexture != null) {
+            indicatorTexture = null;
+            manager.unload(INDICATOR_FILE);
         }
     }
 
