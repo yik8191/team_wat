@@ -18,8 +18,8 @@ public interface InputController {
 	public static final int CONTROL_MOVE_UP    = 0x04;
 	/** Move the ship to the down */
 	public static final int CONTROL_MOVE_DOWN  = 0x08;
-    /** Apply the jump modifier */
-    public static final int CONTROL_JUMP = 0x10;
+	/** Shoot a projectile in the direction you are facing */
+	public static final int CONTROL_SHOOT = 0x10;
     /** Reset the game */
     public static final int CONTROL_RESET = 0x20;
     /** Exit the game */

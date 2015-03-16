@@ -27,23 +27,6 @@ public class Knight extends GameObject {
         isActive = true;
     }
 
-    /** Do not do anything */
-    public static final int CONTROL_NO_ACTION  = 0x00;
-    /** Move the knight to the left */
-    public static final int CONTROL_MOVE_LEFT  = 0x01;
-    /** Move the knight to the right */
-    public static final int CONTROL_MOVE_RIGHT = 0x02;
-    /** Move the knight to the up */
-    public static final int CONTROL_MOVE_UP    = 0x04;
-    /** Move the knight to the down */
-    public static final int CONTROL_MOVE_DOWN  = 0x08;
-    /** If the player wants to jump */
-    public static final int CONTROL_JUMP = 0x10;
-    /** If the player wants to reset the game */
-    public static final int CONTROL_RESET  = 0x40;
-    /** If the player wants to exit the game */
-    public static final int CONTROL_EXIT = 0x80;
-
     public void update() {
         // If we are dead do nothing.
         if (!isAlive) {
