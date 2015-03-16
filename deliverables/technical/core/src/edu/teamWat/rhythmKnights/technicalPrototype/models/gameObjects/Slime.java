@@ -30,7 +30,7 @@ public class Slime extends GameObject{
     public void draw(GameCanvas canvas) {
         FilmStrip sprite = new FilmStrip(slimeTexture, 1, 1);
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
-        canvas.draw(sprite, loc.x, loc.y);
+        canvas.draw(sprite, loc.x, loc.y, canvas.TILE_SIZE, canvas.TILE_SIZE);
     }
 
 
