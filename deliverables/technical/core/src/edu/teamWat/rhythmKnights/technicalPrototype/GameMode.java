@@ -92,6 +92,7 @@ public class GameMode implements Screen{
 		Slime.PreLoadContent(manager);
 		Skeleton.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
+		DynamicTile.PreLoadContent(manager);
 	}
 
 	/**
@@ -137,6 +138,7 @@ public class GameMode implements Screen{
 		Slime.LoadContent(manager);
 		Skeleton.LoadContent(manager);
 		Ticker.LoadContent(manager);
+		DynamicTile.LoadContent(manager);
 	}
 
 	/**
@@ -168,6 +170,7 @@ public class GameMode implements Screen{
 		Slime.UnloadContent(manager);
 		Skeleton.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
+		DynamicTile.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -240,7 +243,7 @@ public class GameMode implements Screen{
 				// TODO: Fill in other initialization code
 				break;
 			case PLAY:
-				if (!gameplayController.isGameOver()) reset();
+				if (gameplayController.isGameOver()) reset();
 				else play();
 				break;
 		}
