@@ -11,9 +11,9 @@ import java.util.Random;
 
 public class Board {
     /* Width of current board */
-    public int width;
+    private int width;
     /* Height of current board */
-    public int height;
+    private int height;
 
     /* Variables for tile sprite */
     public static final String TILE_FILE = "images/tileFull.png";

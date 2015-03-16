@@ -241,6 +241,7 @@ public class GameMode implements Screen{
 				gameState = GameState.PLAY;
 				gameplayController.initialize();
 				// TODO: Fill in other initialization code
+                canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				break;
 			case PLAY:
 				if (gameplayController.isGameOver()) reset();

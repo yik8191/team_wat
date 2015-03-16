@@ -40,8 +40,8 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController
 public class GameCanvas {
 
     public final int TILE_SIZE = 100;
-    private final int X_OFFSET = 225;
-    private final int Y_OFFSET = 152;
+    private int X_OFFSET = 0;
+    private int Y_OFFSET = 0;
 
 	/** Drawing context to handle textures as sprites */
 	private SpriteBatch spriteBatch;
@@ -513,6 +513,14 @@ public class GameCanvas {
 
     public Vector2 boardToScreen(float x, float y){
         return new Vector2(x*TILE_SIZE + X_OFFSET, y*TILE_SIZE + Y_OFFSET);
+    }
+
+    /* Takes in width and height of board and appropriately sets offsets. */
+    public void setOffsets(int boardW, int boardH){
+        float startX = getWidth()/2 - (TILE_SIZE*boardW)/2;
+        float startY = getHeight()/2 - (TILE_SIZE*boardH)/2 - 50;
+        X_OFFSET = (int)startX;
+        Y_OFFSET = (int)startY;
     }
 
 

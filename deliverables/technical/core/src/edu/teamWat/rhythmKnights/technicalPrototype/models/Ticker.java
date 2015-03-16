@@ -25,8 +25,8 @@ public class Ticker {
 	private int beat;
 
     //how spaced out ticker squares should be
-    private static int SPACING = 5;
-    private static int TICK_SQUARE_SIZE = 90;
+    private static int SPACING = 10;
+    private static int TICK_SQUARE_SIZE = 115;
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
@@ -40,9 +40,9 @@ public class Ticker {
 	public void draw(GameCanvas canvas) {
         //float midX = canvas.getWidth()/2;
         float width = TICK_SQUARE_SIZE + SPACING;
-        float startX = canvas.getWidth()/2 - TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1);
+        float startX = canvas.getWidth()/2 - (TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1))/2;
         FilmStrip sprite;
-        Vector2 loc = new Vector2(0,canvas.getHeight()/2);
+        Vector2 loc = new Vector2(0,canvas.getHeight()-(TICK_SQUARE_SIZE + 70));
         for (int i=0; i < tickerActions.length; i++){
 
             if (tickerActions[i] == TickerAction.MOVE){
