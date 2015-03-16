@@ -8,7 +8,7 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 public class Slime extends GameObject{
     
-    public static final String SLIME_FILE = "images/skeleton.png";
+    public static final String SLIME_FILE = "images/slime.png";
     public static Texture slimeTexture;
 
     public Slime(int id, float x, float y){

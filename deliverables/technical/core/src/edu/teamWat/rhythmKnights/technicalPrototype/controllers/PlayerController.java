@@ -11,7 +11,6 @@ package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 
 public class PlayerController implements InputController {
 
@@ -31,7 +30,6 @@ public class PlayerController implements InputController {
         if (Gdx.input.isKeyPressed(Input.Keys.W))    code |= CONTROL_MOVE_UP;
         if (Gdx.input.isKeyPressed(Input.Keys.S))  code |= CONTROL_MOVE_DOWN;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))  code |= CONTROL_JUMP;
         if (Gdx.input.isKeyPressed(Input.Keys.R))  code |= CONTROL_RESET;
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))  code |= CONTROL_EXIT;
 

@@ -24,6 +24,7 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayControll
 import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
@@ -90,6 +91,8 @@ public class GameMode implements Screen{
 		Knight.PreLoadContent(manager);
 		Slime.PreLoadContent(manager);
 		Skeleton.PreLoadContent(manager);
+		Ticker.PreLoadContent(manager);
+		DynamicTile.PreLoadContent(manager);
 	}
 
 	/**
@@ -134,6 +137,8 @@ public class GameMode implements Screen{
 		Knight.LoadContent(manager);
 		Slime.LoadContent(manager);
 		Skeleton.LoadContent(manager);
+		Ticker.LoadContent(manager);
+		DynamicTile.LoadContent(manager);
 	}
 
 	/**
@@ -164,6 +169,8 @@ public class GameMode implements Screen{
 		Knight.UnloadContent(manager);
 		Slime.UnloadContent(manager);
 		Skeleton.UnloadContent(manager);
+		Ticker.UnloadContent(manager);
+		DynamicTile.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -234,8 +241,11 @@ public class GameMode implements Screen{
 				gameState = GameState.PLAY;
 				gameplayController.initialize();
 				// TODO: Fill in other initialization code
+                canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				break;
 			case PLAY:
+				if (gameplayController.isGameOver()) reset();
+				else play();
 				break;
 		}
 	}
@@ -246,6 +256,8 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
+
+
 	}
 
 	/** This method resets the game */
@@ -270,6 +282,7 @@ public class GameMode implements Screen{
 		// NO UPDATE CODE HERE
 		gameplayController.board.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);
+		gameplayController.ticker.draw(canvas);
 		canvas.end();
 	}
 

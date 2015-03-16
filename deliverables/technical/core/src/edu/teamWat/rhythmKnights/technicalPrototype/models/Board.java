@@ -11,9 +11,9 @@ import java.util.Random;
 
 public class Board {
     /* Width of current board */
-    public int width;
+    private int width;
     /* Height of current board */
-    public int height;
+    private int height;
 
     /* Variables for tile sprite */
     public static final String TILE_FILE = "images/tileFull.png";
@@ -57,8 +57,6 @@ public class Board {
     public void setTile(int x, int y, boolean goal, boolean start, boolean obstacle){
         this.tiles[x][y].isGoal = goal;
         this.tiles[x][y].isStart = start;
-        //this.tiles[x][y].isKnight = knight;
-        //this.tiles[x][y].isEnemy = enemy;
         this.tiles[x][y].isObstacle = obstacle;
         this.tiles[x][y].setColor();
     }
@@ -156,12 +154,13 @@ public class Board {
         return this.height;
     }
 
-    public float boardToScreen(int i) {
-        // TODO Auto-generated method stub
-        return 0;
+    public void updateColors(){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                tiles[i][j].setColor();
+            }
+        }
     }
-
-
 
     /**
      * Each tile on the board has a set of attributes associated with it.
@@ -202,16 +201,22 @@ public class Board {
                 col = Color.GREEN;
             }else {
                 Random r = new Random();
-                int i = r.nextInt(3);
+                int i = r.nextInt(5);
                 if (i == 0) {
                     //pinkish
-                    col = new Color(223f/255f, 157f/255f, 233f/255f, 1);
+                    col = new Color(145f/255f, 55f/255f, 82f/255f, 1);
                 } else if (i == 1) {
                     //blueish
-                    col = new Color(157f/255f, 192f/255f, 233f/255f, 1);
-                } else{
+                    col = new Color(3f/255f, 87f/255f, 145f/255f, 1);
+                } else if (i == 2) {
                     //greenish
-                    col = new Color(157f/255f, 233f/255f, 162f/255f, 1);
+                    col = new Color(32f/120f, 120f/255f, 82f/255f, 1);
+                } else if (i == 3) {
+                    //lightblue
+                    col = new Color(27f/255f, 156f/255f, 154f/255f, 1);
+                } else if (i == 4) {
+                    //yellowish
+                    col = new Color(143f/255f, 138f/255f, 91f/255f, 1);
                 }
             }
         }
