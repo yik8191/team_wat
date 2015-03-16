@@ -202,16 +202,22 @@ public class Board {
                 col = Color.GREEN;
             }else {
                 Random r = new Random();
-                int i = r.nextInt(3);
+                int i = r.nextInt(5);
                 if (i == 0) {
                     //pinkish
-                    col = new Color(223f/255f, 157f/255f, 233f/255f, 1);
+                    col = new Color(254f/255f, 96f/255f, 143f/255f, 1);
                 } else if (i == 1) {
                     //blueish
-                    col = new Color(157f/255f, 192f/255f, 233f/255f, 1);
-                } else{
+                    col = new Color(5f/255f, 146f/255f, 244f/255f, 1);
+                } else if (i == 2) {
                     //greenish
-                    col = new Color(157f/255f, 233f/255f, 162f/255f, 1);
+                    col = new Color(66f/255f, 250f/255f, 171f/255f, 1);
+                } else if (i == 3) {
+                    //redish
+                    col = new Color(254f/255f, 96f/255f, 143f/255f, 1);
+                } else if (i == 4) {
+                    //yellowish
+                    col = new Color(251f/255f, 243f/255f, 160f/255f, 1);
                 }
             }
         }
