@@ -236,6 +236,8 @@ public class GameMode implements Screen{
 				// TODO: Fill in other initialization code
 				break;
 			case PLAY:
+				if (!gameplayController.isGameOver()) reset();
+				else play();
 				break;
 		}
 	}
@@ -246,6 +248,8 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
+
+
 	}
 
 	/** This method resets the game */

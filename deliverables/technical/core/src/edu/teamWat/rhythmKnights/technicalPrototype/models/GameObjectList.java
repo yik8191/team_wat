@@ -75,13 +75,13 @@ public class GameObjectList implements Iterable<GameObject>{
 	 * @return the number of ships alive at the end of an update.
 	 */
 	public int numAlive() {
-		int shipsAlive = 0;
+		int objsAlive = 0;
 		for (GameObject s : this) {
 			if (s.isAlive()) {
-				shipsAlive++;
+				objsAlive++;
 			}
 		}
-		return shipsAlive;
+		return objsAlive;
 	}
 
 	/**

@@ -11,6 +11,8 @@ public class GameplayController {
 	/** List of all the input (both player and AI) controllers */
 	protected InputController[] controls;
 
+	private boolean gameOver = false;
+
 	/**
 	* Initializes the ships to new random locations.
 	*
@@ -67,5 +69,14 @@ public class GameplayController {
 		for (int ii = 1; ii < gameObjects.size(); ii++) {
 			controls[ii] = new AIController(ii, board, gameObjects);
 		}
+	}
+
+
+	public void update() {
+
+	}
+
+	public boolean isGameOver() {
+		return gameOver;
 	}
 }
