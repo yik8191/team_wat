@@ -77,7 +77,8 @@ public class GameplayController {
 
 
 	public void update() {
-
+		int action = controls[0].getAction();
+		
 	}
 
 	public boolean isGameOver() {
