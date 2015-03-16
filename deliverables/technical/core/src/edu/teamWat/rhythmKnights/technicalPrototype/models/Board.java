@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
+import java.util.Random;
+
 public class Board {
     /* Width of current board */
     public int width;
     /* Height of current board */
     public int height;
-
-    private final int TILE_SIZE = 80;
 
     /* Variables for tile sprite */
     public static final String TILE_FILE = "images/tileFull.png";
@@ -66,9 +66,10 @@ public class Board {
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
-                Color c = tiles[i][j].getColor();
+                Color c = tiles[i][j].col;
+                float scale = (float)canvas.TILE_SIZE/(float)tileTexture.getHeight();
                 //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
-                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, 1, 1);
+                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }
     }
@@ -175,6 +176,8 @@ public class Board {
         public boolean isEnemy;
         /** Is there an obstacle on this tile?*/
         public boolean isObstacle;
+        /** Color of this tile */
+        public Color col;
 
         public Tile() {
             isGoal = false;
@@ -182,6 +185,26 @@ public class Board {
             isKnight = false;
             isEnemy = false;
             isObstacle = false;
+            if (this.isStart){
+                col = Color.CYAN;
+            }
+            if (this.isObstacle){
+                col = Color.DARK_GRAY;
+            }
+            if (this.isGoal){
+                col = Color.GREEN;
+            }
+            Random r = new Random();
+            int i = r.nextInt(5);
+            if (i == 0){
+                col = Color.MAGENTA;
+            }else if (i == 1){
+                col = Color.PURPLE;
+            }else if (i == 2){
+                col = Color.ORANGE;
+            }else{
+                col = Color.TEAL;
+            }
         }
 
         public void clear() {
@@ -190,19 +213,7 @@ public class Board {
             isKnight = false;
             isEnemy = false;
             isObstacle = false;
-        }
-
-        public Color getColor(){
-            if (this.isStart){
-                return Color.CYAN;
-            }
-            if (this.isObstacle){
-                return Color.LIGHT_GRAY;
-            }
-            if (this.isGoal){
-                return Color.GREEN;
-            }
-            return Color.MAGENTA;
+            col = null;
         }
     }
 
