@@ -87,6 +87,7 @@ public class GameMode implements Screen{
 		// Pre-load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.PreLoadContent(manager);
+		Knight.PreLoadContent(manager);
 	}
 
 	/**
@@ -128,6 +129,7 @@ public class GameMode implements Screen{
 		// Load other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.LoadContent(manager);
+		Knight.UnloadContent(manager);
 	}
 
 	/**
@@ -155,6 +157,7 @@ public class GameMode implements Screen{
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.UnloadContent(manager);
+		Knight.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -196,6 +199,7 @@ public class GameMode implements Screen{
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
 //		inputController = new InputController();
+		gameplayController = new GameplayController();
 	}
 
 	/**
@@ -221,11 +225,9 @@ public class GameMode implements Screen{
 
 		switch (gameState) {
 			case INTRO:
-				gameplayController = new GameplayController();
-
+				gameState = GameState.PLAY;
+				gameplayController.initialize();
 				// TODO: Fill in other initialization code
-
-
 				break;
 			case PLAY:
 				break;
