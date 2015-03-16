@@ -203,19 +203,19 @@ public class Board {
                 int i = r.nextInt(5);
                 if (i == 0) {
                     //pinkish
-                    col = new Color(254f/255f, 96f/255f, 143f/255f, 1);
+                    col = new Color(145f/255f, 55f/255f, 82f/255f, 1);
                 } else if (i == 1) {
                     //blueish
-                    col = new Color(5f/255f, 146f/255f, 244f/255f, 1);
+                    col = new Color(3f/255f, 87f/255f, 145f/255f, 1);
                 } else if (i == 2) {
                     //greenish
-                    col = new Color(66f/255f, 250f/255f, 171f/255f, 1);
+                    col = new Color(32f/120f, 120f/255f, 82f/255f, 1);
                 } else if (i == 3) {
-                    //redish
-                    col = new Color(254f/255f, 96f/255f, 143f/255f, 1);
+                    //lightblue
+                    col = new Color(27f/255f, 156f/255f, 154f/255f, 1);
                 } else if (i == 4) {
                     //yellowish
-                    col = new Color(251f/255f, 243f/255f, 160f/255f, 1);
+                    col = new Color(143f/255f, 138f/255f, 91f/255f, 1);
                 }
             }
         }
