@@ -6,16 +6,23 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class RhythmController{
 
-	static private long period;
+	static private long period;  // 6000/tempo = length of beat in ms
 
+	/** Length of period in which player can make a valid move*/
 	static float actionWindowRadius = 0.15f;
+	/** Offset to translate intervals in time*/
 	static float totalOffset = 0f;
+	/** Offset from perceived beat in time in the music*/
 	static float finalActionOffset = 0.5f;
 
+	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
+	/** Is music being played */
 	private static boolean begun = false;
 
+	/** When music started playing */
 	private static long startTime;
+	/** Music player object */
 	static Music music;
 
 	private RhythmController() {}
@@ -60,7 +67,6 @@ public class RhythmController{
 			beatComplete = true;
 			return true;
 		}
-
 		return false;
 	}
 

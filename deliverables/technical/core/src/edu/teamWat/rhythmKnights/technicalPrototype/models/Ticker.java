@@ -177,11 +177,6 @@ public class Ticker {
         }
     }
 
-
-
-
-
-
 	public enum TickerAction {
 		MOVE,
 		DASH,

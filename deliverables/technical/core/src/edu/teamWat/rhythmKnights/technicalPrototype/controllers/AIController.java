@@ -11,7 +11,7 @@ public class AIController implements InputController{
 	/** The GameObject being controlled by this AIController, typically 
 	 * an enemy character */
 	private GameObject enemy;
-	/** The game board; used for pathfinding */
+	/** The game board; used for bounds checking */
 	private Board board;
 	/** The game object's next action (may include firing). */
 	private int move; // A ControlCode
@@ -21,12 +21,13 @@ public class AIController implements InputController{
 	/** The number of ticks since we started this controller. Use this 
 	 * 	to control how often enemies move*/
 	private long ticks;
+	
 	public AIController(int id, Board board, GameObjectList gameobjs) {
-		// TODO Auto-generated constructor stub
 		this.enemy = gameobjs.get(id);
 		this.board = board;
 		this.gameobjs = gameobjs;
 	}
+	
 	public int getAction(){
 		return 0;
 	}

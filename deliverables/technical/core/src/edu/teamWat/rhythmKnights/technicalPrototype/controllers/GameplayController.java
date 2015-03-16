@@ -19,7 +19,7 @@ public class GameplayController {
 	protected InputController[] controls;
 	/** Ticker */
 	public Ticker ticker;
-
+	
 	private Knight knight;
 
 	public PlayerController playerController;

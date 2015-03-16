@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.TimeUtils;
  */
 public class GameplayController {
 
+	/** Reference to the game board. */
 	public Board board;
+	
 	public Knight knight;
 	public Enemy enemies[];
 	
