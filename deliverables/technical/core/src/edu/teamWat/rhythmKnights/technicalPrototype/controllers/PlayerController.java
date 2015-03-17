@@ -22,6 +22,13 @@ public class PlayerController implements InputController, InputProcessor {
 	public KeyEvent[] keyEvents = new KeyEvent[5];
 	public int numKeyEvents = 0;
 
+	public PlayerController() {
+		super();
+		for (KeyEvent keyEvent : keyEvents) {
+			keyEvent = new KeyEvent();
+		}
+	}
+
 	/**
 	 * Return the action of this knight (but do not process)
 	 * 
@@ -120,7 +127,7 @@ public class PlayerController implements InputController, InputProcessor {
 	}
 
 	public class KeyEvent {
-		int code;
-		long time;
+		int code = 0;
+		long time = 0;
 	}
 }
