@@ -66,7 +66,7 @@ public class Board {
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
                 Color c = tiles[i][j].col;
-                float scale = (float)canvas.TILE_SIZE/(float)tileTexture.getHeight();
+                float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
                 //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }

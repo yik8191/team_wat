@@ -39,9 +39,11 @@ import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController
  */
 public class GameCanvas {
 
-    public final int TILE_SIZE = 100;
-    private int X_OFFSET = 0;
-    private int Y_OFFSET = 0;
+    public  int tileSize = 100;
+    private int xOffset = 0;
+    private int yOffset = 0;
+    private int bWidth = 1;
+    private int bHeight = 1;
 
 	/** Drawing context to handle textures as sprites */
 	private SpriteBatch spriteBatch;
@@ -219,6 +221,7 @@ public class GameCanvas {
 	public void resize() {
 		// Resizing screws up the spriteBatch projection matrix
 		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, getWidth(), getHeight());
+        setOffsets(bWidth, bHeight);
 	}
 
 	/**
@@ -512,15 +515,19 @@ public class GameCanvas {
 	}
 
     public Vector2 boardToScreen(float x, float y){
-        return new Vector2(x*(TILE_SIZE+2) + X_OFFSET, y*(TILE_SIZE+2) + Y_OFFSET);
+        return new Vector2(x*(tileSize+2) + xOffset, y*(tileSize+2) + yOffset);
     }
 
     /* Takes in width and height of board and appropriately sets offsets. */
     public void setOffsets(int boardW, int boardH) {
-	    float startX = getWidth() / 2 - (TILE_SIZE * boardW) / 2;
-	    float startY = getHeight() / 2 - (TILE_SIZE * boardH) / 2 - 50;
-	    X_OFFSET = (int)startX;
-	    Y_OFFSET = (int)startY;
+        this.bWidth = boardW;
+        this.bHeight = boardH;
+        //TODO: Play with these scaling constants
+        tileSize = (this.getWidth()*2/3) / boardW;
+	    float startX = getWidth() / 2 - (tileSize * boardW) / 2;
+	    float startY = getHeight() / 2 - (tileSize * boardH) / 2 - 50;
+	    xOffset = (int)startX;
+	    yOffset = (int)startY;
     }
 
 
