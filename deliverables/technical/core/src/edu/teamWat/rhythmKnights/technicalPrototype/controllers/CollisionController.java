@@ -51,10 +51,26 @@ public class CollisionController {
 	}
 
 	/**
+	 * Update game board due to dynamic tile states. */
+	public void updateBoard() {
+		for (GameObject g: gameobjs){
+			if (g instanceof DynamicTile){
+				board.setTile((int) g.getPosition().x, 
+						(int) g.getPosition().y, false, false, false);
+			}
+		}
+	}
+	
+	
+	
+	/**
 	 * Updates all of the game objects and projectiles, moving them forward.
 	 *
 	 */
 	public void update() {
+		// update dynamic tiles 
+		updateBoard();
+		// initialize boolean
 		hasPlayerMoved = false;
 		// Move only the player
 		if (gameobjs.getPlayer().isActive()){
