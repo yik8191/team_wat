@@ -2,6 +2,7 @@ package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.sun.javafx.collections.VetoableListDecorator;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker.*;
@@ -234,6 +235,7 @@ public class GameplayController {
 		if (!gameStateAdvanced) {
 			ticker.advance();
 			board.updateColors();
+			moveEnemies();
 			collisionController.update();
 			if (collisionController.hasPlayerMoved) knight.setInvulnerable(false);
 			gameStateAdvanced = true;
@@ -258,6 +260,29 @@ public class GameplayController {
 		if (!knight.isInvulnerable()) {
 			knight.takeDamage();
 			knight.setInvulnerable(true);
+		}
+	}
+
+	public void moveEnemies() {
+		Vector2 vel = new Vector2();
+		for (int i = 1; i < controls.length; i++) {
+			vel.set(0,0);
+			switch(controls[i].getAction()){
+				case InputController.CONTROL_MOVE_RIGHT:
+					vel.x = 1;
+					break;
+				case InputController.CONTROL_MOVE_UP:
+					vel.y = 1;
+					break;
+				case InputController.CONTROL_MOVE_LEFT:
+					vel.x = -1;
+					break;
+				case InputController.CONTROL_MOVE_DOWN:
+					vel.y = -1;
+					break;
+			}
+			((AIController)controls[i]).nextAction();
+			gameObjects.get(i).setVelocity(vel);
 		}
 	}
 
