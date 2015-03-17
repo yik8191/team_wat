@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.*;
 
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.GameObject;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.Knight;
 
 /**
  * Class to handle basic collisions in the game.
@@ -48,15 +49,13 @@ public class CollisionController {
 	}
 
 	/**
-	 * Updates all of the ships and photons, moving them forward.
+	 * Updates all of the game objects and photons, moving them forward.
 	 *
 	 */
 	public void update() {
-		// Move live game objects when possible.
-		for (GameObject g : gameobjs) {
-			if (g.isActive()) {
-				moveIfSafe(g);
-			}
+		// Move only the player
+		if (gameobjs.getPlayer().isActive()){
+			moveIfSafe(gameobjs.getPlayer());
 		}
 		
 		// Test collisions between game objects.
@@ -66,13 +65,30 @@ public class CollisionController {
 		for (jj = ii + 1; jj < length; jj++) {
 			checkForCollision(gameobjs.get(ii), gameobjs.get(jj));
 		}
-		// handle all enemy movement
+		
+		// clear player velocity
+		tmp.x = 0; tmp.y = 0;
+		gameobjs.getPlayer().setVelocity(tmp);
+		
+		// Move everything else
+		for (GameObject g: gameobjs){
+			if (g.isActive()){
+				moveIfSafe(g);
+			}
+		}
+		// handle all enemy movement first
 		for (ii = 1; ii < length - 1; ii++) {
 			for (jj = ii + 1; jj < length; jj++) {
 				checkForCollision(gameobjs.get(ii), gameobjs.get(jj));
 			}
 		}
-
+		
+		// handle final interaction between enemy and player
+		ii = 0;
+		for (jj = ii + 1; jj < length; jj ++){
+			checkForCollision(gameobjs.get(jj), gameobjs.get(ii));
+		}
+		
 		// Test collisions between game objects and projectiles
 		/*for (GameObject s : gameobjs) {
 			for (Photon p : photons) {
@@ -103,6 +119,18 @@ public class CollisionController {
 		}
 	}
 
+	
+	/**
+	 * Bounces a game object back to its original position.*/
+	private void bounceBackGameObject(GameObject g){
+		tmp = g.getVelocity();
+		tmp.x = -tmp.x; tmp.y = -tmp.y;
+		g.setVelocity(tmp);
+		moveIfSafe(g);
+		tmp.x = 0; tmp.y = 0;
+		g.setVelocity(tmp);
+	}
+	
 	/**
 	 * Handles collisions between game objects, 
 	 *
@@ -123,7 +151,25 @@ public class CollisionController {
 
 		// If the two game objects occupy the same tile,
 		if (g1x == g2x && g1y == g2y) {
-			
+			if (g1 instanceof Knight){
+				// damage the enemy
+				g2.setAlive(false);
+				// bounce back the player
+				bounceBackGameObject(g1);
+				
+			} else if (g2 instanceof Knight){
+				// damage the player
+				if (!((Knight) g2).isInvulnerable()) {
+					((Knight) g2).takeDamage();
+					((Knight) g2).setInvulnerable(true);
+				}
+				// bounce back the other object
+				bounceBackGameObject(g1);
+			} else {
+				// bounce back both enemies
+				bounceBackGameObject(g1);
+				bounceBackGameObject(g2);
+			}
 		}
 	}
 }

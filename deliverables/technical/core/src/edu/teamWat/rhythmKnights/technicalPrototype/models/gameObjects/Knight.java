@@ -63,7 +63,7 @@ public class Knight extends GameObject {
             sprite = new FilmStrip(knightDashTexture, 1, 1);
         }
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
-        canvas.draw(sprite, loc.x, loc.y, canvas.TILE_SIZE, canvas.TILE_SIZE);
+        canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
         // Draw remaining hearts
         if (this.knightHP == 0) {
