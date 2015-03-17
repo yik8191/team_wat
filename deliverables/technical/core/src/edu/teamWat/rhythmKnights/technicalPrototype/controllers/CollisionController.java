@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.*;
 
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.GameObject;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.Knight;
 
 /**
  * Class to handle basic collisions in the game.
@@ -123,7 +124,9 @@ public class CollisionController {
 
 		// If the two game objects occupy the same tile,
 		if (g1x == g2x && g1y == g2y) {
-			
+			if (g1 instanceof Knight){
+				
+			}
 		}
 	}
 }
