@@ -53,18 +53,46 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = new Board(13, 7);
+        board = new Board(13, 7);
 		gameObjects = new GameObjectList(9);
 
-		gameObjects.add(new Knight(0, 0, 3));
-		gameObjects.add(new DynamicTile(1, 3, 3));
-		gameObjects.add(new Skeleton(2, 5, 0));
+        controls = new InputController[gameObjects.size()];
+
+        gameObjects.add(new Knight(0, 0, 3));
+        controls[0] = playerController;
+
+        gameObjects.add(new DynamicTile(1, 3, 3));
+        Vector2[] path = {new Vector2(3,3), new Vector2(3,4), new Vector2(3,5), new Vector2(4,5), new Vector2(4,4),
+                new Vector2(4,3), new Vector2(4,2), new Vector2(4,1), new Vector2(3,1), new Vector2(3,2)};
+        controls[1] = new AIController(1, gameObjects, path);
+
+        gameObjects.add(new Skeleton(2, 5, 0));
+        path = new Vector2[]{new Vector2(5,0), new Vector2(4,0), new Vector2(5,0), new Vector2(6,0)};
+        controls[2] = new AIController(2, gameObjects, path);
+
 		gameObjects.add(new Skeleton(3, 5, 6));
+        path = new Vector2[]{new Vector2(5,6), new Vector2(4,6), new Vector2(5,6), new Vector2(6,6)};
+        controls[3] = new AIController(3, gameObjects, path);
+
 		gameObjects.add(new Slime(4, 7, 0));
-		gameObjects.add(new Slime(5, 7, 6));
-		gameObjects.add(new Slime(6, 9, 2));
-		gameObjects.add(new Slime(7, 9, 4));
-		gameObjects.add(new Slime(8, 11, 3));
+        path = new Vector2[]{new Vector2(7,0), new Vector2(7,1), new Vector2(8,1), new Vector2(8,0)};
+        controls[4] = new AIController(4, gameObjects, path);
+
+        gameObjects.add(new Slime(5, 7, 6));
+        path = new Vector2[]{new Vector2(7,6), new Vector2(7,5), new Vector2(8,5), new Vector2(8,6)};
+        controls[5] = new AIController(5, gameObjects, path);
+
+        gameObjects.add(new Slime(6, 9, 2));
+        path = new Vector2[]{new Vector2(9,2), new Vector2(10,2), new Vector2(10,1), new Vector2(9,1)};
+        controls[6] = new AIController(6, gameObjects, path);
+
+        gameObjects.add(new Slime(7, 9, 4));
+        path = new Vector2[]{new Vector2(9,4), new Vector2(10,4), new Vector2(10,5), new Vector2(9,5)};
+        controls[7] = new AIController(7, gameObjects, path);
+
+        gameObjects.add(new Slime(8, 11, 3));
+        path = new Vector2[]{new Vector2(11,3), new Vector2(11,4), new Vector2(11,3), new Vector2(11,2)};
+        controls[8] = new AIController(8, gameObjects, path);
 
 		board.setTile(0, 3, false, true, false);
 		board.setTile(3, 1, false, false, true);
@@ -92,12 +120,6 @@ public class GameplayController {
 		playerMoved = true;
 		calibrationBeatSent = true;
 		gameStateAdvanced = true;
-
-		controls = new InputController[gameObjects.size()];
-		controls[0] = playerController;
-		for (int ii = 1; ii < gameObjects.size(); ii++) {
-			controls[ii] = new AIController(ii, board, gameObjects);
-		}
 	}
 
 
