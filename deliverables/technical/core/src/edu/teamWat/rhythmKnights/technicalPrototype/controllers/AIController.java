@@ -13,7 +13,7 @@ public class AIController implements InputController{
 	/** The GameObject being controlled by this AIController, typically 
 	 * an enemy character */
 	private GameObject enemy;
-	/** The game board; used for pathfinding */
+	/** The game board; used for bounds checking */
 	private Board board;
 	/** The game object's next action (may include firing). */
 	private int move; // A ControlCode
@@ -30,7 +30,6 @@ public class AIController implements InputController{
         this.curPathPlace = 0;
         this.path = path;
 	}
-
 	public int getAction(){
         Vector2 prev = this.path[this.curPathPlace];
         Vector2 next = this.path[this.curPathPlace + 1];

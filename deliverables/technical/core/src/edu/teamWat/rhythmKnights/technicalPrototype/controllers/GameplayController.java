@@ -19,7 +19,7 @@ public class GameplayController {
 	protected InputController[] controls;
 	/** Ticker */
 	public Ticker ticker;
-
+	
 	private Knight knight;
 
 	public PlayerController playerController;
@@ -124,13 +124,6 @@ public class GameplayController {
 
 
 	public void update() {
-		// DEBUGGING CODE
-		gameObjects.get(1).isAlive = false;
-		if (RhythmController.isWithinActionWindow(TimeUtils.millis(), false)){
-			gameObjects.get(1).isAlive = true;
-		}
-
-
 		int code = playerController.getAction();
 
 		if (RhythmController.updateBeat()) {
@@ -229,6 +222,7 @@ public class GameplayController {
 	private void advanceGameState () {
 		if (!gameStateAdvanced) {
 			ticker.advance();
+			board.updateColors();
 			gameStateAdvanced = true;
 		}
 	}
