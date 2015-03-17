@@ -21,6 +21,7 @@ public class PlayerController implements InputController, InputProcessor {
 
 	public KeyEvent[] keyEvents = new KeyEvent[5];
 	public int numKeyEvents = 0;
+	public boolean didReset = false;
 
 	public PlayerController() {
 		super();
@@ -45,6 +46,7 @@ public class PlayerController implements InputController, InputProcessor {
 	public void clear() {
 		keyEvents[0].code = CONTROL_NO_ACTION;
 		numKeyEvents = 0;
+		didReset = false;
 	}
 
 	public KeyEvent getLastAction() {
@@ -78,7 +80,9 @@ public class PlayerController implements InputController, InputProcessor {
 			case Keys.DOWN:
 				addKeyEvent(CONTROL_MOVE_DOWN, TimeUtils.millis());
 				break;
-
+			case Keys.R:
+				didReset = true;
+				break;
 		}
 		return true;
 	}
