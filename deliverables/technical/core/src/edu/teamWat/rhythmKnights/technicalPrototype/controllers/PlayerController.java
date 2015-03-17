@@ -24,8 +24,8 @@ public class PlayerController implements InputController, InputProcessor {
 
 	public PlayerController() {
 		super();
-		for (KeyEvent keyEvent : keyEvents) {
-			keyEvent = new KeyEvent();
+		for (int i = 0; i < 5; i++) {
+			keyEvents[i] = new KeyEvent();
 		}
 	}
 

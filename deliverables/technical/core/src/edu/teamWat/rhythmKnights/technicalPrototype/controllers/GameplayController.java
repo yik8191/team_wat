@@ -26,6 +26,8 @@ public class GameplayController {
 
 	public PlayerController playerController;
 
+	public CollisionController collisionController;
+
 	private ArrayList<Integer> playerActionQueue = new ArrayList<Integer>();
 
 	boolean playerMoved = false;
@@ -111,6 +113,8 @@ public class GameplayController {
 
 		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.DASH});
 
+		collisionController = new CollisionController(board, gameObjects);
+
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
 		playerMoved = true;
@@ -181,7 +185,44 @@ public class GameplayController {
 						}
 						break;
 					case DASH:
+						if (playerController.numKeyEvents > 1) {
+							damagePlayer();
+							advanceGameState();
+							playerMoved = true;
+						} else if (playerController.numKeyEvents == 1) {
+							PlayerController.KeyEvent event = playerController.keyEvents[0];
 
+							//DEBUGGING CODE
+							RhythmController.isWithinActionWindow(event.time, 0, true);
+
+							// Send a calibration beat
+							if (!calibrationBeatSent) {
+								RhythmController.sendCalibrationBeat(event.time);
+								calibrationBeatSent = true;
+							}
+
+
+							if (RhythmController.isWithinActionWindow(event.time, 0, false)) {
+								Vector2 vel = new Vector2();
+								switch (event.code) {
+									case InputController.CONTROL_MOVE_RIGHT:
+										vel.x = 1;
+										break;
+									case InputController.CONTROL_MOVE_UP:
+										vel.y = 1;
+										break;
+									case InputController.CONTROL_MOVE_LEFT:
+										vel.x = -1;
+										break;
+									case InputController.CONTROL_MOVE_DOWN:
+										vel.y = -1;
+										break;
+								}
+								playerMoved = true;
+								knight.setVelocity(vel);
+								advanceGameState();
+							}
+						}
 						break;
 				}
 			}
@@ -290,20 +331,21 @@ public class GameplayController {
 		if (!gameStateAdvanced) {
 			ticker.advance();
 			board.updateColors();
+			collisionController.update();
 			gameStateAdvanced = true;
 
 			// Configures the next beat to handle inputs properly
-			switch (ticker.getAction()) {
-				case MOVE:
-					RhythmController.actionWindowRadius = 0.15f;
-					RhythmController.finalActionOffset = 0.5f;
-
-					break;
-				case DASH:
-
-
-					break;
-			}
+//			switch (ticker.getAction()) {
+//				case MOVE:
+//					RhythmController.actionWindowRadius = 0.15f;
+//					RhythmController.finalActionOffset = 0.5f;
+//
+//					break;
+//				case DASH:
+//
+//
+//					break;
+//			}
 
 
 		}
