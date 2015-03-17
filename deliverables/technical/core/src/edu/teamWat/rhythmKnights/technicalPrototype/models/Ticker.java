@@ -27,10 +27,13 @@ public class Ticker {
 	private int beat;
 
     //how spaced out ticker squares should be
-    private static int SPACING = 10;
-    private static int TICK_SQUARE_SIZE = 115;
-    private static int INDICATOR_HEIGHT = 145;
-    private static int INDICATOR_WIDTH = 420;
+    //TODO: THese should be changed when the screen is rescaled.
+    //   this can be done by putting these constants inside GameCanvas
+    //   and updating them in GameCanvas.setOffsets()
+    private int SPACING = 10;
+    private int TICK_SQUARE_SIZE = 115;
+    private int INDICATOR_HEIGHT = 145;
+    private int INDICATOR_WIDTH = 420;
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;

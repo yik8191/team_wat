@@ -66,7 +66,7 @@ public class Board {
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
                 Color c = tiles[i][j].col;
-                float scale = (float)canvas.TILE_SIZE/(float)tileTexture.getHeight();
+                float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
                 //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
@@ -204,16 +204,16 @@ public class Board {
                 int i = r.nextInt(4);
                 if (i == 0) {
                     //pinkish
-                    col = new Color(145f/255f, 55f/255f, 82f/255f, 1);
+                    col = new Color(202f/255f, 75f/255f, 155f/255f, 1);
                 } else if (i == 1) {
                     //blueish
-                    col = new Color(3f/255f, 87f/255f, 145f/255f, 1);
+                    col = new Color(69f/255f, 197f/255f, 222f/255f, 1);
                 } else if (i == 2) {
                     //greenish
-                    col = new Color(32f/120f, 120f/255f, 82f/255f, 1);
+                    col = new Color(106f/255f, 189f/255f, 69f/255f, 1);
                 } else if (i == 3) {
                     //yellowish
-                    col = new Color(143f/255f, 138f/255f, 91f/255f, 1);
+                    col = new Color(233f / 255f, 230f / 255f, 18f / 255f, 1);
                 }
             }
         }
