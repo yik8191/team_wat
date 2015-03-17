@@ -149,8 +149,9 @@ public class CollisionController {
 		if ((g instanceof DynamicTile) && nonzerov){
 			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, false, false, true);
 			// move player with DynamicTile if necessary
-			if (g.getPosition() == gameobjs.getPlayer().getPosition()){
+			if (g.getPosition().x == gameobjs.getPlayer().getPosition().x && g.getPosition().y == gameobjs.getPlayer().getPosition().y){
 				gameobjs.getPlayer().setPosition(tmp);
+				((Knight) gameobjs.getPlayer()).setInvulnerable(true);
 			}
 			g.setPosition(tmp);
 			
@@ -205,7 +206,7 @@ public class CollisionController {
 				}
 				// bounce back the other object
 				bounceBackGameObject(g1);
-			} else {
+			} else if (!(g1 instanceof DynamicTile) && !(g2 instanceof DynamicTile)) {
 				// bounce back both enemies
 				bounceBackGameObject(g1);
 				bounceBackGameObject(g2);
