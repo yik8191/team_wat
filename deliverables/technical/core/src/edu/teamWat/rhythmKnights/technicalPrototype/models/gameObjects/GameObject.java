@@ -52,4 +52,8 @@ public abstract class GameObject {
 		this.position = pos;
 	}
 	
+	public void setAlive(boolean alive){
+		this.isAlive = alive;
+	}
+	
 }
