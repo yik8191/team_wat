@@ -58,7 +58,6 @@ public class CollisionController {
 		// Move only the player
 		if (gameobjs.getPlayer().isActive()){
 			moveIfSafe(gameobjs.getPlayer());
-			hasPlayerMoved = true;
 		}
 		
 		// Test collisions between game objects.
@@ -118,6 +117,7 @@ public class CollisionController {
 
 		if (safeAfter) {
 			g.setPosition(tmp);
+			hasPlayerMoved = true;
 		}
 	}
 
