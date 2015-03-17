@@ -54,6 +54,7 @@ public class CollisionController {
 	 *
 	 */
 	public void update() {
+		hasPlayerMoved = false;
 		// Move only the player
 		if (gameobjs.getPlayer().isActive()){
 			moveIfSafe(gameobjs.getPlayer());
