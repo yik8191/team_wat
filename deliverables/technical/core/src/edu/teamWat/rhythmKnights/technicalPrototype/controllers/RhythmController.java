@@ -17,7 +17,7 @@ public class RhythmController {
 	static float finalActionOffset = 0.5f;
 
 	/** Location of music file */
-	public static final String MUSIC_FILE = "music/game2.wav";
+	public static final String MUSIC_FILE = "music/game2longer.ogg";
 
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
@@ -33,30 +33,30 @@ public class RhythmController {
 	private RhythmController() {
 	}
 
-	public static void PreloadContent(AssetManager manager) {
-		manager.load(MUSIC_FILE, Music.class);
-	}
-
-	public static void LoadContent(AssetManager manager) {
-		if (manager.isLoaded(MUSIC_FILE)) {
-			music = manager.get(MUSIC_FILE, Music.class);
-			music.setLooping(true);
-		} else {
-			music = null;  // Failed to load
-		}
-	}
-
-	public static void UnloadContent(AssetManager manager) {
-		if (music != null) {
-			music = null;
-			manager.unload(MUSIC_FILE);
-		}
-	}
-
-//	public static void init() {
-//		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.wav"));
-//		music.setLooping(true);
+//	public static void PreloadContent(AssetManager manager) {
+//		manager.load(MUSIC_FILE, Music.class);
 //	}
+//
+//	public static void LoadContent(AssetManager manager) {
+//		if (manager.isLoaded(MUSIC_FILE)) {
+//			music = manager.get(MUSIC_FILE, Music.class);
+//			music.setLooping(true);
+//		} else {
+//			music = null;  // Failed to load
+//		}
+//	}
+//
+//	public static void UnloadContent(AssetManager manager) {
+//		if (music != null) {
+//			music = null;
+//			manager.unload(MUSIC_FILE);
+//		}
+//	}
+
+	public static void init() {
+		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
+		music.setLooping(true);
+	}
 
 	public static void launch(float tempo) {
 		period = (long)(60000.0f / tempo);
