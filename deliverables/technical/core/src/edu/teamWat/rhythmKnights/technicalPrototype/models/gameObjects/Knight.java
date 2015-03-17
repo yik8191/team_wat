@@ -23,7 +23,7 @@ public class Knight extends GameObject {
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
     public static Texture knightHpEmptyTexture;
-    private static int HP_SIZE = 100;
+    private static int HP_SIZE;
     protected int knightHP;
 
 	private boolean isInvulnerable;
@@ -65,6 +65,7 @@ public class Knight extends GameObject {
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
+        HP_SIZE = canvas.HP_SIZE;
         // Draw remaining hearts
         if (this.knightHP == 0) {
             spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);

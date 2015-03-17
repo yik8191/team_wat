@@ -30,10 +30,10 @@ public class Ticker {
     //TODO: THese should be changed when the screen is rescaled.
     //   this can be done by putting these constants inside GameCanvas
     //   and updating them in GameCanvas.setOffsets()
-    private int SPACING = 10;
-    private int TICK_SQUARE_SIZE = 115;
-    private int INDICATOR_HEIGHT = 145;
-    private int INDICATOR_WIDTH = 420;
+    private int SPACING;
+    private int TICK_SQUARE_SIZE;
+    private int INDICATOR_HEIGHT;
+    private int INDICATOR_WIDTH;
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
@@ -45,7 +45,11 @@ public class Ticker {
 	}
 
 	public void draw(GameCanvas canvas) {
-        //float midX = canvas.getWidth()/2;
+        //float midX = canvas.getWidth()/2;)
+        SPACING = canvas.TICKER_SPACING;
+        TICK_SQUARE_SIZE = canvas.TICK_SQUARE_SIZE;
+        INDICATOR_HEIGHT = canvas.INDICATOR_HEIGHT;
+        INDICATOR_WIDTH = canvas.INDICATOR_WIDTH;
         float width = TICK_SQUARE_SIZE + SPACING;
         float startX = canvas.getWidth()/2 - (TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1))/2;
         FilmStrip sprite;
