@@ -34,21 +34,6 @@ public class GameplayController {
 
 	private boolean gameOver = false;
 
-	/**
-	* Initializes the ships to new random locations.
-	*
-	* TODO: need level design
-	*/
-	private void initGameObjectPositions() {
-		// Set the player position
-//		float px = board.boardToScreen(board.getWidth() / 2);
-//		float py = board.boardToScreen(board.getHeight() / 2);
-//		gameobjs.get(0).getPosition().set(px,py);
-
-		// Create a list of available AI positions
-		// Assign positions
-	}
-
 	public GameplayController() {	}
 
 	public void initialize() {
@@ -169,29 +154,31 @@ public class GameplayController {
 								advanceGameState();
 								break;
 							case DASH:
-								// debugging
-								moveDirection = new Vector2(0, 0);
-								if (code == InputController.CONTROL_MOVE_RIGHT) {
-									moveDirection.x = 1;
-									knight.setInvulnerable(false);
-								} else if (code == InputController.CONTROL_MOVE_UP) {
-									moveDirection.y = 1;
-									knight.setInvulnerable(false);
-								} else if (code == InputController.CONTROL_MOVE_LEFT) {
-									moveDirection.x = -1;
-									knight.setInvulnerable(false);
-								} else if (code == InputController.CONTROL_MOVE_DOWN) {
-									moveDirection.y = -1;
-									knight.setInvulnerable(false);
-								} else {
-									damagePlayer();
-								}
+//								// debugging
+//								moveDirection = new Vector2(0, 0);
+//								if (code == InputController.CONTROL_MOVE_RIGHT) {
+//									moveDirection.x = 1;
+//									knight.setInvulnerable(false);
+//								} else if (code == InputController.CONTROL_MOVE_UP) {
+//									moveDirection.y = 1;
+//									knight.setInvulnerable(false);
+//								} else if (code == InputController.CONTROL_MOVE_LEFT) {
+//									moveDirection.x = -1;
+//									knight.setInvulnerable(false);
+//								} else if (code == InputController.CONTROL_MOVE_DOWN) {
+//									moveDirection.y = -1;
+//									knight.setInvulnerable(false);
+//								} else {
+//									damagePlayer();
+//								}
+//
+//								knight.move(moveDirection);
+//								if (knight.getPosition().x < 0 || knight.getPosition().x >= board.getWidth()
+//										|| knight.getPosition().y < 0 || knight.getPosition().y >= board.getHeight()) {
+//									knight.move(moveDirection.scl(-1));
+//								}
 
-								knight.move(moveDirection);
-								if (knight.getPosition().x < 0 || knight.getPosition().x >= board.getWidth()
-										|| knight.getPosition().y < 0 || knight.getPosition().y >= board.getHeight()) {
-									knight.move(moveDirection.scl(-1));
-								}
+
 								playerMoved = true;
 								advanceGameState();
 								break;
@@ -200,7 +187,6 @@ public class GameplayController {
 				}
 			}
 		}
-
 		playerController.clear();
 	}
 
@@ -208,6 +194,21 @@ public class GameplayController {
 		if (!gameStateAdvanced) {
 			ticker.advance();
 			gameStateAdvanced = true;
+
+			// Configures the next beat to handle inputs properly
+			switch (ticker.getAction()) {
+				case MOVE:
+					RhythmController.actionWindowRadius = 0.15f;
+					RhythmController.finalActionOffset = 0.5f;
+
+					break;
+				case DASH:
+
+
+					break;
+			}
+
+
 		}
 	}
 

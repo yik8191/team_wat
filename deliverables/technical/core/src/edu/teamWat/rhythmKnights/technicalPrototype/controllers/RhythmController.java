@@ -35,8 +35,8 @@ public class RhythmController{
 		startTime = TimeUtils.millis();
 	}
 
-	public static boolean isWithinActionWindow(long actionTime, boolean out) {
-		float beatTime = toBeatTime(actionTime);
+	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
+		float beatTime = toBeatTime(actionTime) - anchor;
 		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
