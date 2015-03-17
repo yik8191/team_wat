@@ -8,8 +8,8 @@ public abstract class GameObject {
     protected int id;
     public boolean isAlive = false;
     protected boolean isActive = false;
-    protected Vector2 position;
-    protected Vector2 velocity;
+    protected Vector2 position = new Vector2();
+    protected Vector2 velocity = new Vector2();
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -45,11 +45,18 @@ public abstract class GameObject {
 	}
 	
 	public void setVelocity(Vector2 v){
-		this.velocity = v;
+		this.velocity.x = v.x;
+		this.velocity.y = v.y;
 	}
 	
 	public void setPosition(Vector2 pos){
-		this.position = pos;
+		this.position.x = pos.x;
+		this.position.y = pos.y;
+	}
+	
+	public void setAlive(boolean alive){
+		this.isAlive = alive;
+		this.isActive = alive;
 	}
 	
 }
