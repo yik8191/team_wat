@@ -26,6 +26,8 @@ import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
+import javax.naming.ldap.ManageReferralControl;
+
 
 /**
  * The primary controller class for the game. While GDXRoot is the root class, 
@@ -94,6 +96,7 @@ public class GameMode implements Screen{
 		Skeleton.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
+		RhythmController.PreloadContent(manager);
 	}
 
 	/**
@@ -140,6 +143,7 @@ public class GameMode implements Screen{
 		Skeleton.LoadContent(manager);
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
+		RhythmController.LoadContent(manager);
 	}
 
 	/**
@@ -172,6 +176,7 @@ public class GameMode implements Screen{
 		Skeleton.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
+		RhythmController.UnloadContent(manager);
 	}
 
 	// CONSTANTS

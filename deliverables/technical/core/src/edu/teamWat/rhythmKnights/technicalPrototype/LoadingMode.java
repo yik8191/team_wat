@@ -203,7 +203,7 @@ public class LoadingMode implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		active = true;
 
-		RhythmController.init();
+//		RhythmController.init();
 	}
 
 	/** Called when this screen should release all resources. */
