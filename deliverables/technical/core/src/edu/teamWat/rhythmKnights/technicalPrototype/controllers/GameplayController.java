@@ -145,12 +145,16 @@ public class GameplayController {
 						if (RhythmController.isWithinActionWindow(event.time, 0, false)) {
 							switch (event.code) {
 								case InputController.CONTROL_MOVE_RIGHT:
+									//velocity
 									break;
 								case InputController.CONTROL_MOVE_UP:
+									//velocity
 									break;
 								case InputController.CONTROL_MOVE_LEFT:
+									//velocity
 									break;
 								case InputController.CONTROL_MOVE_DOWN:
+									//velocity
 									break;
 							}
 						} else {
@@ -159,6 +163,7 @@ public class GameplayController {
 					}
 					break;
 				case DASH:
+
 					break;
 			}
 		}

@@ -44,6 +44,10 @@ public class RhythmController {
 		startTime = TimeUtils.millis();
 	}
 
+	/**
+	 * Takes in time and converts it to beat time, a float between 0 and 1. Then checks if this time is within action
+	 * window for a valid beat.
+	 */
 	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
 		float beatTime = toBeatTime(actionTime) - anchor;
 		if (out) System.out.println(totalOffset + " " + beatTime);
