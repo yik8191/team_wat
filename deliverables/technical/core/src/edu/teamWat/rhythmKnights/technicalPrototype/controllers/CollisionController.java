@@ -37,8 +37,7 @@ public class CollisionController {
 	/**
 	 * Creates a CollisionController for the given models.
 	 *
-	 * @param b The game board 
-	 * @param s The list of game objects 
+	 * @param b The game board
 	 * TODO: @param p The active projectiles -- eventually
 	 */
 	public CollisionController(Board b, GameObjectList g) {
@@ -108,13 +107,12 @@ public class CollisionController {
 	 */
 	private void moveIfSafe(GameObject g) {
 		tmp.set(g.getPosition());
-		boolean safeBefore = board.isSafeAt((int)tmp.x, (int)tmp.y);
 		
 		// Test add velocity
 		tmp.add(g.getVelocity());
 		boolean safeAfter  = board.isSafeAt((int)tmp.x, (int)tmp.y);
 
-		if (!(safeBefore && !safeAfter)) {
+		if (safeAfter) {
 			g.setPosition(tmp);
 		}
 	}
@@ -123,7 +121,7 @@ public class CollisionController {
 	/**
 	 * Bounces a game object back to its original position.*/
 	private void bounceBackGameObject(GameObject g){
-		tmp = g.getVelocity();
+		tmp.set(g.getVelocity());
 		tmp.x = -tmp.x; tmp.y = -tmp.y;
 		g.setVelocity(tmp);
 		moveIfSafe(g);
