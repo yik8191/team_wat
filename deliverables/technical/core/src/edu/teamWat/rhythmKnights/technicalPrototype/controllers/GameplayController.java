@@ -123,14 +123,60 @@ public class GameplayController {
 			playerMoved = false;
 			calibrationBeatSent = false;
 		} else {
+			switch (ticker.getAction()){
+				case MOVE:
+					if (playerController.numKeyEvents > 1){
+						damagePlayer();
+						advanceGameState();
+						playerMoved = true;
+					} else if (playerController.numKeyEvents == 1) {
+						PlayerController.KeyEvent event = playerController.getLastAction();
+						if (RhythmController.isWithinActionWindow(event.time, 0, false)) {
+							switch (event.code) {
+								case InputController.CONTROL_MOVE_RIGHT:
+									break;
+								case InputController.CONTROL_MOVE_UP:
+									break;
+								case InputController.CONTROL_MOVE_LEFT:
+									break;
+								case InputController.CONTROL_MOVE_DOWN:
+									break;
+							}
+						} else {
+							damagePlayer();
+						}
+					}
+					break;
+				case DASH:
+					break;
+			}
+		}
+
+
+
+
+
+		if (RhythmController.updateBeat()) {
+			//Final actions
+			if (!playerMoved) {
+				damagePlayer();
+				advanceGameState();
+			}
+
+			// Cleanup
+			gameStateAdvanced = false;
+			playerMoved = false;
+			calibrationBeatSent = false;
+		} else {
 			if (code != InputController.CONTROL_NO_ACTION) {
 
-				RhythmController.isWithinActionWindow(playerController.lastEventTime, true);
+				//DEBUGGING CODE
+				RhythmController.isWithinActionWindow(playerController.getLastAction().time, 0, true);
 
 				// Send a calibration beat
 				if (!calibrationBeatSent) {
 					if (ticker.getAction() == TickerAction.MOVE) {
-						RhythmController.sendCalibrationBeat(playerController.lastEventTime);
+						RhythmController.sendCalibrationBeat(playerController.getLastAction().time);
 						calibrationBeatSent = true;
 					}
 				}
@@ -138,7 +184,7 @@ public class GameplayController {
 				if (playerMoved) {
 					damagePlayer();
 				} else {
-					if (RhythmController.isWithinActionWindow(playerController.lastEventTime, false)) {
+					if (RhythmController.isWithinActionWindow(playerController.getLastAction().time, 0, false)) {
 						switch (ticker.getAction()) {
 							case MOVE:
 								Vector2 moveDirection = new Vector2(0, 0);
@@ -228,7 +274,7 @@ public class GameplayController {
 		}
 	}
 
-	private void damagePlayer() {
+	public void damagePlayer() {
 		if (!knight.isInvulnerable()) {
 			knight.takeDamage();
 			knight.setInvulnerable(true);

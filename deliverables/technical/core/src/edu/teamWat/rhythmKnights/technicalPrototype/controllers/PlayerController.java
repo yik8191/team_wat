@@ -10,16 +10,17 @@
  */
 package edu.teamWat.rhythmKnights.technicalPrototype.controllers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.awt.*;
+import java.sql.Time;
+
 public class PlayerController implements InputController, InputProcessor {
 
-	public int controlCode = CONTROL_NO_ACTION;
-	public long lastEventTime = 0;
+	public KeyEvent[] keyEvents = new KeyEvent[5];
+	public int numKeyEvents = 0;
 
 	/**
 	 * Return the action of this knight (but do not process)
@@ -29,52 +30,58 @@ public class PlayerController implements InputController, InputProcessor {
 	 *
 	 * @return the action of this ship
 	 */
+	@Deprecated
     public int getAction() {
-	    return controlCode;
+	    return keyEvents[numKeyEvents].code;
     }
 
 	public void clear() {
-		controlCode = CONTROL_NO_ACTION;
+		keyEvents[0].code = CONTROL_NO_ACTION;
+		numKeyEvents = 0;
+	}
+
+	public KeyEvent getLastAction() {
+		return keyEvents[numKeyEvents];
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 			case Keys.A:
-				controlCode |= CONTROL_MOVE_LEFT;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_LEFT, TimeUtils.millis());
 				break;
 			case Keys.D:
-				controlCode |= CONTROL_MOVE_RIGHT;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_RIGHT, TimeUtils.millis());
 				break;
 			case Keys.W:
-				controlCode |= CONTROL_MOVE_UP;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_UP, TimeUtils.millis());
 				break;
 			case Keys.S:
-				controlCode |= CONTROL_MOVE_DOWN;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_DOWN, TimeUtils.millis());
 				break;
 			case Keys.LEFT:
-				controlCode |= CONTROL_MOVE_LEFT;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_LEFT, TimeUtils.millis());
 				break;
 			case Keys.RIGHT:
-				controlCode |= CONTROL_MOVE_RIGHT;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_RIGHT, TimeUtils.millis());
 				break;
 			case Keys.UP:
-				controlCode |= CONTROL_MOVE_UP;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_UP, TimeUtils.millis());
 				break;
 			case Keys.DOWN:
-				controlCode |= CONTROL_MOVE_DOWN;
-				lastEventTime = TimeUtils.millis();
+				addKeyEvent(CONTROL_MOVE_DOWN, TimeUtils.millis());
 				break;
 
 		}
 		return true;
+	}
+
+	public synchronized void addKeyEvent(int code, long time) {
+		if (numKeyEvents < 5) {
+			keyEvents[numKeyEvents].code = code;
+			keyEvents[numKeyEvents].time = time;
+			numKeyEvents++;
+		}
 	}
 
 	@Override
@@ -112,5 +119,8 @@ public class PlayerController implements InputController, InputProcessor {
 		return false;
 	}
 
-	
+	public class KeyEvent {
+		int code;
+		long time;
+	}
 }
