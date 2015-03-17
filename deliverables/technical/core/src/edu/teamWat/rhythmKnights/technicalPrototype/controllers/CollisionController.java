@@ -49,7 +49,7 @@ public class CollisionController {
 	}
 
 	/**
-	 * Updates all of the game objects and photons, moving them forward.
+	 * Updates all of the game objects and projectiles, moving them forward.
 	 *
 	 */
 	public void update() {
@@ -90,9 +90,9 @@ public class CollisionController {
 		}
 		
 		// Test collisions between game objects and projectiles
-		/*for (GameObject s : gameobjs) {
-			for (Photon p : photons) {
-				checkForCollision(s, p);
+		/*for (GameObject g : gameobjs) {
+			for (Projectile p : projectiles) {
+				checkForCollision(g, p);
 			}
 		}*/
 	}
