@@ -187,11 +187,10 @@ public class CollisionController {
 				// damage the enemy if it is not a dynamictile - must be fixed later
 				if (!(g2 instanceof DynamicTile)){
 					g2.setAlive(false);
+					// bounce back the player
+					bounceBackGameObject(g1);
+					hasPlayerMoved = true;
 				}
-				// bounce back the player
-				bounceBackGameObject(g1);
-				hasPlayerMoved = true;
-				
 			} else if (g2 instanceof Knight){
 				// damage the player
 				if (!((Knight) g2).isInvulnerable()) {
