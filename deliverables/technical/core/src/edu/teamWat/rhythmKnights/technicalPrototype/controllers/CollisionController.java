@@ -33,7 +33,9 @@ public class CollisionController {
 	
 	/** Cache attribute for calculations */
 	private Vector2 tmp;
-
+	/** Whether the player has moved */
+	public boolean hasPlayerMoved;
+	
 	/**
 	 * Creates a CollisionController for the given models.
 	 *
@@ -55,6 +57,7 @@ public class CollisionController {
 		// Move only the player
 		if (gameobjs.getPlayer().isActive()){
 			moveIfSafe(gameobjs.getPlayer());
+			hasPlayerMoved = true;
 		}
 		
 		// Test collisions between game objects.
@@ -154,6 +157,7 @@ public class CollisionController {
 				g2.setAlive(false);
 				// bounce back the player
 				bounceBackGameObject(g1);
+				hasPlayerMoved = true;
 				
 			} else if (g2 instanceof Knight){
 				// damage the player
