@@ -125,6 +125,11 @@ public class GameplayController {
 
 
 	public void update() {
+		if (playerController.didReset) {
+			playerController.clear();
+			gameOver = true;
+			return;
+		}
 
 		if (RhythmController.updateBeat()) {
 			//Final actions
