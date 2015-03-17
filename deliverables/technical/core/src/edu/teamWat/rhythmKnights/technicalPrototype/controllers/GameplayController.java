@@ -111,7 +111,7 @@ public class GameplayController {
 		board.setTile(12, 3, true, false, false);
 		board.setTile(12, 4, false, false, true);
 
-		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.DASH});
+		ticker = new Ticker(new TickerAction[] {TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE, TickerAction.MOVE});
 
 		collisionController = new CollisionController(board, gameObjects);
 
