@@ -102,7 +102,7 @@ public class GameplayController {
 
         gameObjects.add(new Slime(8, 11, 3));
         path = new int[]{InputController.CONTROL_MOVE_UP, InputController.CONTROL_MOVE_DOWN,
-                InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_UP};
+                InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_UP}; 
         controls[8] = new AIController(8, gameObjects, path);
 
 		board.setTile(0, 3, false, true, false);
