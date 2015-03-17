@@ -117,7 +117,9 @@ public class CollisionController {
 
 		if (safeAfter) {
 			g.setPosition(tmp);
-			hasPlayerMoved = true;
+			if (g.getVelocity().x != 0 || g.getVelocity().y != 0){
+				hasPlayerMoved = true;
+			}
 		}
 	}
 
