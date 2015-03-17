@@ -512,7 +512,9 @@ public class GameCanvas {
 	}
 
     public Vector2 boardToScreen(float x, float y){
-        return new Vector2(x*TILE_SIZE + X_OFFSET, y*TILE_SIZE + Y_OFFSET);
+        System.out.println("asdf");
+        return new Vector2(x*(TILE_SIZE+2) + X_OFFSET, y*(TILE_SIZE+2) + Y_OFFSET);
+
     }
 
     /* Takes in width and height of board and appropriately sets offsets. */

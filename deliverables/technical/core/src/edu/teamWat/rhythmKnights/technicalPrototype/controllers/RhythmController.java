@@ -4,21 +4,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class RhythmController{
+public class RhythmController {
 
-	static private long period;
+	static private long period;  // 6000/tempo = length of beat in ms
 
+	/** Length of period in which player can make a valid move*/
 	static float actionWindowRadius = 0.15f;
+	/** Offset to translate intervals in time*/
 	static float totalOffset = 0f;
+	/** Offset from perceived beat in time in the music*/
 	static float finalActionOffset = 0.5f;
 
+	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
+	/** Is music being played */
 	private static boolean begun = false;
 
+	/** When music started playing */
 	private static long startTime;
+	/** Music player object */
 	static Music music;
 
-	private RhythmController() {}
+	private RhythmController() {
+	}
 
 	public static void init() {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/game2.wav"));
@@ -32,6 +40,7 @@ public class RhythmController{
 		}
 		begun = true;
 		music.play();
+		totalOffset = 0;
 		startTime = TimeUtils.millis();
 	}
 
@@ -42,25 +51,24 @@ public class RhythmController{
 	}
 
 	/**
-	 * Method for checking whether or not it's time to move on to the next beat.
-	 * If we're past the final action point but the beat isn't complete, returns true and sets beat to complete.
-	 * If we're within the action window, sets to beat to incomplete.
-	 * Assumes that this method will be called at least once per action window. (If it's not, something else is wrong).
-	 * This method should only be used to check whether or not it's time to take care of final actions. It should not be
-	 * used to check if the player has moved within the beat. Use isWithinActionWindow() for that.
+	 * Method for checking whether or not it's time to move on to the next beat. If we're past the final action point
+	 * but the beat isn't complete, returns true and sets beat to complete. If we're within the action window, sets to
+	 * beat to incomplete. Assumes that this method will be called at least once per action window. (If it's not,
+	 * something else is wrong). This method should only be used to check whether or not it's time to take care of final
+	 * actions. It should not be used to check if the player has moved within the beat. Use isWithinActionWindow() for
+	 * that.
 	 *
 	 * @return returns whether or not it's time to take final actions.
 	 */
 	public static boolean updateBeat() {
 		long time = TimeUtils.timeSinceMillis(startTime);
 		float beatTime = toBeatTime(time);
-		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius) ) {
+		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
 			beatComplete = false;
 		} else if (beatTime > finalActionOffset && !beatComplete) {
 			beatComplete = true;
 			return true;
 		}
-
 		return false;
 	}
 
@@ -68,7 +76,7 @@ public class RhythmController{
 	public static void sendCalibrationBeat(long time) {
 		float beatTime = toBeatTime(time);
 		if (beatTime > 0.5) beatTime--;
-		totalOffset += 0.1 * beatTime;
+		totalOffset += 0.5 * (1 - beatTime) * beatTime;
 		if (totalOffset > 0.5) totalOffset--;
 	}
 

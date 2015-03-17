@@ -1,8 +1,9 @@
 /*
- * KnightController.java
+ * PlayerController.java
  * 
  * This class provides the human player an interface to move the knight
  * 
+ * Author: Team Wat
  * Heavily based on 2015 CS 3152 Game Lab 2 by 
  * Walker M. White, Cristian Zaloj, which was based on the
  * original AI Game Lab by Yi Xu and Don Holden, 2007
@@ -19,8 +20,6 @@ public class PlayerController implements InputController, InputProcessor {
 
 	public int controlCode = CONTROL_NO_ACTION;
 	public long lastEventTime = 0;
-
-
 
 	/**
 	 * Return the action of this knight (but do not process)

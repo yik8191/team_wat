@@ -1,15 +1,13 @@
 /*
  * GameMode.java
  *
- * This is the primary class file for running the game.  You should study this file for
- * ideas on how to structure your own root class. This class follows a
+ * This is the primary class file for running the game. This class follows a
  * model-view-controller pattern fairly strictly.
  *
  * Author: Walker M. White
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
- *
- * This code has been copied from the above original authors and modified by Gagik Hakobyan.
+ * Modified: Gagik Hakobyan
  */
 
 package edu.teamWat.rhythmKnights.technicalPrototype;
@@ -22,21 +20,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.utils.TimeUtils;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.PlayerController;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.RhythmController;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
 
 /**
- * The primary controller class for the game. <p/> While GDXRoot is the root class, it delegates all of the work to the
- * player mode classes. This is the player mode class for running the game. In initializes all of the other classes in
- * the game and hooks them together.  It also provides the basic game loop (update-draw).
+ * The primary controller class for the game. While GDXRoot is the root class, 
+ * it delegates all of the work to the
+ * player mode classes. This is the player mode class for running the game. 
+ * In initializes all of the other classes in
+ * the game and hooks them together.  
+ * It also provides the basic game loop (update-draw).
  */
 public class GameMode implements Screen{
 	/**
@@ -53,7 +50,6 @@ public class GameMode implements Screen{
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
-	// TODO: replace the assets in these paths with the correct files
 	private static String BKGD_FILE = "images/background.png";
 	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
@@ -61,7 +57,7 @@ public class GameMode implements Screen{
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture background;
-	/**backgroung image for level 1 */
+	/** background image for level 1 */
 	private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
@@ -241,8 +237,6 @@ public class GameMode implements Screen{
 	 * @param delta Number of seconds since last animation frame
 	 */
 	private void update(float delta) {
-		// TODO: Main game loop
-
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
