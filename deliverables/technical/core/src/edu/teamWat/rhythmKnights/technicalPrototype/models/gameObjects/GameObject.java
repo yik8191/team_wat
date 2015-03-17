@@ -36,5 +36,20 @@ public abstract class GameObject {
     public void move(Vector2 direction){this.position.add(direction);}
 
     /* Get the ID of this GameObject */
-    public int getId(){ return this.id;}
+    public int getId(){ 
+    	return this.id;
+    }
+
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
+	
+	public void setVelocity(Vector2 v){
+		this.velocity = v;
+	}
+	
+	public void setPosition(Vector2 pos){
+		this.position = pos;
+	}
+	
 }
