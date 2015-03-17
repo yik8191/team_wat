@@ -103,8 +103,8 @@ lhLower = \relative c {
   c8 r r r r r d ees  |              % bar 6
   d8 r r r c r bes r  |              % bar 7
   aes8 r f r aes r g r |             % bar 8 
-  bes8 r r d ees r r ees  |            % bar 9
-  bes8 r r d ees r r g,  |            % bar 10
+  d8 r r bes ees r r ees  |            % bar 9
+  d8 r r bes ees r r g,  |            % bar 10
   g8 r r c f, r r bes |              % bar 11
   ees,8 r r aes d, r r g  |          % bar 12
   g8 r f r g r aes r |               % bar 13

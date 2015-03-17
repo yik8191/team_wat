@@ -228,5 +228,11 @@ public class Board {
         }
     }
 
+    /** Checks if the pair (x,y) represents a valid coordinate on the board. */
+	public boolean isSafeAt(int x, int y) {
+		return (x >= 0 && y >= 0 && x < width && y < height && 
+				!isObstacleTile(x,y));
+	}
+
 
 }
