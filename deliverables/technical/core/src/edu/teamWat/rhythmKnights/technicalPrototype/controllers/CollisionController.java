@@ -114,6 +114,9 @@ public class CollisionController {
 				checkForCollision(g, p);
 			}
 		}*/
+		
+		// update dynamic tiles 
+		updateBoard();
 	}
 
 
@@ -144,11 +147,13 @@ public class CollisionController {
 			}
 		}
 		if ((g instanceof DynamicTile) && nonzerov){
+			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, false, false, true);
 			// move player with DynamicTile if necessary
 			if (g.getPosition() == gameobjs.getPlayer().getPosition()){
 				gameobjs.getPlayer().setPosition(tmp);
 			}
 			g.setPosition(tmp);
+			
 		}
 	}
 
