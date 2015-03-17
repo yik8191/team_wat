@@ -139,15 +139,16 @@ public class CollisionController {
 			if ((g instanceof Knight) && nonzerov){
 				hasPlayerMoved = true;
 				g.setPosition(tmp);
-			} else if ((g instanceof DynamicTile) && nonzerov){
-				// move player with DynamicTile if necessary
-				if (g.getPosition() == gameobjs.getPlayer().getPosition()){
-					gameobjs.getPlayer().setPosition(tmp);
-					g.setPosition(tmp);
-				}
 			} else {
 				g.setPosition(tmp);
 			}
+		}
+		if ((g instanceof DynamicTile) && nonzerov){
+			// move player with DynamicTile if necessary
+			if (g.getPosition() == gameobjs.getPlayer().getPosition()){
+				gameobjs.getPlayer().setPosition(tmp);
+			}
+			g.setPosition(tmp);
 		}
 	}
 
@@ -191,7 +192,7 @@ public class CollisionController {
 					bounceBackGameObject(g1);
 					hasPlayerMoved = true;
 				}
-			} else if (g2 instanceof Knight){
+			} else if (g2 instanceof Knight && !(g1 instanceof DynamicTile)){
 				// damage the player
 				if (!((Knight) g2).isInvulnerable()) {
 					((Knight) g2).takeDamage();
