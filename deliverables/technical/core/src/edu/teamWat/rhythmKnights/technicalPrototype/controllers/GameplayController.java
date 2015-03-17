@@ -332,6 +332,7 @@ public class GameplayController {
 			ticker.advance();
 			board.updateColors();
 			collisionController.update();
+			if (collisionController.hasPlayerMoved) knight.setInvulnerable(false);
 			gameStateAdvanced = true;
 
 			// Configures the next beat to handle inputs properly
