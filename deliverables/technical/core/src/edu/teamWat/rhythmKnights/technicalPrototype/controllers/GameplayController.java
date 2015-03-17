@@ -5,10 +5,12 @@ import com.badlogic.gdx.utils.TimeUtils;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker.*;
+import jdk.internal.util.xml.impl.Input;
 
 import javax.swing.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class GameplayController {
 	/** Reference to the game board */
@@ -53,18 +55,55 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = new Board(13, 7);
+        board = new Board(13, 7);
 		gameObjects = new GameObjectList(9);
 
-		gameObjects.add(new Knight(0, 0, 3));
-		gameObjects.add(new DynamicTile(1, 3, 3));
-		gameObjects.add(new Skeleton(2, 5, 0));
+        controls = new InputController[gameObjects.size()];
+
+        gameObjects.add(new Knight(0, 0, 3));
+        controls[0] = playerController;
+
+        gameObjects.add(new DynamicTile(1, 3, 3));
+        int[] path = {InputController.CONTROL_MOVE_UP, InputController.CONTROL_MOVE_UP, InputController.CONTROL_MOVE_RIGHT,
+                            InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_DOWN,
+                            InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_UP,
+                            InputController.CONTROL_MOVE_UP};
+        controls[1] = new AIController(1, gameObjects, path);
+
+        gameObjects.add(new Skeleton(2, 5, 0));
+        path = new int[]{InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_RIGHT,
+                InputController.CONTROL_MOVE_RIGHT, InputController.CONTROL_MOVE_LEFT};
+        controls[2] = new AIController(2, gameObjects, path);
+
 		gameObjects.add(new Skeleton(3, 5, 6));
+        path = new int[]{InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_RIGHT,
+                InputController.CONTROL_MOVE_RIGHT, InputController.CONTROL_MOVE_LEFT};
+        controls[3] = new AIController(3, gameObjects, path);
+
 		gameObjects.add(new Slime(4, 7, 0));
-		gameObjects.add(new Slime(5, 7, 6));
-		gameObjects.add(new Slime(6, 9, 2));
-		gameObjects.add(new Slime(7, 9, 4));
-		gameObjects.add(new Slime(8, 11, 3));
+        path = new int[]{InputController.CONTROL_MOVE_UP, InputController.CONTROL_MOVE_RIGHT,
+                InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_LEFT};
+        controls[4] = new AIController(4, gameObjects, path);
+
+        gameObjects.add(new Slime(5, 7, 6));
+        path = new int[]{InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_UP,
+                InputController.CONTROL_MOVE_RIGHT, InputController.CONTROL_MOVE_DOWN};
+        controls[5] = new AIController(5, gameObjects, path);
+
+        gameObjects.add(new Slime(6, 9, 2));
+        path = new int[]{InputController.CONTROL_MOVE_RIGHT, InputController.CONTROL_MOVE_DOWN,
+                InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_UP};
+        controls[6] = new AIController(6, gameObjects, path);
+
+        gameObjects.add(new Slime(7, 9, 4));
+        path = new int[]{InputController.CONTROL_MOVE_RIGHT, InputController.CONTROL_MOVE_UP,
+                InputController.CONTROL_MOVE_LEFT, InputController.CONTROL_MOVE_DOWN};
+        controls[7] = new AIController(7, gameObjects, path);
+
+        gameObjects.add(new Slime(8, 11, 3));
+        path = new int[]{InputController.CONTROL_MOVE_UP, InputController.CONTROL_MOVE_DOWN,
+                InputController.CONTROL_MOVE_DOWN, InputController.CONTROL_MOVE_UP}; 
+        controls[8] = new AIController(8, gameObjects, path);
 
 		board.setTile(0, 3, false, true, false);
 		board.setTile(3, 1, false, false, true);
@@ -92,23 +131,10 @@ public class GameplayController {
 		playerMoved = true;
 		calibrationBeatSent = true;
 		gameStateAdvanced = true;
-
-		controls = new InputController[gameObjects.size()];
-		controls[0] = playerController;
-		for (int ii = 1; ii < gameObjects.size(); ii++) {
-			controls[ii] = new AIController(ii, board, gameObjects);
-		}
 	}
 
 
 	public void update() {
-		// DEBUGGING CODE
-		gameObjects.get(1).isAlive = false;
-		if (RhythmController.isWithinActionWindow(TimeUtils.millis(), false)){
-			gameObjects.get(1).isAlive = true;
-		}
-
-
 		int code = playerController.getAction();
 
 		if (RhythmController.updateBeat()) {
