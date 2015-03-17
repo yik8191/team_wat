@@ -14,6 +14,7 @@ import java.util.Random;
 import com.badlogic.gdx.math.*;
 
 import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.DynamicTile;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.GameObject;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.Knight;
 
@@ -109,6 +110,8 @@ public class CollisionController {
 	 * @param g The ship to move.
 	 */
 	private void moveIfSafe(GameObject g) {
+		
+		boolean nonzerov = (g.getVelocity().x != 0 || g.getVelocity().y != 0);
 		tmp.set(g.getPosition());
 		
 		// Test add velocity
@@ -116,9 +119,18 @@ public class CollisionController {
 		boolean safeAfter  = board.isSafeAt((int)tmp.x, (int)tmp.y);
 
 		if (safeAfter) {
-			g.setPosition(tmp);
-			if (g.getVelocity().x != 0 || g.getVelocity().y != 0){
+			// update boolean only if the player actually can make a move
+			if ((g instanceof Knight) && nonzerov){
 				hasPlayerMoved = true;
+				g.setPosition(tmp);
+			} else if ((g instanceof DynamicTile) && nonzerov){
+				// move player with DynamicTile if necessary
+				if (g.getPosition() == gameobjs.getPlayer().getPosition()){
+					gameobjs.getPlayer().setPosition(tmp);
+					g.setPosition(tmp);
+				}
+			} else {
+				g.setPosition(tmp);
 			}
 		}
 	}
@@ -156,8 +168,10 @@ public class CollisionController {
 		// If the two game objects occupy the same tile,
 		if (g1x == g2x && g1y == g2y) {
 			if (g1 instanceof Knight){
-				// damage the enemy
-				g2.setAlive(false);
+				// damage the enemy if it is not a dynamictile - must be fixed later
+				if (!(g2 instanceof DynamicTile)){
+					g2.setAlive(false);
+				}
 				// bounce back the player
 				bounceBackGameObject(g1);
 				hasPlayerMoved = true;
