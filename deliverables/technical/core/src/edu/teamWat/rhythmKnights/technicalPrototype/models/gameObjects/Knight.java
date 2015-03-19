@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
