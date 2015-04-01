@@ -1,39 +1,41 @@
 /*
  * GameMode.java
  *
- * This is the primary class file for running the game.  You should study this file for
- * ideas on how to structure your own root class. This class follows a
+ * This is the primary class file for running the game. This class follows a
  * model-view-controller pattern fairly strictly.
  *
  * Author: Walker M. White
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
- *
- * This code has been copied from the above original authors and modified by Gagik Hakobyan.
+ * Modified: Gagik Hakobyan
  */
 
 package edu.teamWat.rhythmKnights.technicalPrototype;
 // TODO: Import the package that contains our gameObjects
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.GameplayController;
-import edu.teamWat.rhythmKnights.technicalPrototype.controllers.InputController;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.Board;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.GameObjectList;
-import edu.teamWat.rhythmKnights.technicalPrototype.models.Ticker;
+import com.badlogic.gdx.utils.TimeUtils;
+import edu.teamWat.rhythmKnights.technicalPrototype.controllers.*;
+import edu.teamWat.rhythmKnights.technicalPrototype.models.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.technicalPrototype.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 
+import javax.naming.ldap.ManageReferralControl;
+
 
 /**
- * The primary controller class for the game. <p/> While GDXRoot is the root class, it delegates all of the work to the
- * player mode classes. This is the player mode class for running the game. In initializes all of the other classes in
- * the game and hooks them together.  It also provides the basic game loop (update-draw).
+ * The primary controller class for the game. While GDXRoot is the root class, 
+ * it delegates all of the work to the
+ * player mode classes. This is the player mode class for running the game. 
+ * In initializes all of the other classes in
+ * the game and hooks them together.  
+ * It also provides the basic game loop (update-draw).
  */
 public class GameMode implements Screen{
 	/**
@@ -43,20 +45,21 @@ public class GameMode implements Screen{
 		/** Before the game has started */
 		INTRO,
 		/** While we are playing the game */
-		PLAY
+		PLAY,
+        /** Player has won the game */
+        WIN
 	}
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
-	// TODO: replace the assets in these paths with the correct files
-	private static String BKGD_FILE = "images/loading.png";
+	private static String BKGD_FILE = "images/background.png";
 	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture background;
-	/**backgroung image for level 1 */
+	/** background image for level 1 */
 	private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
@@ -93,6 +96,7 @@ public class GameMode implements Screen{
 		Skeleton.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
+//		RhythmController.PreloadContent(manager);
 	}
 
 	/**
@@ -139,6 +143,7 @@ public class GameMode implements Screen{
 		Skeleton.LoadContent(manager);
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
+//		RhythmController.LoadContent(manager);
 	}
 
 	/**
@@ -171,6 +176,7 @@ public class GameMode implements Screen{
 		Skeleton.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
+//		RhythmController.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -183,7 +189,7 @@ public class GameMode implements Screen{
 	/** Reference to drawing context to display graphics (VIEW CLASS) */
 	private GameCanvas canvas;
 	/** Reads input from keyboard or game pad (CONTROLLER CLASS) */
-	private InputController inputController;
+	private PlayerController playerController;
 	/** Constructs the game models and handle basic gameplay (CONTROLLER CLASS) */
 	private GameplayController gameplayController;
 
@@ -211,15 +217,17 @@ public class GameMode implements Screen{
 
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
-//		inputController = new InputController();
 		gameplayController = new GameplayController();
+		playerController = new PlayerController();
+		gameplayController.playerController = playerController;
+		Gdx.input.setInputProcessor(playerController);
 	}
 
 	/**
 	 * Dispose of all (non-static) resources allocated to this mode.
 	 */
 	public void dispose() {
-		inputController = null;
+		playerController = null;
 		gameplayController = null;
 		canvas = null;
 	}
@@ -234,19 +242,25 @@ public class GameMode implements Screen{
 	 * @param delta Number of seconds since last animation frame
 	 */
 	private void update(float delta) {
-		// TODO: Main game loop
-
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-				gameplayController.initialize();
 				// TODO: Fill in other initialization code
+				gameplayController.initialize();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
+				RhythmController.launch(144);//143.882f
 				break;
 			case PLAY:
+				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
+                else if (!knight.isAlive()) reset();
+                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y))
+					gameState = GameState.WIN;
 				else play();
 				break;
+            case WIN:
+                // Print level complete message!
+                break;
 		}
 	}
 
@@ -256,13 +270,13 @@ public class GameMode implements Screen{
 	protected void play() {
 		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
-
+		gameplayController.update();
 
 	}
 
 	/** This method resets the game */
 	protected void reset() {
-		gameState = gameState.INTRO;
+		gameState = GameState.INTRO;
 		// TODO: take care of other resetting code. E.g. call reset on gameplayController
 		// NO INITIALIZATION CODE HERE. That's taken care of in update.
 	}
@@ -280,6 +294,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
+        canvas.draw(background, 0, 0);
 		gameplayController.board.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);
 		gameplayController.ticker.draw(canvas);

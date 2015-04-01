@@ -1,13 +1,14 @@
-\version "2.11.46"
+\version "2.18.2"
 \include "articulate.ly"
 \header {
-  title = "Song"
-  subtitle = "(tune)"
-  composer = "Me"
-  meter = "moderato"
-  piece = "Swing"
+  title = "Game Design"
+  subtitle = "32 bars"
+  composer = "Austin Liu"
+  meter = "Allegretto"
+  piece = "Theme 2"
   tagline = \markup {
     \column {
+      "Based off of the"
       "LilyPond example file by Amelie Zapf,"
       "Berlin 07/07/2003"
     }
@@ -60,15 +61,30 @@ rhUpper = \relative c'' {
   g' c, g' c, g' c, aes' c,  |            % bar 2
   aes' c, g' c, f c ees d |               % bar 3
   aes' c, g' c, f c ees d |               % bar 4
-  g8 c, g' b d  c aes c  |               % bar 5
-  g c, g' b d  c aes c  |               % bar 6
-  b g b d g aes g g,     |               % bar 7
-  b' f aes  d, f b, d g,  |               % bar 7 
+  g8 c, g' b d  c aes c  |                % bar 5
+  g c, g' b d  c aes c  |                 % bar 6
+  b g b d g aes g g,     |                % bar 7
+  b' f aes  d, f b, d g,  |               % bar 8
+  f g f aes g aes g c |                   % bar 9
+  f, g f aes g aes g c |                  % bar 10
+  bes g bes f aes g aes ees |             % bar 11
+  f ees d g f aes g f |                    % bar 12
+  ees c d c ees c d c |                   % bar 13
+  ees c d c ees c g' c, |                 % bar 14
+  aes' c, c' aes g ees g d |              % bar 15
+  g ees g d b g b d |                   % bar 16
 }
 rhLower = \relative c' {
   \voiceTwo
   \Key
-  r1 | r | r
+  % g8 c, g' c, g' c, aes' c,  |            % bar 1
+  % g' c, g' c, g' c, aes' c,  |            % bar 2
+  % aes' c, g' c, f c ees d |               % bar 3
+  % aes' c, g' c, f c ees d |               % bar 4
+  % g8 c, g' b d  c aes c  |                % bar 5
+  % g c, g' b d  c aes c  |                 % bar 6
+  % b g b d g aes g g,     |                % bar 7
+  % b' f aes  d, f b, d g,  |               % bar 8
 }
 
 lhUpper = \relative c' {
@@ -83,6 +99,19 @@ lhLower = \relative c {
   c8 r r r r r d ees  |              % bar 2
   c8 r r r aes r g r  |              % bar 3
   c8 r r r aes r g r  |              % bar 4
+  c8 r r r r r d ees  |              % bar 5
+  c8 r r r r r d ees  |              % bar 6
+  d8 r r r c r bes r  |              % bar 7
+  aes8 r f r aes r g r |             % bar 8 
+  d8 r r bes ees r r ees  |            % bar 9
+  d8 r r bes ees r r g,  |            % bar 10
+  g8 r r c f, r r bes |              % bar 11
+  ees,8 r r aes d, r r g  |          % bar 12
+  g8 r f r g r aes r |               % bar 13
+  g8 r f r g r ees r |               % bar 14
+  f8 r aes r ees r f r  |            % bar 15
+  ees8 r d r d r g r  |                % bar 16
+
 }
 
 PianoRH = {
@@ -114,25 +143,42 @@ piano = {
 % ------ Drums ------
 up = \drummode {
   \voiceOne
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |				  
+  hh4 hh hh hh8 hh |  % bar 1
+  hh4 hh hh hh8 hh |
+  hh4 hh hh hh8 hh |
+  hh4 hh hh hh8 hh |
+  hh4 hh hh hh8 hh |  % bar 5
+  hh4 hh hh hh8 hh |
+  hh4 hh hh hh8 hh |
+  hh4 hh hh hh8 hh |
+  hh r4 hh8 hh r4 hh8  |  % bar 9
+  hh r4 hh8 hh r4 hh8  |  % bar 10
+  hh r4 hh8 hh r4 hh8  |  % bar 11
+  hh r4 hh8 hh r4 hh8 |  % bar 12
+  hh4 hh hh hh |
+  hh4 hh hh hh |
+  hh4 hh hh hh |
+  hh4 hh hh hh |
 }
 down = \drummode {
   \voiceTwo
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
+  bd4 sn bd sn
 }
 
 drumContents = {

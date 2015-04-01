@@ -6,10 +6,10 @@ import edu.teamWat.rhythmKnights.technicalPrototype.views.GameCanvas;
 public abstract class GameObject {
 
     protected int id;
-    protected boolean isAlive = false;
+    public boolean isAlive = false;
     protected boolean isActive = false;
-    protected Vector2 position;
-    protected Vector2 velocity;
+    protected Vector2 position = new Vector2();
+    protected Vector2 velocity = new Vector2();
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -36,5 +36,27 @@ public abstract class GameObject {
     public void move(Vector2 direction){this.position.add(direction);}
 
     /* Get the ID of this GameObject */
-    public int getId(){ return this.id;}
+    public int getId(){ 
+    	return this.id;
+    }
+
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
+	
+	public void setVelocity(Vector2 v){
+		this.velocity.x = v.x;
+		this.velocity.y = v.y;
+	}
+	
+	public void setPosition(Vector2 pos){
+		this.position.x = pos.x;
+		this.position.y = pos.y;
+	}
+	
+	public void setAlive(boolean alive){
+		this.isAlive = alive;
+		this.isActive = alive;
+	}
+	
 }

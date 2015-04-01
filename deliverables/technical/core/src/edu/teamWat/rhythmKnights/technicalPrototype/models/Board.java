@@ -14,6 +14,8 @@ public class Board {
     private int width;
     /* Height of current board */
     private int height;
+	/*Which color tiles should be*/
+	private int colorInd = 0;
 
     /* Variables for tile sprite */
     public static final String TILE_FILE = "images/tileFull.png";
@@ -66,7 +68,7 @@ public class Board {
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
                 Color c = tiles[i][j].col;
-                float scale = (float)canvas.TILE_SIZE/(float)tileTexture.getHeight();
+                float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
                 //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
@@ -154,12 +156,27 @@ public class Board {
         return this.height;
     }
 
-    public void updateColors(){
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                tiles[i][j].setColor();
-            }
-        }
+    public void updateColors() {
+	    int rand = colorInd % 2; // Initentionally removed red and yellow, too jarring
+	    colorInd++;
+	    if (rand == 2) {
+		    //pinkish
+		    Tile.randCol = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
+	    } else if (rand == 1) {
+		    //blueish
+		    Tile.randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+	    } else if (rand == 0) {
+		    //greenish
+		    Tile.randCol = new Color(106f / 255f, 189f / 255f, 69f / 255f, 1);
+	    } else if (rand == 3) {
+		    //yellowish
+		    Tile.randCol = new Color(233f / 255f, 230f / 255f, 18f / 255f, 1);
+	    }
+	    for (int i = 0; i < width; i++) {
+		    for (int j = 0; j < height; j++) {
+			    tiles[i][j].setColor();
+		    }
+	    }
     }
 
     /**
@@ -178,6 +195,8 @@ public class Board {
         public boolean isObstacle;
         /** Color of this tile */
         public Color col;
+	    /** Random color */
+	    public static Color randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
         public Tile() {
             isGoal = false;
@@ -200,24 +219,7 @@ public class Board {
                 col = new Color(27f/255f, 253f/255f,34f/255f, 1);
                 col = Color.GREEN;
             }else {
-                Random r = new Random();
-                int i = r.nextInt(5);
-                if (i == 0) {
-                    //pinkish
-                    col = new Color(145f/255f, 55f/255f, 82f/255f, 1);
-                } else if (i == 1) {
-                    //blueish
-                    col = new Color(3f/255f, 87f/255f, 145f/255f, 1);
-                } else if (i == 2) {
-                    //greenish
-                    col = new Color(32f/120f, 120f/255f, 82f/255f, 1);
-                } else if (i == 3) {
-                    //lightblue
-                    col = new Color(27f/255f, 156f/255f, 154f/255f, 1);
-                } else if (i == 4) {
-                    //yellowish
-                    col = new Color(143f/255f, 138f/255f, 91f/255f, 1);
-                }
+                col = randCol;
             }
         }
 
@@ -230,6 +232,12 @@ public class Board {
             col = null;
         }
     }
+
+    /** Checks if the pair (x,y) represents a valid coordinate on the board. */
+	public boolean isSafeAt(int x, int y) {
+		return (x >= 0 && y >= 0 && x < width && y < height && 
+				!isObstacleTile(x,y));
+	}
 
 
 }
