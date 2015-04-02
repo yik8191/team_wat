@@ -56,10 +56,8 @@ public class Board {
     }
 
     /*Set a certain tile to have all listed variables*/
-    public void setTile(int x, int y, boolean goal, boolean start, boolean obstacle){
-        this.tiles[x][y].isGoal = goal;
-        this.tiles[x][y].isStart = start;
-        this.tiles[x][y].isObstacle = obstacle;
+    public void setTile(int x, int y, Tile.tileType t){
+        this.tiles[x][y].type = t;
         this.tiles[x][y].setColor();
     }
 
@@ -77,27 +75,17 @@ public class Board {
 
     /* Returns if the tile at (x,y) is a goal tile */
     public boolean isGoalTile(int x, int y){
-        return this.tiles[x][y].isGoal;
+        return this.tiles[x][y].type == Tile.tileType.GOAL;
     }
 
     /* Returns if the tile at (x,y) is the start tile */
     public boolean isStartTile(int x, int y){
-        return this.tiles[x][y].isStart;
-    }
-
-    /* Returns if the tile at (x,y) is the knight's location */
-    public boolean isKnightTile(int x, int y){
-        return this.tiles[x][y].isKnight;
-    }
-
-    /* Returns if the tile at (x,y) contains an enemy */
-    public boolean isEnemyTile(int x, int y){
-        return this.tiles[x][y].isEnemy;
+        return this.tiles[x][y].type == Tile.tileType.START;
     }
 
     /* Returns if the tile at (x,y) is an obstacle (and therefore impassable) */
     public boolean isObstacleTile(int x, int y){
-        return this.tiles[x][y].isObstacle;
+        return this.tiles[x][y].type == Tile.tileType.OBSTACLE;
     }
 
     /**
@@ -184,37 +172,32 @@ public class Board {
      */
     public static class Tile {
         /** Is this a goal tile?*/
-        public boolean isGoal;
-        /** Is this a start tile?*/
-        public boolean isStart;
-        /** Is the knight on this tile?*/
-        public boolean isKnight;
-        /** Is an enemy on this tile?*/
-        public boolean isEnemy;
-        /** Is there an obstacle on this tile?*/
-        public boolean isObstacle;
+        public tileType type = tileType.NORMAL;
         /** Color of this tile */
         public Color col;
 	    /** Random color */
 	    public static Color randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
+        public enum tileType {
+            GOAL,
+            START,
+            OBSTACLE,
+            NORMAL
+        }
+
         public Tile() {
-            isGoal = false;
-            isStart = false;
-            isKnight = false;
-            isEnemy = false;
-            isObstacle = false;
+            type = tileType.NORMAL;
             setColor();
         }
 
         public void setColor(){
-            if (this.isStart){
+            if (this.type == tileType.START){
                 //bright blue
                 col = new Color(7f/255f, 82f/255f, 1,1);
-            }else if (this.isObstacle){
+            }else if (this.type == tileType.OBSTACLE){
                 //dark gray
                 col = Color.DARK_GRAY;
-            }else if (this.isGoal){
+            }else if (this.type == tileType.GOAL){
                 //bright green
                 col = new Color(27f/255f, 253f/255f,34f/255f, 1);
                 col = Color.GREEN;
@@ -224,11 +207,7 @@ public class Board {
         }
 
         public void clear() {
-            isGoal = false;
-            isStart = false;
-            isKnight = false;
-            isEnemy = false;
-            isObstacle = false;
+            type = tileType.NORMAL;
             col = null;
         }
     }

@@ -56,7 +56,7 @@ public class CollisionController {
 		for (GameObject g: gameobjs){
 			if (g instanceof DynamicTile){
 				board.setTile((int) g.getPosition().x, 
-						(int) g.getPosition().y, false, false, false);
+						(int) g.getPosition().y, Board.Tile.tileType.NORMAL);
 			}
 		}
 	}
@@ -147,7 +147,7 @@ public class CollisionController {
 			}
 		}
 		if ((g instanceof DynamicTile) && nonzerov){
-			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, false, false, true);
+			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, Board.Tile.tileType.OBSTACLE);
 			// move player with DynamicTile if necessary
 			if (g.getPosition().x == gameobjs.getPlayer().getPosition().x && g.getPosition().y == gameobjs.getPlayer().getPosition().y){
 				gameobjs.getPlayer().setPosition(tmp);
