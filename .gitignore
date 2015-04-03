@@ -4,7 +4,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar  # Allow jars because of 3rd party libs
 *.war
 *.ear
 *.zip
