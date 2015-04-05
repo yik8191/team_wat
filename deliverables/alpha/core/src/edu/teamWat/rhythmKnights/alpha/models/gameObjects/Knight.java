@@ -15,8 +15,6 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
-	private int animFrames = 10;
-	private int animAge = 0;
 
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/knight.png";
@@ -34,6 +32,8 @@ public class Knight extends GameObject {
     public Knight(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
+	    this.animatedPosition.set(position);
+	    this.oldPosition.set(position);
         this.isAlive = true;
         this.isActive = true;
         this.knightHP = 3;
@@ -44,6 +44,17 @@ public class Knight extends GameObject {
         if (!isAlive) {
             return;
         }
+	    if (moved) {
+		    animAge++;
+		    if (animAge == animFrames) {
+			    animAge = 0;
+			    animatedPosition.set(position);
+			    oldPosition.set(position);
+			    moved = false;
+		    } else {
+			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
+		    }
+	    }
         //TODO: implement this
 
     }
@@ -65,7 +76,7 @@ public class Knight extends GameObject {
         } else {
             sprite = new FilmStrip(knightDashTexture, 1, 1);
         }
-        Vector2 loc = canvas.boardToScreen(position.x, position.y);
+	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
         HP_SIZE = canvas.HP_SIZE;

@@ -16,6 +16,8 @@ public class Enemy extends GameObject {
     public Enemy(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
+	    this.animatedPosition.set(position);
+	    this.oldPosition.set(position);
         isAlive = true;
         isActive = true;
     }
@@ -25,13 +27,24 @@ public class Enemy extends GameObject {
         if (!isAlive) {
             return;
         }
+	    if (moved) {
+		    animAge++;
+		    if (animAge == animFrames) {
+			    animAge = 0;
+			    animatedPosition.set(position);
+			    oldPosition.set(position);
+			    moved = false;
+		    } else {
+			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
+		    }
+	    }
         //TODO: implement this
 
     }
 
     public void draw(GameCanvas canvas) {
         FilmStrip sprite = new FilmStrip(skeletonTexture, 1, 1);
-        Vector2 loc = canvas.boardToScreen(position.x, position.y);
+	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
     }
 
