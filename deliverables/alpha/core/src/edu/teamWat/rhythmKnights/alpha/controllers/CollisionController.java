@@ -217,32 +217,16 @@ public class CollisionController {
 	}
 
 	private void checkForCollision(GameObject g, Projectile p) {
-		// Do nothing if ship is off the board.
-				if (!ship.isActive()) {
-					return;
-				} else if (ship.getId() == photon.getSource()) {
-					// Our own photon; do nothing.
-					return;
-				}
+		// Do nothing if either game object is off the board.
+		if (!g.isActive() || !p.isAlive()) {
+			return;
+		}
 
-				// Get the tiles for ship and photon
-				int sx = board.screenToBoard(ship.getX());
-				int sy = board.screenToBoard(ship.getY());
-				int px = board.screenToBoard(photon.getX());
-				int py = board.screenToBoard(photon.getY());
-
-				// If the ship and photon occupy the same tile,
-				if (sx == px && sy == py) {
-					// Have the photon push the ship.
-					board.destroyTileAt(sx, sy);
-					float x = photon.getPushX() * (board.getTileSize() + board.getTileSpacing());
-					float y = photon.getPushY() * (board.getTileSize() + board.getTileSpacing());
-					ship.getPosition().add(x,y);
-
-					photons.destroy(photon);
-					ship.play(SoundController.BUMP_SOUND);
-				}
-
-		
+		// Get the tiles for each game object
+		int gx = (int) g.getPosition().x;
+		int gy = (int) g.getPosition().y;
+		int px = (int) p.getPosition().x;
+		int py = (int) p.getPosition().y;
+		// TODO : figure out damage
 	}
 }
