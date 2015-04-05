@@ -11,6 +11,21 @@ public class Skeleton extends GameObject {
 
     public static final String SKELETON_FILE = "images/skeleton.png";
     public static Texture skeletonTexture;
+    private FilmStrip sprite;
+
+    // The number of frames before a sprite refreshes
+    private int animDelay = 5;
+    private int curTime = 5;
+    private int idleCur = 0;
+
+    // Constants for reference to the spritesheet
+    private int IDLE_START = 0;
+    private int IDLE_END = 5;
+    private int HURT_START = 6;
+    private int HURT_END = 11;
+    private int SPRITE_ROWS = 2;
+    private int SPRITE_COLS = 6;
+    private int SPRITE_TOT = 12;
 
     public Skeleton(int id, float x, float y){
         this.id = id;
@@ -29,7 +44,18 @@ public class Skeleton extends GameObject {
     }
 
     public void draw(GameCanvas canvas) {
-        FilmStrip sprite = new FilmStrip(skeletonTexture, 1, 1);
+//        curTime --;
+//        if (curTime == 0) {
+//            idleCur ++;
+//            if (idleCur >= IDLE_END) {
+//                idleCur = IDLE_START;
+//            }
+//            curTime = animDelay;
+//        } else {
+//            sprite.setFrame(idleCur);
+//        }
+
+        sprite = new FilmStrip(skeletonTexture, 1, 1);
         Vector2 loc = canvas.boardToScreen(position.x, position.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
     }

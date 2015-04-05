@@ -44,7 +44,7 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = JSONReader.parseFile("../levels/level1.json");
+		board = JSONReader.parseFile("../../levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
 
