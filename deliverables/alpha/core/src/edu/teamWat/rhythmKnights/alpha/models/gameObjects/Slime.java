@@ -11,26 +11,38 @@ public class Slime extends GameObject{
     
     public static final String SLIME_FILE = "images/slime.png";
     public static Texture slimeTexture;
+	private int animFrames = 10;
+	private int animAge = 0;
 
     public Slime(int id, float x, float y){
         this.id = id;
-        this.position = new Vector2(x,y);
+        this.position.set(x,y);
+	    this.oldPosition.set(position);
         isAlive = true;
         isActive = true;
     }
 
+	@Override
     public void update() {
         // If we are dead do nothing.
         if (!isAlive) {
             return;
         }
+	    animAge++;
+	    if (animAge == animFrames) {
+		    animAge = 0;
+		    animatedPosition.set(position);
+		    oldPosition.set(position);
+	    } else {
+		    animatedPosition.set(position).sub(oldPosition).scl((float)animAge/animFrames).add(oldPosition);
+	    }
         //TODO: implement this
 
     }
 
     public void draw(GameCanvas canvas) {
         FilmStrip sprite = new FilmStrip(slimeTexture, 1, 1);
-        Vector2 loc = canvas.boardToScreen(position.x, position.y);
+        Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
     }
 

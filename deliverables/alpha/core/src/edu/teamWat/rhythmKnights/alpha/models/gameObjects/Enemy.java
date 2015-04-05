@@ -12,6 +12,7 @@ public class Enemy extends GameObject {
     public static final String SKELETON_FILE = "images/skeleton.png";
     public static Texture skeletonTexture;
 
+
     public Enemy(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);

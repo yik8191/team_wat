@@ -69,6 +69,10 @@ public class GameplayController {
 			return;
 		}
 
+		for (GameObject gameObject : gameObjects) {
+			gameObject.update();
+		}
+
 		if (RhythmController.updateBeat()) {
 
 			//Final actions

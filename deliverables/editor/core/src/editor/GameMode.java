@@ -16,6 +16,7 @@ package editor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
@@ -195,6 +196,9 @@ public class GameMode implements Screen {
 	/** Listener that will update the player mode when we are done */
 	private ScreenListener listener;
 
+	/** Board object for storing tiles */
+	private Board board;
+
 	/**
 	 * Creates a new game with the given drawing context.
 	 *
@@ -235,6 +239,7 @@ public class GameMode implements Screen {
 	private void update(float delta) {
 		switch (gameState) {
 			case INTRO:
+				board = new Board(5, 5);
 				gameState = GameState.PLAY;
 				// TODO: Fill in other initialization code
 //				gameplayController.initialize();
@@ -285,6 +290,7 @@ public class GameMode implements Screen {
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
 		canvas.draw(background, 0, 0);
+		board.draw(canvas);
 //		gameplayController.board.draw(canvas);
 //		gameplayController.gameObjects.draw(canvas);
 //		gameplayController.ticker.draw(canvas);

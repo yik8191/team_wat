@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import editor.views.GameCanvas;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Board {
