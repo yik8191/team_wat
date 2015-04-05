@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import edu.teamWat.rhythmKnights.alpha.music.GameMusic;
 import edu.teamWat.rhythmKnights.alpha.music.GameTrack1;
 import edu.teamWat.rhythmKnights.alpha.music.GameTrackRunnable;
 
@@ -23,7 +24,7 @@ public class RhythmController {
 	static float finalActionOffset = 0.5f;
 
 	/** Location of music file */
-	// public static final String MUSIC_FILE = "music/game2longer.ogg";
+	public static final String MUSIC_FILE = "music/game2longer.ogg";
 
 	/** Music player object to play a JFugue pattern */
 	private static Player player;
@@ -36,13 +37,8 @@ public class RhythmController {
 	/** When music started playing */
 	private static long startTime;
 	/** Music track runnable object */
-	static GameTrackRunnable gtrunnable;
-	/** Thread for the music */
-	private static Thread musict;
+	static GameMusic gtrunnable;
 
-
-	private RhythmController() {
-	}
 
 //	public static void PreloadContent(AssetManager manager) {
 //		manager.load(MUSIC_FILE, Music.class);
@@ -65,8 +61,6 @@ public class RhythmController {
 //	}
 
 	public static void init() {
-		player = new Player();
-		gtrunnable = new GameTrackRunnable(player);
 		musict = new Thread(gtrunnable);
 		// music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
 		// music.setLooping(true);
