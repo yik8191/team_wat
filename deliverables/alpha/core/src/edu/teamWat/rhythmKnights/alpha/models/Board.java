@@ -146,7 +146,8 @@ public class Board {
     }
 
     public void updateColors() {
-	    int rand = colorInd % 2; // Initentionally removed red and yellow, too jarring
+	    int rand = colorInd % 2; 
+	    // Intentionally removed red and yellow, too jarring
 	    colorInd++;
 	    if (rand == 2) {
 		    //pinkish
@@ -177,7 +178,8 @@ public class Board {
         /** Color of this tile */
         public Color col;
 	    /** Random color */
-	    public static Color randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+	    public static Color randCol = 
+	    		new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
         public enum tileType {
             GOAL,
@@ -218,6 +220,4 @@ public class Board {
 		return (x >= 0 && y >= 0 && x < width && y < height && 
 				!isObstacleTile(x,y));
 	}
-
-
 }

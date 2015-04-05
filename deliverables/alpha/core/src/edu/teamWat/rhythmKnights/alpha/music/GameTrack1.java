@@ -63,7 +63,7 @@ public class GameTrack1 {
 				// measure
 				.setLength(4); // Set the length of the rhythm to 4 measures
 
-		Pattern rpattern = rhythm.getPattern().repeat(2);
+		Pattern rpattern = rhythm.getPattern();
 
 		pattern.add("T144 V0 " + voice1);
 		pattern.add("V1 " + voice2);

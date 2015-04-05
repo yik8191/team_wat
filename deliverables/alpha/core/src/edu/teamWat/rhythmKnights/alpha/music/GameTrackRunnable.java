@@ -16,8 +16,6 @@ public class GameTrackRunnable implements Runnable {
     public void run() {
 		Pattern pattern = gametrack.getPattern();
 		Player player = new Player();
-		for (int i= 1; i < 100; i++){
-			player.play(pattern);
-		}
+		player.play(pattern);
     }
 }

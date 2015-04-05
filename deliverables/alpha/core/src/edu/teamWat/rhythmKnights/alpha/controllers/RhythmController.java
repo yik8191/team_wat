@@ -1,9 +1,15 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import edu.teamWat.rhythmKnights.alpha.music.GameTrack1;
+import edu.teamWat.rhythmKnights.alpha.music.GameTrackRunnable;
 
 public class RhythmController {
 
@@ -17,8 +23,11 @@ public class RhythmController {
 	static float finalActionOffset = 0.5f;
 
 	/** Location of music file */
-	public static final String MUSIC_FILE = "music/game2longer.ogg";
+	// public static final String MUSIC_FILE = "music/game2longer.ogg";
 
+	/** Music player object to play a JFugue pattern */
+	private static Player player;
+	
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
 	/** Is music being played */
@@ -26,8 +35,10 @@ public class RhythmController {
 
 	/** When music started playing */
 	private static long startTime;
-	/** Music player object */
-	static Music music;
+	/** Music track runnable object */
+	static GameTrackRunnable gtrunnable;
+	/** Thread for the music */
+	private static Thread musict;
 
 
 	private RhythmController() {
@@ -54,19 +65,22 @@ public class RhythmController {
 //	}
 
 	public static void init() {
-		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
-		music.setLooping(true);
+		player = new Player();
+		gtrunnable = new GameTrackRunnable(player);
+		musict = new Thread(gtrunnable);
+		// music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
+		// music.setLooping(true);
 	}
 
 	public static void launch(float tempo) {
 		period = (long)(60000.0f / tempo);
 		if (begun) {
-			music.stop();
+			musict.stop();
 		}
 		begun = true;
-		music.play();
+		musict.start();
 		totalOffset = 0;
-		startTime = TimeUtils.millis();
+		startTime = TimeUtils.millis();        
 	}
 
 	/**
