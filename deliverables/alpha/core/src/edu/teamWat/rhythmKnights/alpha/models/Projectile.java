@@ -1,3 +1,16 @@
+/*
+ * Projectile.java
+ * 
+ * This is a lightweight class that just has getters and setters. 
+ * Because memory 
+ * allocation is handled by ProjectilePool, anything more complicated goes
+ * through that class instead, 
+ * particularly methods that require the Photon to be deleted.
+ *
+ * Author: Walker M. White, Cristian Zaloj, modified Austin Liu
+ * Based on original AI Game Lab by Yi Xu and Don Holden, 2007
+ * LibGDX version, 1/24/2015
+ */
 package edu.teamWat.rhythmKnights.alpha.models;
 
 import com.badlogic.gdx.math.Vector2;
@@ -7,6 +20,8 @@ import com.badlogic.gdx.math.Vector2;
  * 
  * To count down on memory references, the projectile is "flattened" so that
  * it contains no other objects.
+ * 
+ * 
  */
 public class Projectile {
 	

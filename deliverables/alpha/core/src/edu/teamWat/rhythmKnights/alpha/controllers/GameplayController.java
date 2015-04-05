@@ -47,8 +47,11 @@ public class GameplayController {
 		board = JSONReader.parseFile("../levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
+        
+        // Preallocate memory
+        ProjectilePool projs = new ProjectilePool();
 
-        collisionController = new CollisionController(board, gameObjects);
+        collisionController = new CollisionController(board, gameObjects, projs);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);

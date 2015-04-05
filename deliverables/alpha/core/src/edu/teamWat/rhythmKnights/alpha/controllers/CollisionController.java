@@ -32,6 +32,8 @@ public class CollisionController {
 	public Board board; 
 	/** Reference to all the game objects in the game */	
 	public GameObjectList gameobjs; 
+	/** Reference to all active projectiles */
+	public ProjectilePool projs;
 	
 	/** Cache attribute for calculations */
 	private Vector2 tmp;
@@ -44,10 +46,10 @@ public class CollisionController {
 	 * @param b The game board
 	 * TODO: @param p The active projectiles -- eventually
 	 */
-	public CollisionController(Board b, GameObjectList g) {
+	public CollisionController(Board b, GameObjectList g, ProjectilePool p) {
 		board = b;
 		gameobjs = g;
-		
+		projs = p;
 		tmp = new Vector2();
 	}
 
@@ -61,9 +63,7 @@ public class CollisionController {
 			}
 		}
 	}
-	
-	
-	
+		
 	/**
 	 * Updates all of the game objects and projectiles, moving them forward.
 	 *
@@ -110,11 +110,11 @@ public class CollisionController {
 		}
 		
 		// Test collisions between game objects and projectiles
-		/*for (GameObject g : gameobjs) {
-			for (Projectile p : projectiles) {
+		for (GameObject g : gameobjs) {
+			for (Projectile p : projs) {
 				checkForCollision(g, p);
 			}
-		}*/
+		}
 		
 		// update dynamic tiles 
 		updateBoard();
@@ -214,5 +214,10 @@ public class CollisionController {
 				bounceBackGameObject(g2);
 			}
 		}
+	}
+
+	private void checkForCollision(GameObject g, Projectile p) {
+		
+		
 	}
 }
