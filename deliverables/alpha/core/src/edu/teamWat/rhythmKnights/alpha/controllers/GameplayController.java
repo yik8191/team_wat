@@ -7,6 +7,7 @@ import com.sun.javafx.collections.VetoableListDecorator;
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import javax.swing.*;
 
@@ -125,6 +126,11 @@ public class GameplayController {
 								playerMoved = true;
 								knight.setVelocity(vel);
 								advanceGameState();
+
+								// Display visual feedback to show success
+								knight.showSuccess();
+								// Set current tile type to SUCCESS
+								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
 							}
 						}
 						break;

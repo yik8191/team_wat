@@ -15,9 +15,6 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
-	private int animFrames = 10;
-	private int animAge = 0;
-
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/glowing.png";
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
@@ -38,7 +35,7 @@ public class Knight extends GameObject {
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
     private int curTime = 5;
-    private int idleCur = 0;
+    private int curFrame = 0;
 
     // Constants for reference to the spritesheet
     private int IDLE_START = 0;
@@ -86,26 +83,26 @@ public class Knight extends GameObject {
         if (this.state == KnightState.NORMAL) {
             curTime --;
             if (curTime == 0) {
-                idleCur ++;
-                if (idleCur >= IDLE_END) {
-                    idleCur = IDLE_START;
+                curFrame ++;
+                if (curFrame >= IDLE_END) {
+                    curFrame = IDLE_START;
                 }
                 curTime = animDelay;
             } else {
-                sprite.setFrame(idleCur);
+                sprite.setFrame(curFrame);
             }
         } else if (this.state == KnightState.TAKINGDMG) {
             curTime --;
             if (curTime == 0) {
-                idleCur ++;
+                curFrame ++;
                 // Finished animating the "taking damage" frames
-                if (idleCur >= HURT_END) {
-                    idleCur = IDLE_START;
+                if (curFrame >= HURT_END) {
+                    curFrame = IDLE_START;
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
             } else {
-                sprite.setFrame(idleCur);
+                sprite.setFrame(curFrame);
             }
         // Should not ever occur
         } else {
@@ -234,9 +231,15 @@ public class Knight extends GameObject {
             this.isAlive = false;
         }
         curTime = animDelay;
-        idleCur = HURT_START;
+        curFrame = HURT_START;
         this.state = KnightState.TAKINGDMG;
 	}
+
+    public void showSuccess() {
+        //this.state = KnightState.MOVING;
+        // not yet implemented due to lack of sprites
+        this.state = KnightState.NORMAL;
+    }
 
 	public boolean isInvulnerable() {return isInvulnerable;}
 
@@ -253,7 +256,9 @@ public class Knight extends GameObject {
         /** Knight is using freeze spell */
         FREEZING,
         /** Knight is taking damage */
-        TAKINGDMG
+        TAKINGDMG,
+        /** Knight has successfully taken an action */
+        MOVING
     }
 
 }

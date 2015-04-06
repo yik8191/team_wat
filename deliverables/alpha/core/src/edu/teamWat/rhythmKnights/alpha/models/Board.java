@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
+import javax.xml.soap.Text;
 import java.util.Random;
 
 public class Board {
@@ -20,7 +21,20 @@ public class Board {
 
     /* Variables for tile sprite */
     public static final String TILE_FILE = "images/tileFull.png";
+    public static final String GLOWING_FILE = "images/glowingtile.png";
     public static Texture tileTexture;
+    public static Texture glowingTexture;
+    private FilmStrip sprite;
+    // The number of frames before a sprite refreshes
+    private int animDelay = 5;
+    private int curTime = 5;
+    private int curFrame = 0;
+    // Constants for reference to the spritesheet
+    private int FLASH_START = 0;
+    private int FLASH_END = 3;
+    private int SPRITE_ROWS = 1;
+    private int SPRITE_COLS = 4;
+    private int SPRITE_TOT = 4;
 
     /* Holds the array of tiles that make up this board */
     private Tile[][] tiles;
@@ -35,6 +49,10 @@ public class Board {
                 tiles[i][j] = new Tile();
             }
         }
+
+        // Set current tile image
+        sprite = new FilmStrip(glowingTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
+        sprite.setFrame(0);
     }
 
     /** Clears the board by calling clear on each tile, but maintains dimensions. */
@@ -62,14 +80,37 @@ public class Board {
         this.tiles[x][y].setColor();
     }
 
+    /* Set specified tile to be animated after a successful action */
+    public void setSuccess(int x, int y) {
+        this.tiles[x][y].isSuccess = true;
+    }
+
     public void draw(GameCanvas canvas){
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
                 Color c = tiles[i][j].col;
                 float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
-                //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
-                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+
+                // Check for success tiles
+                if (tiles[i][j].isSuccess) {
+                    curTime --;
+                    if (curTime == 0) {
+                        curFrame ++;
+                        // Finished animating the flashing frames
+                        if (curFrame >= FLASH_END) {
+                            curFrame = FLASH_START;
+                            tiles[i][j].isSuccess = false;
+                        }
+                        curTime = animDelay;
+                    } else {
+                        sprite.setFrame(curFrame);
+                    }
+                    canvas.draw(sprite, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                } else {
+                    //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
+                    canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                }
             }
         }
     }
@@ -100,6 +141,7 @@ public class Board {
      */
     public static void PreLoadContent(AssetManager manager) {
         manager.load(TILE_FILE, Texture.class);
+        manager.load(GLOWING_FILE, Texture.class);
     }
 
     /**
@@ -121,6 +163,13 @@ public class Board {
         } else {
             tileTexture = null;  // Failed to load
         }
+
+        if (manager.isLoaded(GLOWING_FILE)) {
+            glowingTexture = manager.get(GLOWING_FILE, Texture.class);
+            glowingTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            tileTexture = null; // Failed to load
+        }
     }
 
     /**
@@ -134,6 +183,10 @@ public class Board {
         if (tileTexture != null) {
             tileTexture = null;
             manager.unload(TILE_FILE);
+        }
+        if (glowingTexture != null) {
+            glowingTexture = null;
+            manager.unload(GLOWING_FILE);
         }
     }
 
@@ -181,6 +234,9 @@ public class Board {
 	    public static Color randCol = 
 	    		new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
+        /** Is this a tile that the player successfully moved onto? */
+        public boolean isSuccess = false;
+
         public enum tileType {
             GOAL,
             START,
@@ -195,16 +251,16 @@ public class Board {
 
         public void setColor(){
             if (this.type == tileType.START){
-                //bright blue
+                // bright blue
                 col = new Color(7f/255f, 82f/255f, 1,1);
-            }else if (this.type == tileType.OBSTACLE){
-                //dark gray
+            } else if (this.type == tileType.OBSTACLE){
+                // dark gray
                 col = Color.DARK_GRAY;
-            }else if (this.type == tileType.GOAL){
-                //bright green
+            } else if (this.type == tileType.GOAL){
+                // bright green
                 col = new Color(27f/255f, 253f/255f,34f/255f, 1);
                 col = Color.GREEN;
-            }else {
+            } else {
                 col = randCol;
             }
         }

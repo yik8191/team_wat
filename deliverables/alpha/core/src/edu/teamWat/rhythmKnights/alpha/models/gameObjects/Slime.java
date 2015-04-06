@@ -15,7 +15,7 @@ public class Slime extends GameObject{
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
     private int curTime = 5;
-    private int idleCur = 0;
+    private int curFrame = 0;
 
     // Constants for reference to the spritesheet
     private int IDLE_START = 0;
@@ -45,13 +45,13 @@ public class Slime extends GameObject{
     public void draw(GameCanvas canvas) {
         //        curTime --;
 //        if (curTime == 0) {
-//            idleCur ++;
-//            if (idleCur >= IDLE_END) {
-//                idleCur = IDLE_START;
+//            curFrame ++;
+//            if (curFrame >= IDLE_END) {
+//                curFrame = IDLE_START;
 //            }
 //            curTime = animDelay;
 //        } else {
-//            sprite.setFrame(idleCur);
+//            sprite.setFrame(curFrame);
 //        }
 
         sprite = new FilmStrip(slimeTexture, 1, 1);
