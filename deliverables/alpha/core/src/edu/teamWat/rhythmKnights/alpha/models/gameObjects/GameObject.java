@@ -6,9 +6,10 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public abstract class GameObject {
 
-    protected int id;
+	protected int id;
     public boolean isAlive = false;
     protected boolean isActive = false;
+    public boolean isCharacter = true; 
     protected Vector2 position = new Vector2();
     protected Vector2 velocity = new Vector2();
 	protected Vector2 oldPosition = new Vector2();
@@ -29,6 +30,12 @@ public abstract class GameObject {
         return this.isActive;
     }
 
+    /* Returns a boolean stating if this object is a character. Used 
+     * for collision detection */
+    public boolean isCharacter(){
+    	return this.isCharacter;
+    }
+    
     /* Updates objects appropriately on each frame*/
     public abstract void update();
 

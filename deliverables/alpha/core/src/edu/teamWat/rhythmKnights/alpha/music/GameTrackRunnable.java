@@ -8,9 +8,9 @@ public class GameTrackRunnable implements Runnable {
     private GameTrack1 gametrack;
     private Player player;
 
-    public GameTrackRunnable(Player player) {
+    public GameTrackRunnable() {
     	this.gametrack = new GameTrack1();
-    	this.player = player;
+    	this.player = new Player();
     }
 
     public void run() {

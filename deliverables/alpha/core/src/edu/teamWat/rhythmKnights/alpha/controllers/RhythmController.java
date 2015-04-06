@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
 
+
 public class RhythmController {
 
 	static private long period;  // 6000/tempo = length of beat in ms
@@ -26,12 +27,10 @@ public class RhythmController {
 
 	/** When music started playing */
 	private static long startTime;
+
 	/** Music player object */
 	static Music music;
 
-
-	private RhythmController() {
-	}
 
 //	public static void PreloadContent(AssetManager manager) {
 //		manager.load(MUSIC_FILE, Music.class);
@@ -54,6 +53,7 @@ public class RhythmController {
 //	}
 
 	public static void init() {
+
 		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
 		music.setLooping(true);
 	}

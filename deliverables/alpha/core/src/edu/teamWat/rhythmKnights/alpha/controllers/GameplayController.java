@@ -43,8 +43,8 @@ public class GameplayController {
 	public GameplayController() {	}
 
 	public void initialize() {
-
-		board = JSONReader.parseFile("../../levels/level1.json");
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		board = JSONReader.parseFile("levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
 

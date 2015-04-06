@@ -61,6 +61,7 @@ public class Knight extends GameObject {
         // Set current knight image
         sprite = new FilmStrip(knightTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
         sprite.setFrame(0);
+        this.isCharacter = true;
     }
 
     public void update() {
