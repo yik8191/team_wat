@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
-public class Slime extends GameObject{
+public class Deprecate extends GameObject{
     
     public static final String SLIME_FILE = "images/slime.png";
     public static Texture slimeTexture;
@@ -26,7 +26,7 @@ public class Slime extends GameObject{
     private int SPRITE_COLS = 6;
     private int SPRITE_TOT = 12;
 
-    public Slime(int id, float x, float y){
+    public Deprecate(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
 	    this.animatedPosition.set(position);

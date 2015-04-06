@@ -10,8 +10,16 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Enemy extends GameObject{
 
     public static final String SKELETON_FILE = "images/skeleton.png";
+    public static final String SLIME_FILE = "images/slime.png";
     public static Texture skeletonTexture;
+    public static Texture slimeTexture;
     private FilmStrip sprite;
+    
+    public enum EnemyType{
+    	SKELETON, SLIME
+    }
+    
+    public EnemyType type;
 
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
@@ -28,11 +36,12 @@ public class Enemy extends GameObject{
     private int SPRITE_TOT = 12;
 
 
-    public Enemy(int id, float x, float y){
+    public Enemy(int id, float x, float y, EnemyType e){
         this.id = id;
         this.position = new Vector2(x,y);
 	    this.animatedPosition.set(position);
 	    this.oldPosition.set(position);
+	    this.type = e;
         isAlive = true;
         isActive = true;
         isCharacter = true;
@@ -58,6 +67,20 @@ public class Enemy extends GameObject{
 
     }
 
+    public Texture getTexture(){
+    	Texture enemyTexture = null;
+    	EnemyType e = this.type;
+    	switch(e){
+    		case SKELETON:
+    			enemyTexture = skeletonTexture;
+    			break;
+    		case SLIME:
+    			enemyTexture = slimeTexture;
+    			break;
+    	}
+    	return enemyTexture;
+    }
+    
     public void draw(GameCanvas canvas) {
 //        curTime --;
 //        if (curTime == 0) {
@@ -69,8 +92,8 @@ public class Enemy extends GameObject{
 //        } else {
 //            sprite.setFrame(curFrame);
 //        }
-
-        sprite = new FilmStrip(skeletonTexture, 1, 1);
+    	Texture enemyTexture = this.getTexture();
+        sprite = new FilmStrip(enemyTexture, 1, 1);
 	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
     }
@@ -82,7 +105,7 @@ public class Enemy extends GameObject{
 //
 //	}
     /**
-     * Preloads the assets for the Knight.
+     * Preloads the assets for the all Enemy types.
      *
      * The asset manager for LibGDX is asynchronous.  That means that
      * you tell it what to load and then wait while it
@@ -92,10 +115,11 @@ public class Enemy extends GameObject{
      */
     public static void PreLoadContent(AssetManager manager) {
         manager.load(SKELETON_FILE, Texture.class);
+        manager.load(SLIME_FILE, Texture.class);
     }
 
     /**
-     * Loads the assets for the Knight.
+     * Loads the assets for all Enemy types.
      *
      * All shell objects use one of two textures, so this is a static method.
      * This keeps us from loading the same images
@@ -113,10 +137,16 @@ public class Enemy extends GameObject{
         } else {
             skeletonTexture = null;  // Failed to load
         }
+        if (manager.isLoaded(SLIME_FILE)) {
+            slimeTexture = manager.get(SLIME_FILE,Texture.class);
+            slimeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            slimeTexture = null;  // Failed to load
+        }
     }
 
     /**
-     * Unloads the assets for the Knight
+     * Unloads the assets for the Enemy types.
      *
      * This method erases the static variables.  It also deletes the associated textures from the assert manager.
      *
@@ -126,6 +156,10 @@ public class Enemy extends GameObject{
         if (skeletonTexture != null) {
             skeletonTexture = null;
             manager.unload(SKELETON_FILE);
+        }
+        if (slimeTexture != null) {
+            slimeTexture = null;
+            manager.unload(SLIME_FILE);
         }
     }
 }
