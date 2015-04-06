@@ -44,11 +44,11 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = JSONReader.parseFile("levels/level1.json");
+		board = JSONReader.parseFile("../../levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
 
-        collisionController = new CollisionController(board, gameObjects, null);
+        collisionController = new CollisionController(board, gameObjects);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
