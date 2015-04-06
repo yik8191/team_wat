@@ -151,10 +151,10 @@ public class RhythmController {
 	}
 
 	public static void playSuccess() {
-//		hitSound.play();
+		hitSound.play();
 	}
 
 	public static void playDamage() {
-//		dmgSound.play();
+		dmgSound.play();
 	}
 }
