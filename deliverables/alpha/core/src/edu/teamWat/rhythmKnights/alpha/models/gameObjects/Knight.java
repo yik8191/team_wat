@@ -15,6 +15,8 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
+	private int animFrames = 10;
+	private int animAge = 0;
 
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/glowing.png";

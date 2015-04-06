@@ -11,6 +11,8 @@ public class DynamicTile extends GameObject {
 
 	public static final String DYN_TILE_FILE = "images/dyn_tile.png";
     public static Texture dynTileTexture;
+	private int animFrames = 10;
+	private int animAge = 0;
 	
 	public DynamicTile(int id, float x, float y) {
 		this.id = id;

@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.*;
 
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.DynamicTile;
+import edu.teamWat.rhythmKnights.alpha.models.gameObjects.Enemy;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.GameObject;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.Knight;
 
@@ -31,6 +32,8 @@ public class CollisionController {
 	public Board board; 
 	/** Reference to all the game objects in the game */	
 	public GameObjectList gameobjs; 
+	/** Reference to all active projectiles */
+	public ProjectilePool projs;
 	
 	/** Cache attribute for calculations */
 	private Vector2 tmp;
@@ -43,10 +46,10 @@ public class CollisionController {
 	 * @param b The game board
 	 * TODO: @param p The active projectiles -- eventually
 	 */
-	public CollisionController(Board b, GameObjectList g) {
+	public CollisionController(Board b, GameObjectList g, ProjectilePool p) {
 		board = b;
 		gameobjs = g;
-		
+		projs = p;
 		tmp = new Vector2();
 	}
 
@@ -60,9 +63,7 @@ public class CollisionController {
 			}
 		}
 	}
-	
-	
-	
+		
 	/**
 	 * Updates all of the game objects and projectiles, moving them forward.
 	 *
@@ -109,11 +110,11 @@ public class CollisionController {
 		}
 		
 		// Test collisions between game objects and projectiles
-		/*for (GameObject g : gameobjs) {
-			for (Projectile p : projectiles) {
+		for (GameObject g : gameobjs) {
+			for (Projectile p : projs) {
 				checkForCollision(g, p);
 			}
-		}*/
+		}
 		
 		// update dynamic tiles 
 		updateBoard();
@@ -191,26 +192,41 @@ public class CollisionController {
 		// If the two game objects occupy the same tile,
 		if (g1x == g2x && g1y == g2y) {
 			if (g1 instanceof Knight){
-				// damage the enemy if it is not a dynamictile - must be fixed later
+				// damage the enemy if it is not a dynamictile
 				if (!(g2 instanceof DynamicTile)){
 					g2.setAlive(false);
 					// bounce back the player
 					bounceBackGameObject(g1);
 					hasPlayerMoved = true;
 				}
-			} else if (g2 instanceof Knight && !(g1 instanceof DynamicTile)){
-				// damage the player
+			} else if (g2 instanceof Knight && g1 instanceof Enemy){
+				// damage the player if enemy ran into player
 				if (!((Knight) g2).isInvulnerable()) {
 					((Knight) g2).takeDamage();
 					((Knight) g2).setInvulnerable(true);
 				}
 				// bounce back the other object
 				bounceBackGameObject(g1);
-			} else if (!(g1 instanceof DynamicTile) && !(g2 instanceof DynamicTile)) {
-				// bounce back both enemies
+			} else if (!(g1 instanceof DynamicTile) && 
+						!(g2 instanceof DynamicTile)) {
+				// bounce back both enemies if neither is a dynamictile
 				bounceBackGameObject(g1);
 				bounceBackGameObject(g2);
 			}
 		}
+	}
+
+	private void checkForCollision(GameObject g, Projectile p) {
+		// Do nothing if either game object is off the board.
+		if (!g.isActive() || !p.isAlive()) {
+			return;
+		}
+
+		// Get the tiles for each game object
+		int gx = (int) g.getPosition().x;
+		int gy = (int) g.getPosition().y;
+		int px = (int) p.getPosition().x;
+		int py = (int) p.getPosition().y;
+		// TODO : figure out damage
 	}
 }

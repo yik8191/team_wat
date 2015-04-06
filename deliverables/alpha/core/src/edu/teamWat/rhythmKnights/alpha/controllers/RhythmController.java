@@ -9,11 +9,11 @@ public class RhythmController {
 
 	static private long period;  // 6000/tempo = length of beat in ms
 
-	/** Length of period in which player can make a valid move*/
+	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
-	/** Offset to translate intervals in time*/
+	/** Offset to translate intervals in time */
 	static float totalOffset = 0f;
-	/** Offset from perceived beat in time in the music*/
+	/** Offset from perceived beat in time in the music */
 	static float finalActionOffset = 0.5f;
 
 	/** Location of music file */

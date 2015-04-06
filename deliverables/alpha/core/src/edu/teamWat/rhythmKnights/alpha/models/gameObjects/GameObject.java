@@ -11,6 +11,10 @@ public abstract class GameObject {
     protected boolean isActive = false;
     protected Vector2 position = new Vector2();
     protected Vector2 velocity = new Vector2();
+	protected Vector2 oldPosition = new Vector2();
+	protected Vector2 animatedPosition = new Vector2();
+	protected int animFrames = 100;
+	protected int animAge = 0;
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -51,6 +55,9 @@ public abstract class GameObject {
 	}
 	
 	public void setPosition(Vector2 pos){
+		this.animatedPosition.set(position);
+		this.oldPosition.set(position);
+		animAge = 0;
 		this.position.x = pos.x;
 		this.position.y = pos.y;
 	}
