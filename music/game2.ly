@@ -69,10 +69,10 @@ rhUpper = \relative c'' {
   f, g f aes g aes g c |                  % bar 10
   bes g bes f aes g aes ees |             % bar 11
   f ees d g f aes g f |                    % bar 12
-  ees c d c ees c d c |                   % bar 13
+  ees c d c ees c b f' |                   % bar 13
   ees c d c ees c g' c, |                 % bar 14
-  aes' c, c' aes g ees g d |              % bar 15
-  g ees g d b g b d |                   % bar 16
+  aes' f c' aes g ees d f |              % bar 15
+  ees d c c b g b d |                   % bar 16
 }
 rhLower = \relative c' {
   \voiceTwo
@@ -97,20 +97,20 @@ lhLower = \relative c {
   \Key
   c8 r r r r r d ees  |              % bar 1
   c8 r r r r r d ees  |              % bar 2
-  c8 r r r aes r g r  |              % bar 3
-  c8 r r r aes r g r  |              % bar 4
-  c8 r r r r r d ees  |              % bar 5
-  c8 r r r r r d ees  |              % bar 6
-  d8 r r r c r bes r  |              % bar 7
+  d8 r r r aes r g r  |              % bar 3
+  d'8 r r r aes r g r  |              % bar 4
+  f8 r r r r r aes g  |              % bar 5
+  f8 r r r r r aes g  |              % bar 6
+  f8 r r r b r d r  |              % bar 7
   aes8 r f r aes r g r |             % bar 8 
-  d8 r r bes ees r r ees  |            % bar 9
-  d8 r r bes ees r r g,  |            % bar 10
-  g8 r r c f, r r bes |              % bar 11
-  ees,8 r r aes d, r r g  |          % bar 12
-  g8 r f r g r aes r |               % bar 13
-  g8 r f r g r ees r |               % bar 14
+  aes8 r r f ees r r g  |            % bar 9
+  aes8 r r f ees r r g  |            % bar 10
+  g8 r r ees c r r aes' |              % bar 11
+  aes8 r f r aes r d, r  |          % bar 12
+  ees8 r d r c r f r |               % bar 13
+  ees8 r d r c r ees r |               % bar 14
   f8 r aes r ees r f r  |            % bar 15
-  ees8 r d r d r g r  |                % bar 16
+  g8 r ees r d r g r  |                % bar 16
 
 }
 

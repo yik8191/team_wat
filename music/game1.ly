@@ -59,17 +59,27 @@ rhUpper = \relative c'' {
   \Key
   b8 b b d d d  e4 d c   |  % bar 1
   b8 b b d8 d d a4 g fis |  % bar 2
+  b8 b d d d b e e g g fis e | % bar 3
+  e8 d c b c d a4 g fis | % bar 4
+  e8 fis g a b c b4 e,4 fis4 | % bar 5
+  e8 fis g a b c b2. | % bar 6
+  e8 d c b c d c4 e,4 fis4 | % bar 7
+  g8 fis e fis g fis dis4.~ dis4 dis8 | % bar 8
+  e8 fis e g fis e a b c b g fis | % bar 9
+  e8 fis e g fis e a e' d c b c | % bar 11
+  d g fis a fis c b c b a b c | % bar 12
+  
 }
 rhLower = \relative c' {
   \voiceTwo
   \Key
-  r1 | r | r
+
 }
 
 lhUpper = \relative c' {
   \voiceOne
   \Key
-  r1 | r | r
+
 }
 lhLower = \relative c {
   \voiceTwo
@@ -105,15 +115,9 @@ piano = {
 % ------ Drums ------
 up = \drummode {
   \voiceOne
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
-  hh4 <hh sn> hh <hh sn> |
 }
 down = \drummode {
   \voiceTwo
-  bd4 s bd s
-  bd4 s bd s
-  bd4 s bd s
 }
 
 drumContents = {
@@ -149,7 +153,7 @@ drumContents = {
   \midi {
     \context {
       \Score
-      tempoWholesPerMinute = #(ly:make-moment 120 4)
+      tempoWholesPerMinute = #(ly:make-moment 180 4)
     }
   }
 }

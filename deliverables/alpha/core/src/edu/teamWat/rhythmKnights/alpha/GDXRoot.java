@@ -85,7 +85,7 @@ public class GDXRoot extends Game implements ScreenListener {
 	 */
 	public void exitScreen(Screen screen, int exitCode) {
 		if (exitCode != 0) {
-			Gdx.app.error("GDXRoot", "Exit with error code " + exitCode, new RuntimeException());
+			Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
 			Gdx.app.exit();
 		} else if (screen == loading) {
 			GameMode.LoadContent(manager);

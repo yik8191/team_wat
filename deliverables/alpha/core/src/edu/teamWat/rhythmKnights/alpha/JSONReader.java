@@ -130,9 +130,9 @@ public class JSONReader {
                 }
                 String type = (String) curObj.get("type");
                 if (type.equals("skeleton")){
-                    gameObjects.add(new Enemy(j, x, y));
+                    gameObjects.add(new Enemy(j, x, y, Enemy.EnemyType.SKELETON));
                 } else if (type.equals("slime")){
-                    gameObjects.add(new Slime(j, x, y));
+                    gameObjects.add(new Enemy(j, x, y, Enemy.EnemyType.SLIME));
                 } else if (type.equals("platform")){
                     gameObjects.add(new DynamicTile(j, x, y));
                 } else {
