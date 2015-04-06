@@ -40,9 +40,11 @@ public class Knight extends GameObject {
 
     // Constants for reference to the spritesheet
     private int IDLE_START = 0;
-    private int IDLE_END = 5;
+    private int IDLE_END = 0;
     private int HURT_START = 6;
     private int HURT_END = 11;
+    private int SUCCESS_START = 3;
+    private int SUCCESS_END = 5;
     private int SPRITE_ROWS = 2;
     private int SPRITE_COLS = 6;
     private int SPRITE_TOT = 12;
@@ -121,6 +123,19 @@ public class Knight extends GameObject {
                 sprite.setFrame(curFrame);
             }
         // Should not ever occur
+        } else if (this.state == KnightState.MOVING) {
+            curTime--;
+            if (curTime == 0) {
+                curFrame++;
+                // Finished animating the success frames
+                if (curFrame >= SUCCESS_END) {
+                    curFrame = IDLE_START;
+                    this.setState(KnightState.NORMAL);
+                }
+                curTime = animDelay;
+            } else {
+                sprite.setFrame(curFrame);
+            }
         } else {
             sprite.setFrame(0);
         }
@@ -255,7 +270,8 @@ public class Knight extends GameObject {
     public void showSuccess() {
         //this.state = KnightState.MOVING;
         // not yet implemented due to lack of sprites
-        this.state = KnightState.NORMAL;
+        curFrame = SUCCESS_START;
+        this.state = KnightState.MOVING;
     }
 
 	public boolean isInvulnerable() {return isInvulnerable;}
