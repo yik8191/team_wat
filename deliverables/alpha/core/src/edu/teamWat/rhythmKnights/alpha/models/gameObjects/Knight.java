@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.models.Board;
 import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
@@ -233,6 +234,7 @@ public class Knight extends GameObject {
         curTime = animDelay;
         curFrame = HURT_START;
         this.state = KnightState.TAKINGDMG;
+        RhythmController.playDamage();
 	}
 
     public void showSuccess() {

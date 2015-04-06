@@ -3,6 +3,8 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.javafx.collections.VetoableListDecorator;
+import com.badlogic.gdx.audio.*;
+import com.badlogic.gdx.assets.AssetManager;
 
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
@@ -131,6 +133,7 @@ public class GameplayController {
 								knight.showSuccess();
 								// Set current tile type to SUCCESS
 								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+								RhythmController.playSuccess();
 							}
 						}
 						break;

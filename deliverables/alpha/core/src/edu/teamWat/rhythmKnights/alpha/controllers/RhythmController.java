@@ -19,6 +19,8 @@ public class RhythmController {
 
 	/** Location of music file */
 	public static final String MUSIC_FILE = "music/game2longer.ogg";
+	public static final String HIT_FILE = "sounds/hit.ogg";
+	public static final String DMG_FILE = "sounds/dmg.ogg";
 
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
@@ -31,26 +33,54 @@ public class RhythmController {
 	/** Music player object */
 	static Music music;
 
+	/** Sound effects */
+	protected static Sound hitSound;
+	protected static Sound dmgSound;
 
-//	public static void PreloadContent(AssetManager manager) {
-//		manager.load(MUSIC_FILE, Music.class);
-//	}
-//
-//	public static void LoadContent(AssetManager manager) {
-//		if (manager.isLoaded(MUSIC_FILE)) {
-//			music = manager.get(MUSIC_FILE, Music.class);
-//			music.setLooping(true);
-//		} else {
-//			music = null;  // Failed to load
-//		}
-//	}
-//
-//	public static void UnloadContent(AssetManager manager) {
-//		if (music != null) {
-//			music = null;
-//			manager.unload(MUSIC_FILE);
-//		}
-//	}
+
+	public static void PreloadContent(AssetManager manager) {
+		manager.load(MUSIC_FILE, Music.class);
+		manager.load(HIT_FILE, Sound.class);
+		manager.load(DMG_FILE, Sound.class);
+	}
+
+	public static void LoadContent(AssetManager manager) {
+		if (manager.isLoaded(MUSIC_FILE)) {
+			music = manager.get(MUSIC_FILE, Music.class);
+			music.setLooping(true);
+		} else {
+			music = null;  // Failed to load
+		}
+
+		if (manager.isLoaded(HIT_FILE)) {
+			hitSound = manager.get(HIT_FILE, Sound.class);
+		} else {
+			hitSound = null;	// Failed to load
+		}
+
+		if (manager.isLoaded(DMG_FILE)) {
+			dmgSound = manager.get(DMG_FILE, Sound.class);
+		} else {
+			dmgSound = null;	// Failed to load
+		}
+	}
+
+	public static void UnloadContent(AssetManager manager) {
+		if (music != null) {
+			music = null;
+			manager.unload(MUSIC_FILE);
+		}
+
+		if (hitSound != null) {
+			hitSound = null;
+			manager.unload(HIT_FILE);
+		}
+
+		if (dmgSound != null) {
+			dmgSound = null;
+			manager.unload(DMG_FILE);
+		}
+	}
 
 	public static void init() {
 
@@ -111,5 +141,13 @@ public class RhythmController {
 
 	private static float toBeatTime(long time) {
 		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
+	}
+
+	public static void playSuccess() {
+		hitSound.play();
+	}
+
+	public static void playDamage() {
+		dmgSound.play();
 	}
 }

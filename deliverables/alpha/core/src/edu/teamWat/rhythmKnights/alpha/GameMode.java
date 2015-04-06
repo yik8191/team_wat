@@ -97,7 +97,7 @@ public class GameMode implements Screen{
 		Slime.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
-//		RhythmController.PreloadContent(manager);
+		RhythmController.PreloadContent(manager);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class GameMode implements Screen{
 		Slime.LoadContent(manager);
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
-//		RhythmController.LoadContent(manager);
+		RhythmController.LoadContent(manager);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class GameMode implements Screen{
 		Slime.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
-//		RhythmController.UnloadContent(manager);
+		RhythmController.UnloadContent(manager);
 	}
 
 	// CONSTANTS
