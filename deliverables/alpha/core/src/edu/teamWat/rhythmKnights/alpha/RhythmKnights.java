@@ -12,7 +12,7 @@ import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 
-public class GDXRoot extends Game implements ScreenListener {
+public class RhythmKnights extends Game implements ScreenListener {
 	/** AssetManager to load game assets (textures, sounds, etc.) */
 	private AssetManager manager;
 	/** Drawing context to display graphics (VIEW CLASS) */
@@ -22,7 +22,7 @@ public class GDXRoot extends Game implements ScreenListener {
 	/** Player mode for the game proper (CONTROLLER CLASS) */
 	private GameMode playing;
 
-	public GDXRoot() {
+	public RhythmKnights() {
 		// Start loading with the asset manager
 		manager = new AssetManager();
 
@@ -85,7 +85,7 @@ public class GDXRoot extends Game implements ScreenListener {
 	 */
 	public void exitScreen(Screen screen, int exitCode) {
 		if (exitCode != 0) {
-			Gdx.app.error("GDXRoot", "Exit with error code " + exitCode, new RuntimeException());
+			Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
 			Gdx.app.exit();
 		} else if (screen == loading) {
 			GameMode.LoadContent(manager);

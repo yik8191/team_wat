@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import java.awt.*;
 
-import edu.teamWat.rhythmKnights.alpha.GDXRoot;
+import edu.teamWat.rhythmKnights.alpha.RhythmKnights;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -14,6 +14,6 @@ public class DesktopLauncher {
 		config.width = screenSize.width;
 		config.height = screenSize.height;
 		config.fullscreen = false;
-		new LwjglApplication(new GDXRoot(), config);
+		new LwjglApplication(new RhythmKnights(), config);
 	}
 }
