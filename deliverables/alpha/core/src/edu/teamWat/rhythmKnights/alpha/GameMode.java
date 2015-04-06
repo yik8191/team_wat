@@ -94,6 +94,7 @@ public class GameMode implements Screen{
 		Board.PreLoadContent(manager);
 		Knight.PreLoadContent(manager);
 		Enemy.PreLoadContent(manager);
+		Slime.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
 //		RhythmController.PreloadContent(manager);
@@ -140,6 +141,7 @@ public class GameMode implements Screen{
 		Board.LoadContent(manager);
 		Knight.LoadContent(manager);
 		Enemy.LoadContent(manager);
+		Slime.LoadContent(manager);
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
 //		RhythmController.LoadContent(manager);
@@ -172,6 +174,7 @@ public class GameMode implements Screen{
 		Board.UnloadContent(manager);
 		Knight.UnloadContent(manager);
 		Enemy.UnloadContent(manager);
+		Slime.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
 //		RhythmController.UnloadContent(manager);
