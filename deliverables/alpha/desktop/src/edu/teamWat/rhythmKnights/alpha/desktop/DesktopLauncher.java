@@ -15,6 +15,7 @@ public class DesktopLauncher {
 		config.addIcon("images/icon.png", Files.FileType.Internal);
 		config.width = screenSize.width;
 		config.height = screenSize.height;
+		config.title = "RhythmKnights";
 		config.fullscreen = false;
 		new LwjglApplication(new GDXRoot(), config);
 	}
