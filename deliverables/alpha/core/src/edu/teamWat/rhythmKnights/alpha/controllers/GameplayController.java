@@ -48,7 +48,10 @@ public class GameplayController {
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
 
-        collisionController = new CollisionController(board, gameObjects);
+		// Preallocate memory
+		ProjectilePool projs = new ProjectilePool();
+
+		collisionController = new CollisionController(board, gameObjects, projs);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
