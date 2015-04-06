@@ -164,16 +164,16 @@ public class GameplayController {
 								Vector2 vel = new Vector2();
 								switch (event.code) {
 									case InputController.CONTROL_MOVE_RIGHT:
-										vel.x = 1;
+										vel.x = 2;
 										break;
 									case InputController.CONTROL_MOVE_UP:
-										vel.y = 1;
+										vel.y = 2;
 										break;
 									case InputController.CONTROL_MOVE_LEFT:
-										vel.x = -1;
+										vel.x = -2;
 										break;
 									case InputController.CONTROL_MOVE_DOWN:
-										vel.y = -1;
+										vel.y = -2;
 										break;
 								}
 								playerMoved = true;

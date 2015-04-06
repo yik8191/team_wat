@@ -57,33 +57,34 @@ public class PlayerController implements InputController, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 			case Keys.A:
-				addKeyEvent(CONTROL_MOVE_LEFT, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_LEFT, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.D:
-				addKeyEvent(CONTROL_MOVE_RIGHT, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_RIGHT, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.W:
-				addKeyEvent(CONTROL_MOVE_UP, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_UP, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.S:
-				addKeyEvent(CONTROL_MOVE_DOWN, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_DOWN, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.LEFT:
-				addKeyEvent(CONTROL_MOVE_LEFT, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_LEFT, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.RIGHT:
-				addKeyEvent(CONTROL_MOVE_RIGHT, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_RIGHT, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.UP:
-				addKeyEvent(CONTROL_MOVE_UP, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_UP, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.DOWN:
-				addKeyEvent(CONTROL_MOVE_DOWN, TimeUtils.millis());
+				addKeyEvent(CONTROL_MOVE_DOWN, (long)(RhythmController.getPosition()));
 				break;
 			case Keys.R:
 				didReset = true;
 				break;
 		}
+		System.out.println(RhythmController.toBeatTime((long)(RhythmController.getPosition())));
 		return true;
 	}
 
