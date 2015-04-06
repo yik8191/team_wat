@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
+import sun.nio.cs.MS1250;
 
 public class RhythmController {
 
@@ -75,7 +76,7 @@ public class RhythmController {
 	 */
 	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
 		float beatTime = toBeatTime(actionTime) - anchor;
-		if (out) System.out.println(totalOffset + " " + beatTime);
+//		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
 
@@ -90,7 +91,7 @@ public class RhythmController {
 	 * @return returns whether or not it's time to take final actions.
 	 */
 	public static boolean updateBeat() {
-		long time = TimeUtils.timeSinceMillis(startTime);
+		long time = (long)(music.getPosition() * 1000);
 		float beatTime = toBeatTime(time);
 		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
 			beatComplete = false;
@@ -109,7 +110,7 @@ public class RhythmController {
 		if (totalOffset > 0.5) totalOffset--;
 	}
 
-	private static float toBeatTime(long time) {
+	public static float toBeatTime(long time) {
 		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
 	}
 }

@@ -4,10 +4,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import com.badlogic.gdx.utils.TimeUtils;
+import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import java.awt.*;
+import java.sql.Time;
 
 
 /** Ticker */ // lol
@@ -67,10 +70,17 @@ public class Ticker {
             }else{ //fireball
                 sprite = new FilmStrip(fireballTexture, 1, 1);
             }
+
             loc.x = startX + (width*i);
 
             canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
             if (beat == i) {
+	            float beatTime = RhythmController.toBeatTime(TimeUtils.millis());
+//	            if (beatTime > 0.5f) beatTime--;
+	            loc.x = startX + ((beatTime + i) * width);
+	            if (i == tickerActions.length - 1 && beatTime > 0.5f) {
+		            loc.x -= width * tickerActions.length;
+	            }
                 // draw the indicator for current action
                 spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
                 canvas.draw(spriteIndicator, loc.x-TICK_SQUARE_SIZE*1.34f, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
