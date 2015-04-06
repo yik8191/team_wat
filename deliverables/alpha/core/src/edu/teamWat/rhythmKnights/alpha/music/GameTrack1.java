@@ -15,21 +15,6 @@ import org.jfugue.rhythm.Rhythm;
  */
 public class GameTrack1 {
 
-	/*public static void main(String[] args) {
-		GameTrack1 gt1 = new GameTrack1();
-		Pattern pattern = gt1.getPattern();
-		MidiFileManager mymanager = new MidiFileManager();
-
-		Player player = new Player();
-		player.play(pattern);
-
-		try {
-			mymanager.savePatternToMidi(pattern, new File("track1.mid"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}*/
 	public GameTrack1() {
 		
 	}

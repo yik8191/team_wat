@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.assets.*;
 import com.badlogic.gdx.graphics.*;
 
+import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.models.Board;
 import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
@@ -15,17 +16,36 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
-
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
-    public static final String KNIGHT_NORMAL_FILE = "images/knight.png";
+    public static final String KNIGHT_NORMAL_FILE = "images/glowing.png";
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
     public static Texture knightHpEmptyTexture;
+
+    // Constants relating to Knight HP
     private static int HP_SIZE;
     protected int knightHP;
+    protected int INITIAL_HP = 5;
+
+    // Used for animating the knight
+    private FilmStrip sprite;
+    private FilmStrip spriteHP;
+    // The number of frames before a sprite refreshes
+    private int animDelay = 5;
+    private int curTime = 5;
+    private int curFrame = 0;
+
+    // Constants for reference to the spritesheet
+    private int IDLE_START = 0;
+    private int IDLE_END = 5;
+    private int HURT_START = 6;
+    private int HURT_END = 11;
+    private int SPRITE_ROWS = 2;
+    private int SPRITE_COLS = 6;
+    private int SPRITE_TOT = 12;
 
 	private boolean isInvulnerable;
 
@@ -36,7 +56,13 @@ public class Knight extends GameObject {
 	    this.oldPosition.set(position);
         this.isAlive = true;
         this.isActive = true;
-        this.knightHP = 3;
+        this.knightHP = INITIAL_HP;
+	    this.animFrames = 3;
+
+        // Set current knight image
+        sprite = new FilmStrip(knightTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
+        sprite.setFrame(0);
+        this.isCharacter = true;
     }
 
     public void update() {
@@ -44,6 +70,7 @@ public class Knight extends GameObject {
         if (!isAlive) {
             return;
         }
+
 	    if (moved) {
 		    animAge++;
 		    if (animAge == animFrames) {
@@ -56,7 +83,6 @@ public class Knight extends GameObject {
 		    }
 	    }
         //TODO: implement this
-
     }
 
     public void setState(KnightState ks){
@@ -69,21 +95,44 @@ public class Knight extends GameObject {
 
 
     public void draw(GameCanvas canvas) {
-        FilmStrip sprite;
-        FilmStrip spriteHP;
+        // Animation code for knight
         if (this.state == KnightState.NORMAL) {
-            sprite = new FilmStrip(knightTexture, 1, 1);
+            curTime --;
+            if (curTime == 0) {
+                curFrame ++;
+                if (curFrame >= IDLE_END) {
+                    curFrame = IDLE_START;
+                }
+                curTime = animDelay;
+            } else {
+                sprite.setFrame(curFrame);
+            }
+        } else if (this.state == KnightState.TAKINGDMG) {
+            curTime --;
+            if (curTime == 0) {
+                curFrame ++;
+                // Finished animating the "taking damage" frames
+                if (curFrame >= HURT_END) {
+                    curFrame = IDLE_START;
+                    this.setState(KnightState.NORMAL);
+                }
+                curTime = animDelay;
+            } else {
+                sprite.setFrame(curFrame);
+            }
+        // Should not ever occur
         } else {
-            sprite = new FilmStrip(knightDashTexture, 1, 1);
+            sprite.setFrame(0);
         }
 	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
+        // Drawing code for the Knight HP
         HP_SIZE = canvas.HP_SIZE;
         // Draw remaining hearts
         if (this.knightHP == 0) {
             spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
-            for (int j = 0; j < (3 - this.knightHP); j++) {
+            for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
                 canvas.draw(spriteHP, HP_SIZE + j* HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
             }
         }
@@ -93,7 +142,7 @@ public class Knight extends GameObject {
             canvas.draw(spriteHP, HP_SIZE + i*HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
-                for (int j = 0; j < (3 - this.knightHP); j++) {
+                for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
                     canvas.draw(spriteHP, HP_SIZE + (j+1+i)*HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
                 }
             }
@@ -197,12 +246,23 @@ public class Knight extends GameObject {
         if (this.knightHP == 0) {
             this.isAlive = false;
         }
+        curTime = animDelay;
+        curFrame = HURT_START;
+        this.state = KnightState.TAKINGDMG;
+        RhythmController.playDamage();
 	}
+
+    public void showSuccess() {
+        //this.state = KnightState.MOVING;
+        // not yet implemented due to lack of sprites
+        this.state = KnightState.NORMAL;
+    }
 
 	public boolean isInvulnerable() {return isInvulnerable;}
 
 	public void setInvulnerable(boolean invulnerable) {this.isInvulnerable = invulnerable;}
 
+    // Currently being used for animation of the knight
     public enum KnightState {
         /** Draw the knight normally */
         NORMAL,
@@ -212,8 +272,10 @@ public class Knight extends GameObject {
         ATTACKING,
         /** Knight is using freeze spell */
         FREEZING,
-        /** Knight is falling off board */
-        FALLING
+        /** Knight is taking damage */
+        TAKINGDMG,
+        /** Knight has successfully taken an action */
+        MOVING
     }
 
 }

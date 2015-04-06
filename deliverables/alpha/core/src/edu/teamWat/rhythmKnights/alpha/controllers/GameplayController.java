@@ -1,12 +1,16 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.javafx.collections.VetoableListDecorator;
+import com.badlogic.gdx.audio.*;
+import com.badlogic.gdx.assets.AssetManager;
 
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import javax.swing.*;
 
@@ -43,15 +47,15 @@ public class GameplayController {
 	public GameplayController() {	}
 
 	public void initialize() {
-
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		board = JSONReader.parseFile("levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
-        
-        // Preallocate memory
-        ProjectilePool projs = new ProjectilePool();
 
-        collisionController = new CollisionController(board, gameObjects, projs);
+		// Preallocate memory
+		ProjectilePool projs = new ProjectilePool();
+
+		collisionController = new CollisionController(board, gameObjects, projs);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
@@ -129,6 +133,12 @@ public class GameplayController {
 								playerMoved = true;
 								knight.setVelocity(vel);
 								advanceGameState();
+
+								// Display visual feedback to show success
+								knight.showSuccess();
+								// Set current tile type to SUCCESS
+								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+								RhythmController.playSuccess();
 							}
 						}
 						break;

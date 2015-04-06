@@ -19,6 +19,7 @@ public class DynamicTile extends GameObject {
 		this.oldPosition.set(position);
         isAlive = true;
         isActive = true;
+        isCharacter = false;
 	}
 
 	public void update() {

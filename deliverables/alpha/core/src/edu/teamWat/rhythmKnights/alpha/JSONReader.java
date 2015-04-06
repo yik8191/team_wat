@@ -131,11 +131,11 @@ public class JSONReader {
                 String type = (String) curObj.get("type");
                 if (type.equals("skeleton")){
                     gameObjects.add(new Enemy(j, x, y));
-                }else if (type.equals("slime")){
+                } else if (type.equals("slime")){
                     gameObjects.add(new Slime(j, x, y));
-                }else if (type.equals("platform")){
+                } else if (type.equals("platform")){
                     gameObjects.add(new DynamicTile(j, x, y));
-                }else{
+                } else {
                     System.out.println("Invalid type '"+type+"' of object #"+(j+1));
                 }
                 controls[j] = new AIController(j, gameObjects, path);
