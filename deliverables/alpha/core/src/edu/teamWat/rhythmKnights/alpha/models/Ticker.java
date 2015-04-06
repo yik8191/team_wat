@@ -75,12 +75,9 @@ public class Ticker {
 
             canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
             if (beat == i) {
+
 	            float beatTime = RhythmController.toBeatTime(TimeUtils.millis());
-//	            if (beatTime > 0.5f) beatTime--;
-	            loc.x = startX + ((beatTime + i) * width);
-	            if (i == tickerActions.length - 1 && beatTime > 0.5f) {
-		            loc.x -= width * tickerActions.length;
-	            }
+	            loc.x = startX + ((RhythmController.getCurrentTime() % tickerActions.length - 0.5f) * width);
                 // draw the indicator for current action
                 spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
                 canvas.draw(spriteIndicator, loc.x-TICK_SQUARE_SIZE*1.34f, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);

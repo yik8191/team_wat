@@ -3,8 +3,6 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.TimeUtils;
-import sun.nio.cs.MS1250;
 
 
 public class RhythmController {
@@ -28,8 +26,8 @@ public class RhythmController {
 	/** Is music being played */
 	private static boolean begun = false;
 
-	/** When music started playing */
-	private static long startTime;
+	/** Maximum rate at which the beat can drift */
+	private static float maxDriftRate;
 
 	/** Music player object */
 	static Music music;
@@ -94,10 +92,10 @@ public class RhythmController {
 		if (begun) {
 			music.stop();
 		}
+		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
 		begun = true;
 		music.play();
-		totalOffset = 0;
-		startTime = TimeUtils.millis();
+		totalOffset = 0.3f;
 	}
 
 	/**
@@ -106,7 +104,7 @@ public class RhythmController {
 	 */
 	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
 		float beatTime = toBeatTime(actionTime) - anchor;
-//		if (out) System.out.println(totalOffset + " " + beatTime);
+		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
 
@@ -144,11 +142,19 @@ public class RhythmController {
 		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
 	}
 
+	public static float getCurrentTime() {
+		return (music.getPosition() * 1000f) / (float)period - totalOffset;
+	}
+
+	public static float getPosition() {
+		return music.getPosition() * 1000f;
+	}
+
 	public static void playSuccess() {
-		hitSound.play();
+//		hitSound.play();
 	}
 
 	public static void playDamage() {
-		dmgSound.play();
+//		dmgSound.play();
 	}
 }
