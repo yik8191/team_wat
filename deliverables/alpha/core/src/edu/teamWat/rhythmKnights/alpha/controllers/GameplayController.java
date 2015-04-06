@@ -44,7 +44,7 @@ public class GameplayController {
 
 	public void initialize() {
 
-		board = JSONReader.parseFile("../levels/level1.json");
+		board = JSONReader.parseFile("levels/level1.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
         
@@ -67,6 +67,10 @@ public class GameplayController {
 			playerController.clear();
 			gameOver = true;
 			return;
+		}
+
+		for (GameObject gameObject : gameObjects) {
+			gameObject.update();
 		}
 
 		if (RhythmController.updateBeat()) {

@@ -7,16 +7,18 @@ import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
-public class Enemy extends GameObject {
+public class Enemy extends GameObject{
 
     public static final String SKELETON_FILE = "images/skeleton.png";
     public static Texture skeletonTexture;
+
 
     public Enemy(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
         isAlive = true;
         isActive = true;
+        isCharacter = true;
     }
 
     public void update() {

@@ -207,9 +207,8 @@ public class CollisionController {
 				}
 				// bounce back the other object
 				bounceBackGameObject(g1);
-			} else if (!(g1 instanceof DynamicTile) && 
-						!(g2 instanceof DynamicTile)) {
-				// bounce back both enemies if neither is a dynamictile
+			} else if (g1.isCharacter() && g2.isCharacter()) {
+				// bounce back both characters 
 				bounceBackGameObject(g1);
 				bounceBackGameObject(g2);
 			}

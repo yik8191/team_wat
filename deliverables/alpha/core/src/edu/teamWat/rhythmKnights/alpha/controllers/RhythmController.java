@@ -1,34 +1,25 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import edu.teamWat.rhythmKnights.alpha.music.GameMusic;
-import edu.teamWat.rhythmKnights.alpha.music.GameTrack1;
-import edu.teamWat.rhythmKnights.alpha.music.GameTrackRunnable;
 
 public class RhythmController {
 
 	static private long period;  // 6000/tempo = length of beat in ms
 
-	/** Length of period in which player can make a valid move*/
+	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
-	/** Offset to translate intervals in time*/
+	/** Offset to translate intervals in time */
 	static float totalOffset = 0f;
-	/** Offset from perceived beat in time in the music*/
+	/** Offset from perceived beat in time in the music */
 	static float finalActionOffset = 0.5f;
 
 	/** Location of music file */
 	public static final String MUSIC_FILE = "music/game2longer.ogg";
 
-	/** Music player object to play a JFugue pattern */
-	private static Player player;
-	
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
 	/** Is music being played */
@@ -36,8 +27,9 @@ public class RhythmController {
 
 	/** When music started playing */
 	private static long startTime;
-	/** Music track runnable object */
-	static GameMusic gtrunnable;
+
+	/** Music player object */
+	static Music music;
 
 
 //	public static void PreloadContent(AssetManager manager) {
@@ -61,20 +53,20 @@ public class RhythmController {
 //	}
 
 	public static void init() {
-		musict = new Thread(gtrunnable);
-		// music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
-		// music.setLooping(true);
+
+		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
+		music.setLooping(true);
 	}
 
 	public static void launch(float tempo) {
 		period = (long)(60000.0f / tempo);
 		if (begun) {
-			musict.stop();
+			music.stop();
 		}
 		begun = true;
-		musict.start();
+		music.play();
 		totalOffset = 0;
-		startTime = TimeUtils.millis();        
+		startTime = TimeUtils.millis();
 	}
 
 	/**

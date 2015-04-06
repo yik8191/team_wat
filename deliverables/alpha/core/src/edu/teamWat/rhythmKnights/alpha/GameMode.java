@@ -93,7 +93,6 @@ public class GameMode implements Screen{
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.PreLoadContent(manager);
 		Knight.PreLoadContent(manager);
-		Slime.PreLoadContent(manager);
 		Enemy.PreLoadContent(manager);
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
@@ -140,7 +139,6 @@ public class GameMode implements Screen{
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.LoadContent(manager);
 		Knight.LoadContent(manager);
-		Slime.LoadContent(manager);
 		Enemy.LoadContent(manager);
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
@@ -173,7 +171,6 @@ public class GameMode implements Screen{
 		// TODO: Fill in the other assets we'll be using in this style:
 		Board.UnloadContent(manager);
 		Knight.UnloadContent(manager);
-		Slime.UnloadContent(manager);
 		Enemy.UnloadContent(manager);
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
