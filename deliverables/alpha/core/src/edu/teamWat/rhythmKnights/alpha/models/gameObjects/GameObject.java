@@ -14,8 +14,9 @@ public abstract class GameObject {
     protected Vector2 velocity = new Vector2();
 	protected Vector2 oldPosition = new Vector2();
 	protected Vector2 animatedPosition = new Vector2();
-	protected int animFrames = 100;
-	protected int animAge = 0;
+	protected int animFrames = 5;
+	protected int animAge;
+	protected boolean moved;
 
     /* Draw the sprite on the board*/
     public abstract void draw(GameCanvas canvas);
@@ -45,7 +46,8 @@ public abstract class GameObject {
     }
 
     /* Pass in relative vector of which direction this object should move */
-    public void move(Vector2 direction){this.position.add(direction);}
+    public void move(Vector2 direction){
+	    this.position.add(direction);}
 
     /* Get the ID of this GameObject */
     public int getId(){ 
@@ -62,9 +64,11 @@ public abstract class GameObject {
 	}
 	
 	public void setPosition(Vector2 pos){
-		this.animatedPosition.set(position);
-		this.oldPosition.set(position);
-		animAge = 0;
+		if ((this.oldPosition.x != pos.x || this.oldPosition.y != pos.y) && !moved) {
+			this.oldPosition.set(position);
+			moved = true;
+			animAge = 0;
+		}
 		this.position.x = pos.x;
 		this.position.y = pos.y;
 	}

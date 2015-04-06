@@ -1,12 +1,16 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.javafx.collections.VetoableListDecorator;
+import com.badlogic.gdx.audio.*;
+import com.badlogic.gdx.assets.AssetManager;
 
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import javax.swing.*;
 
@@ -69,6 +73,10 @@ public class GameplayController {
 			return;
 		}
 
+		for (GameObject gameObject : gameObjects) {
+			gameObject.update();
+		}
+
 		if (RhythmController.updateBeat()) {
 
 			//Final actions
@@ -125,6 +133,12 @@ public class GameplayController {
 								playerMoved = true;
 								knight.setVelocity(vel);
 								advanceGameState();
+
+								// Display visual feedback to show success
+								knight.showSuccess();
+								// Set current tile type to SUCCESS
+								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+								RhythmController.playSuccess();
 							}
 						}
 						break;

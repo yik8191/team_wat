@@ -10,15 +10,13 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Enemy extends GameObject{
 
     public static final String SKELETON_FILE = "images/skeleton.png";
-    public static final String SLIME_FILE = "images/slime.png";
     public static Texture skeletonTexture;
-    public static Texture slimeTexture;
     private FilmStrip sprite;
 
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
     private int curTime = 5;
-    private int idleCur = 0;
+    private int curFrame = 0;
 
     // Constants for reference to the spritesheet
     private int IDLE_START = 0;
@@ -33,6 +31,8 @@ public class Enemy extends GameObject{
     public Enemy(int id, float x, float y){
         this.id = id;
         this.position = new Vector2(x,y);
+	    this.animatedPosition.set(position);
+	    this.oldPosition.set(position);
         isAlive = true;
         isActive = true;
         isCharacter = true;
@@ -43,6 +43,17 @@ public class Enemy extends GameObject{
         if (!isAlive) {
             return;
         }
+	    if (moved) {
+		    animAge++;
+		    if (animAge == animFrames) {
+			    animAge = 0;
+			    animatedPosition.set(position);
+			    oldPosition.set(position);
+			    moved = false;
+		    } else {
+			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
+		    }
+	    }
         //TODO: implement this
 
     }
@@ -50,17 +61,17 @@ public class Enemy extends GameObject{
     public void draw(GameCanvas canvas) {
 //        curTime --;
 //        if (curTime == 0) {
-//            idleCur ++;
-//            if (idleCur >= IDLE_END) {
-//                idleCur = IDLE_START;
+//            curFrame ++;
+//            if (curFrame >= IDLE_END) {
+//                curFrame = IDLE_START;
 //            }
 //            curTime = animDelay;
 //        } else {
-//            sprite.setFrame(idleCur);
+//            sprite.setFrame(curFrame);
 //        }
 
         sprite = new FilmStrip(skeletonTexture, 1, 1);
-        Vector2 loc = canvas.boardToScreen(position.x, position.y);
+	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
     }
 
@@ -118,3 +129,4 @@ public class Enemy extends GameObject{
         }
     }
 }
+

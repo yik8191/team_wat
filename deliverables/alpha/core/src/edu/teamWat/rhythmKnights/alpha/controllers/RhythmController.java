@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.TimeUtils;
+import sun.nio.cs.MS1250;
 
 
 public class RhythmController {
@@ -19,6 +20,8 @@ public class RhythmController {
 
 	/** Location of music file */
 	public static final String MUSIC_FILE = "music/game2longer.ogg";
+	public static final String HIT_FILE = "sounds/hit.ogg";
+	public static final String DMG_FILE = "sounds/dmg.ogg";
 
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
@@ -31,26 +34,54 @@ public class RhythmController {
 	/** Music player object */
 	static Music music;
 
+	/** Sound effects */
+	protected static Sound hitSound;
+	protected static Sound dmgSound;
 
-//	public static void PreloadContent(AssetManager manager) {
-//		manager.load(MUSIC_FILE, Music.class);
-//	}
-//
-//	public static void LoadContent(AssetManager manager) {
-//		if (manager.isLoaded(MUSIC_FILE)) {
-//			music = manager.get(MUSIC_FILE, Music.class);
-//			music.setLooping(true);
-//		} else {
-//			music = null;  // Failed to load
-//		}
-//	}
-//
-//	public static void UnloadContent(AssetManager manager) {
-//		if (music != null) {
-//			music = null;
-//			manager.unload(MUSIC_FILE);
-//		}
-//	}
+
+	public static void PreloadContent(AssetManager manager) {
+		manager.load(MUSIC_FILE, Music.class);
+		manager.load(HIT_FILE, Sound.class);
+		manager.load(DMG_FILE, Sound.class);
+	}
+
+	public static void LoadContent(AssetManager manager) {
+		if (manager.isLoaded(MUSIC_FILE)) {
+			music = manager.get(MUSIC_FILE, Music.class);
+			music.setLooping(true);
+		} else {
+			music = null;  // Failed to load
+		}
+
+		if (manager.isLoaded(HIT_FILE)) {
+			hitSound = manager.get(HIT_FILE, Sound.class);
+		} else {
+			hitSound = null;	// Failed to load
+		}
+
+		if (manager.isLoaded(DMG_FILE)) {
+			dmgSound = manager.get(DMG_FILE, Sound.class);
+		} else {
+			dmgSound = null;	// Failed to load
+		}
+	}
+
+	public static void UnloadContent(AssetManager manager) {
+		if (music != null) {
+			music = null;
+			manager.unload(MUSIC_FILE);
+		}
+
+		if (hitSound != null) {
+			hitSound = null;
+			manager.unload(HIT_FILE);
+		}
+
+		if (dmgSound != null) {
+			dmgSound = null;
+			manager.unload(DMG_FILE);
+		}
+	}
 
 	public static void init() {
 
@@ -75,7 +106,7 @@ public class RhythmController {
 	 */
 	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
 		float beatTime = toBeatTime(actionTime) - anchor;
-		if (out) System.out.println(totalOffset + " " + beatTime);
+//		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
 
@@ -90,7 +121,7 @@ public class RhythmController {
 	 * @return returns whether or not it's time to take final actions.
 	 */
 	public static boolean updateBeat() {
-		long time = TimeUtils.timeSinceMillis(startTime);
+		long time = (long)(music.getPosition() * 1000);
 		float beatTime = toBeatTime(time);
 		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
 			beatComplete = false;
@@ -109,7 +140,15 @@ public class RhythmController {
 		if (totalOffset > 0.5) totalOffset--;
 	}
 
-	private static float toBeatTime(long time) {
+	public static float toBeatTime(long time) {
 		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
+	}
+
+	public static void playSuccess() {
+		hitSound.play();
+	}
+
+	public static void playDamage() {
+		dmgSound.play();
 	}
 }
