@@ -199,6 +199,9 @@ public class GameMode implements Screen {
 	/** Board object for storing tiles */
 	private Board board;
 
+    /** Menu object */
+    private Menu menu;
+
 	/**
 	 * Creates a new game with the given drawing context.
 	 *
@@ -210,6 +213,7 @@ public class GameMode implements Screen {
 		active = false;
 		// Null out all pointers, 0 out all ints, etc
 		gameState = GameState.INTRO;
+        menu = new Menu();
 
 		// Create the controllers.
 		// TODO: Properly create the controllers. InputController is now abstract.
@@ -240,6 +244,7 @@ public class GameMode implements Screen {
 		switch (gameState) {
 			case INTRO:
 				board = new Board(5, 5);
+                canvas.setOffsets(5,5);
 				gameState = GameState.PLAY;
 				// TODO: Fill in other initialization code
 //				gameplayController.initialize();
@@ -291,9 +296,7 @@ public class GameMode implements Screen {
 		// NO UPDATE CODE HERE
 		canvas.draw(background, 0, 0);
 		board.draw(canvas);
-//		gameplayController.board.draw(canvas);
-//		gameplayController.gameObjects.draw(canvas);
-//		gameplayController.ticker.draw(canvas);
+        menu.draw(canvas);
 		canvas.end();
 	}
 
