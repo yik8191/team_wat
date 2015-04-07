@@ -1,0 +1,30 @@
+{
+    "tiles": [
+	{"x":4,"y":0,"type":"obstacle"},
+	{"x":11,"y":0,"type":"goal"},
+	{"x":2,"y":1,"type":"obstacle"},
+	{"x":5,"y":1,"type":"obstacle"},
+	{"x":9,"y":1,"type":"obstacle"},
+	{"x":2,"y":2,"type":"obstacle"},
+	{"x":6,"y":2,"type":"obstacle"},
+	{"x":10,"y":2,"type":"obstacle"},
+	{"x":2,"y":3,"type":"obstacle"},
+	{"x":7,"y":3,"type":"obstacle"},
+	{"x":11,"y":3,"type":"obstacle"},
+	{"x":2,"y":4,"type":"obstacle"},
+	{"x":8,"y":4,"type":"obstacle"},
+	{"x":0,"y":5,"type":"start"},
+	{"x":2,"y":5,"type":"obstacle"}
+    ],
+    "objects":[
+	{"path":"UDLR","x":5,"y":0,"type":"skeleton"},
+	{"path":"RUDL","x":1,"y":1,"type":"slime"},
+	{"path":"UDLR","x":5,"y":2,"type":"skeleton"},
+	{"path":"UDLR","x":7,"y":4,"type":"skeleton"},
+	{"path":"RUDL","x":3,"y":5,"type":"slime"}
+    ],
+    "width":12,
+    "height":6,
+    "player":{"x":0,"y":5}
+    "ticker": "MMMM"
+}

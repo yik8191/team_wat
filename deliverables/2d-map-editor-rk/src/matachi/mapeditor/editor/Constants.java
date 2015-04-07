@@ -13,9 +13,9 @@ public class Constants {
 
 	public static final int MAP_HEIGHT = 8;
 	
-	public static final int GRID_WIDTH = 16;
+	public static final int GRID_WIDTH = 12;
 
-	public static final int GRID_HEIGHT = 8;
+	public static final int GRID_HEIGHT = 6;
 
 	public static final int TILE_WIDTH = 32;
 
