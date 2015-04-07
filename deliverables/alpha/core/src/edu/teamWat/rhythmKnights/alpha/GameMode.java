@@ -54,7 +54,7 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
 	private static String BKGD_FILE = "images/game_background.png";
-	private static String LVL1_FILE = "images/level1.png";
+//	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables

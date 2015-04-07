@@ -95,9 +95,9 @@ public class RhythmController {
 			music.stop();
 		}
 //		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
-		startTime = TimeUtils.millis();
 		begun = true;
 		music.play();
+		startTime = TimeUtils.millis();
 		totalOffset = -0.7f;
 	}
 
