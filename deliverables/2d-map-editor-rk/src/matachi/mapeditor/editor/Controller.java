@@ -30,7 +30,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import org.json.*;
+// import org.json.*;
 
 /**
  * Controller of the application.
@@ -223,12 +223,12 @@ public class Controller implements ActionListener, GUIInformation {
 				xmlOutput.setFormat(Format.getPrettyFormat());
 
 				// To convert to JSON format
-				String convertMe = xmlOutput.outputString(doc);
-				try {
-					JSONObject toExport = XML.toJSONObject(convertMe);
-					String test = toExport.toString();
-					System.out.println(test);
-				} catch (JSONException e) {}
+				// String convertMe = xmlOutput.outputString(doc);
+//				try {
+//					JSONObject toExport = XML.toJSONObject(convertMe);
+//					String test = toExport.toString();
+//					System.out.println(test);
+//				} catch (JSONException e) {}
 
 				xmlOutput
 						.output(doc, new FileWriter(chooser.getSelectedFile()));

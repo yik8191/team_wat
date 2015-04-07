@@ -71,6 +71,13 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 		lastClickedTileY = e.getY() / Constants.TILE_HEIGHT;
 		if (ifLeftMouseButtonPressed(e)) {
 			updateTile(lastClickedTileX, lastClickedTileY);
+			// if the tile clicked was an enemy
+			char character = guiInformation.getSelectedTile().getCharacter();
+			System.out.println(character);
+			if (guiInformation.getSelectedTile().getCharacter() == '<'){
+				System.out.println("Need to display the direction inputs");
+			}
+			// launch a sidebar with text input available
 		}
 	}
 
