@@ -3,11 +3,11 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
-
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class RhythmController {
 
-	static private long period;  // 6000/tempo = length of beat in ms
+	static private float period;  // 6000/tempo = length of beat in ms
 
 	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
@@ -15,6 +15,8 @@ public class RhythmController {
 	static float totalOffset = 0f;
 	/** Offset from perceived beat in time in the music */
 	static float finalActionOffset = 0.5f;
+
+	static long startTime;
 
 	/** Location of music file */
 	public static final String MUSIC_FILE = "music/game2longer.ogg";
@@ -27,7 +29,7 @@ public class RhythmController {
 	private static boolean begun = false;
 
 	/** Maximum rate at which the beat can drift */
-	private static float maxDriftRate;
+//	private static float maxDriftRate;
 
 	/** Music player object */
 	static Music music;
@@ -88,23 +90,24 @@ public class RhythmController {
 	}
 
 	public static void launch(float tempo) {
-		period = (long)(60000.0f / tempo);
+		period = 60.0f / tempo;
 		if (begun) {
 			music.stop();
 		}
-		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
+//		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
+		startTime = TimeUtils.millis();
 		begun = true;
 		music.play();
-		totalOffset = 0.3f;
+		totalOffset = -0.7f;
 	}
 
 	/**
 	 * Takes in time and converts it to beat time, a float between 0 and 1. Then checks if this time is within action
 	 * window for a valid beat.
 	 */
-	public static boolean isWithinActionWindow(long actionTime, float anchor, boolean out) {
+	public static boolean isWithinActionWindow(float actionTime, float anchor, boolean out) {
 		float beatTime = toBeatTime(actionTime) - anchor;
-		if (out) System.out.println(totalOffset + " " + beatTime);
+//		if (out) System.out.println(totalOffset + " " + beatTime);
 		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
 	}
 
@@ -119,8 +122,7 @@ public class RhythmController {
 	 * @return returns whether or not it's time to take final actions.
 	 */
 	public static boolean updateBeat() {
-		long time = (long)(music.getPosition() * 1000);
-		float beatTime = toBeatTime(time);
+		float beatTime = toBeatTime(music.getPosition());
 		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
 			beatComplete = false;
 		} else if (beatTime > finalActionOffset && !beatComplete) {
@@ -130,24 +132,24 @@ public class RhythmController {
 		return false;
 	}
 
-
-	public static void sendCalibrationBeat(long time) {
+	public static void sendCalibrationBeat(float time) {
 		float beatTime = toBeatTime(time);
 		if (beatTime > 0.5) beatTime--;
 		totalOffset += 0.5 * (1 - beatTime) * beatTime;
 		if (totalOffset > 0.5) totalOffset--;
 	}
 
-	public static float toBeatTime(long time) {
-		return (float)((time - (long)(totalOffset * period)) % period) / (float)period;
+	public static float toBeatTime(float time) {
+		return ((time - totalOffset * period) % period) / period;
 	}
 
 	public static float getCurrentTime() {
-		return (music.getPosition() * 1000f) / (float)period - totalOffset;
+		return (music.getPosition()) / period;
 	}
 
 	public static float getPosition() {
-		return music.getPosition() * 1000f;
+		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
+		return music.getPosition();
 	}
 
 	public static void playSuccess() {

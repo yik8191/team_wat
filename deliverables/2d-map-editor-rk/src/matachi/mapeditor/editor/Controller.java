@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -23,14 +24,16 @@ import matachi.mapeditor.grid.GridCamera;
 import matachi.mapeditor.grid.GridModel;
 import matachi.mapeditor.grid.GridView;
 
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-
-// import org.json.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+//import org.jdom.Attribute;
+//import org.jdom.Document;
+//import org.jdom.Element;
+//import org.jdom.input.SAXBuilder;
+//import org.jdom.output.Format;
+//import org.jdom.output.XMLOutputter;
 
 /**
  * Controller of the application.
@@ -58,6 +61,8 @@ public class Controller implements ActionListener, GUIInformation {
 	private int gridWidth = Constants.MAP_WIDTH;
 	private int gridHeight = Constants.MAP_HEIGHT;
 
+	private String currentPathString = "UDLR";
+
 	/**
 	 * Construct the controller.
 	 */
@@ -73,9 +78,10 @@ public class Controller implements ActionListener, GUIInformation {
 				Constants.GRID_HEIGHT);
 
 		grid = new GridView(this, camera, tiles); // Every tile is
-		// 30x30 pixels
+													// 30x30 pixels
 
 		this.view = new View(this, camera, grid, tiles);
+		this.currentPathString = "UDLR";
 	}
 
 	/**
@@ -98,6 +104,10 @@ public class Controller implements ActionListener, GUIInformation {
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWidth, gridHeight);
+		} else if (e.getActionCommand().equals("pathupdate")) {
+			// need to press Enter for this to happen...
+			currentPathString = view.getPath();
+			System.out.println(currentPathString);
 		}
 	}
 
@@ -122,8 +132,27 @@ public class Controller implements ActionListener, GUIInformation {
 			gridHeight = view.getHeight();
 		}
 	};
+	
+	DocumentListener updatePathString = new DocumentListener() {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			currentPathString = view.getPath();
+			System.out.println(currentPathString);
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			currentPathString = view.getPath();
+			System.out.println(currentPathString);
+		}
+	};
+	
 
 	// OLD
+
+
 	private void saveTEXTFile() {
 		do {
 			JFileChooser chooser = new JFileChooser();
@@ -151,98 +180,110 @@ public class Controller implements ActionListener, GUIInformation {
 
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"xml files", "xml");
+				"json files", "json");
 		chooser.setFileFilter(filter);
 		int returnVal = chooser.showSaveDialog(null);
 		try {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
-				Element level = new Element("level");
-				Document doc = new Document(level);
-				doc.setRootElement(level);
+                JSONObject level = new JSONObject();
 
-				Element size = new Element("size");
-				int height = model.getHeight();
-				int width = model.getWidth();
-				size.addContent(new Element("width").setText(width + ""));
-				size.addContent(new Element("height").setText(height + ""));
-				doc.getRootElement().addContent(size);
+                int height = model.getHeight();
+                int width = model.getWidth();
+
+                level.put("width", width);
+                level.put("height", height);
+
+                JSONArray tiles = new JSONArray();
+                JSONArray objects = new JSONArray();
+
+                boolean hasStart = false;
+                boolean hasGoal  = false;
 
 				for (int y = 0; y < height; y++) {
-					Element row = new Element("row");
 					for (int x = 0; x < width; x++) {
 						char tileChar = model.getTile(x,y);
-						String item = "";
-						String enemy = "";
-						String type = "AirTile";
+						String path = model.getPath(x,y);
+						String tileType = "";
+                        String object = "";
 
-						if (tileChar == '1')
-							type = "GroundTile";
-						else if (tileChar == '2')
-							type = "GroundTile2";
-						else if (tileChar == '3')
-							type = "GroundTile3";
-						else if (tileChar == '4')
-							type = "GroundTile4";
-						else if (tileChar == '5')
-							type = "EndTile";
-						else if (tileChar == '6')
-							type = "SpawnTile";
-						else if (tileChar == '7')
-							item = "healthPack";
-						else if (tileChar == '8')
-							item = "laserPistol";
-						else if (tileChar == '9')
-							item = "rocketLauncher";
-						else if(tileChar == ':')
-							item = "shotgun";
-						else if(tileChar == ';')
-							item = "upgradePoint";
-						else if(tileChar == '<')
-							enemy = "ballbot";
-						else if(tileChar == '=')
-							enemy = "bucketbot";
-						else if(tileChar == '>')
-							enemy = "rocketbot";
-						else if(tileChar == '?')
-							enemy = "spikes";
-						else if(tileChar == '@')
-							enemy = "tankbot";
+						if (tileChar == '1')      //start
+							tileType = "start";
+						else if (tileChar == '2') //goal
+							tileType = "goal";
+						else if (tileChar == '3') //obstacle
+							tileType = "obstacle";
+						else if (tileChar == '4') //platform
+							object = "platform";
+						else if (tileChar == '5') //slime
+							object = "slime";
+						else if (tileChar == '6') //skeleton
+							object = "skeleton";
 
-						Element e = new Element("cell");
-						if(!item.equals(""))
-							e.setAttribute(new Attribute("item",item));
-						if(!enemy.equals(""))
-							e.setAttribute(new Attribute("enemy",enemy));
 
-						row.addContent(e.setText(type));
+                        JSONObject curObj = new JSONObject();
+
+                        if (!tileType.equals("")) {
+                            curObj.put("x", x);
+                            curObj.put("y", y);
+                            curObj.put("type", tileType);
+                            if (tileType.equals("start") && !hasStart) {
+                                hasStart = true;
+                                JSONObject player = new JSONObject();
+                                player.put("x", x);
+                                player.put("y", y);
+                                level.put("player", player);
+                            } else if (tileType.equals("start") && hasStart) {
+                                System.out.println("Error saving file! You can only have one start tile");
+                                return;
+                            }
+
+                            if (tileType.equals("goal") && !hasGoal) {
+                                hasGoal = true;
+                            } else if (tileType.equals("goal") && hasGoal) {
+                                System.out.println("Error saving file! You can only have one goal tile");
+                                return;
+                            }
+                            tiles.add(curObj);
+                        } else if (!object.equals("")){
+                            curObj.put("type", object);
+                            curObj.put("x", x);
+                            curObj.put("y", y);
+                            //TODO: Correctly implement this so objects have paths
+                            curObj.put("path", path);
+
+                            objects.add(curObj);
+                        }
 					}
-					doc.getRootElement().addContent(row);
-				}
-				XMLOutputter xmlOutput = new XMLOutputter();
-				xmlOutput.setFormat(Format.getPrettyFormat());
+                }
 
-				// To convert to JSON format
-				// String convertMe = xmlOutput.outputString(doc);
-//				try {
-//					JSONObject toExport = XML.toJSONObject(convertMe);
-//					String test = toExport.toString();
-//					System.out.println(test);
-//				} catch (JSONException e) {}
+                if (!hasGoal){
+                    System.out.println("Error saving! You need to have a goal!");
+                    return;
+                }
+                if (!hasStart){
+                    System.out.println("Error saving! You need to have a start!");
+                    return;
+                }
 
-				xmlOutput
-						.output(doc, new FileWriter(chooser.getSelectedFile()));
+                level.put("tiles", tiles);
+                level.put("objects", objects);
 
+                //finished adding objects, now to save the file
+                FileWriter file = new FileWriter(chooser.getSelectedFile());
+                file.write(level.toJSONString());
+                file.flush();
+                file.close();
 			}
 		} catch (FileNotFoundException e1) {
 			JOptionPane.showMessageDialog(null, "Invalid file!", "error",
 					JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
+
 		}
 	}
 
 	public void loadFile() {
-		SAXBuilder builder = new SAXBuilder();
 		try {
 			JFileChooser chooser = new JFileChooser();
 			File selectedFile;
@@ -250,81 +291,125 @@ public class Controller implements ActionListener, GUIInformation {
 			FileReader reader = null;
 
 			int returnVal = chooser.showOpenDialog(null);
-			Document document;
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				selectedFile = chooser.getSelectedFile();
 				if (selectedFile.canRead() && selectedFile.exists()) {
-					document = (Document) builder.build(selectedFile);
 
-					Element rootNode = document.getRootElement();
+                    JSONParser parser = new JSONParser();
+                    Object o;
+                    try {
+                        FileReader f = new FileReader(selectedFile.getAbsoluteFile());
+                        o = parser.parse(f);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        o = null;
+                        System.out.println("File not found!");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        o = null;
+                        System.out.println("ParseException");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        o = null;
+                        System.out.println("IOException");
+                    }
+                    JSONObject level = (JSONObject) o;//new JSONObject(filePath);
 
-					List sizeList = rootNode.getChildren("size");
-					Element sizeElem = (Element) sizeList.get(0);
-					int height = Integer.parseInt(sizeElem
-							.getChildText("height"));
-					int width = Integer
-							.parseInt(sizeElem.getChildText("width"));
-					updateGrid(width, height);
+                    int height = ((Long) level.get("height")).intValue();
+                    int width  = ((Long) level.get("width")).intValue();
 
-					List rows = rootNode.getChildren("row");
-					for (int y = 0; y < rows.size(); y++) {
-						Element cellsElem = (Element) rows.get(y);
-						List cells = cellsElem.getChildren("cell");
+                    updateGrid(width, height);
 
-						for (int x = 0; x < cells.size(); x++) {
-							Element cell = (Element) cells.get(x);
-							String cellValue = cell.getText();
+                    //initialize all tiles to be empty
+                    for (int y=0; y < height; y++){
+                        for (int x=0; x < width; x++){
+                            model.setTile(x, y, '0');
+                        }
+                    }
 
+                    //populate the tile types
+                    JSONArray tiles = (JSONArray) level.get("tiles");
+                    if (tiles != null){
+                        Iterator<JSONObject> iterator = tiles.iterator();
+                        int i = 0;
+                        while (iterator.hasNext()) {
 
-							String item = cell.getAttributeValue("item");
-							String enemy = cell.getAttributeValue("enemy");
-							char tileNr;
-							if(item != null){
-								if(item.equals("healthPack"))
-									tileNr = '7';
-								else if(item.equals("laserPistol"))
-									tileNr = '8';
-								else if(item.equals("rocketLauncher"))
-									tileNr = '9';
-								else if(item.equals("shotgun"))
-									tileNr = ':';
-								else
-									tileNr = ';';
-							}
-							else if(enemy != null){
-								if(enemy.equals("ballbot"))
-									tileNr = '<';
-								else if(enemy.equals("bucketbot"))
-									tileNr = '=';
-								else if(enemy.equals("rocketbot"))
-									tileNr = '>';
-								else if(enemy.equals("spikes"))
-									tileNr = '?';
-								else
-									tileNr = '@';
-							}
-							else{
-								if (cellValue.equals("AirTile"))
-									tileNr = '0';
-								else if (cellValue.equals("GroundTile"))
-									tileNr = '1';
-								else if (cellValue.equals("GroundTile2"))
-									tileNr = '2';
-								else if (cellValue.equals("GroundTile3"))
-									tileNr = '3';
-								else if (cellValue.equals("GroundTile4"))
-									tileNr = '4';
-								else if (cellValue.equals("EndTile"))
-									tileNr = '5';
-								else if (cellValue.equals("SpawnTile"))
-									tileNr = '6';
-								else
-									tileNr = '0';
-							}
-							model.setTile(x, y, tileNr);
-							grid.redrawGrid();
-						}
-					}
+                            JSONObject curTile = iterator.next();
+                            i += 1;
+
+                            //get coordinates of tile
+                            int x = ((Long) curTile.get("x")).intValue();
+                            int y = ((Long) curTile.get("y")).intValue();
+
+                            char tileNr;
+
+                            String s = (String) curTile.get("type");
+                             //find the type of this tile
+                            if (s.equals("obstacle")) {
+                                tileNr = '3';
+                            } else if (s.equals("start")) {
+                                tileNr = '1';
+                            } else if (s.equals("goal")) {
+                                tileNr = '2';
+                            } else if (s.equals("normal")) {
+                                tileNr = '0';
+                            } else {
+                                tileNr = '0';
+                            }
+
+                            //got everything, set the tile
+                            model.setTile(x, y, tileNr);
+                            grid.redrawGrid();
+                        }
+                    }
+
+                    //now to populate objects (enemies/dynamic tiles)
+                    JSONArray objects = (JSONArray) level.get("objects");
+                    if (objects != null) {
+                        for (int j = 1; j < objects.size()+1; j++) {
+                            JSONObject curObj = (JSONObject) objects.get(j-1);
+                            //get where enemy starts
+                            int x = ((Long) curObj.get("x")).intValue();
+                            int y = ((Long) curObj.get("y")).intValue();
+
+                            char tileNr;
+
+                            //get path for object
+
+                            //TODO: add path parsing once Austin finishes
+                            String pathString = ((String) curObj.get("path")).toUpperCase();
+//                            int[] path = new int[pathString.length()];
+//                            for (int i=0; i<pathString.length(); i++){
+//                                char c = pathString.charAt(i);
+//                                switch (c){
+//                                    case 'U': path[i] = CONTROL_MOVE_UP;    break;
+//                                    case 'D': path[i] = CONTROL_MOVE_DOWN;  break;
+//                                    case 'L': path[i] = CONTROL_MOVE_LEFT;  break;
+//                                    case 'R': path[i] = CONTROL_MOVE_RIGHT; break;
+//                                    case 'N': path[i] = CONTROL_NO_ACTION;  break;
+//                                    case 'S': path[i] = CONTROL_SHOOT;      break;
+//                                    default: System.out.println("unrecognized character '"+c+"'");
+//                                }
+//                            }
+
+                            String type = (String) curObj.get("type");
+                            if (type.equals("skeleton")){
+                                tileNr = '6';
+                            } else if (type.equals("slime")){
+                                tileNr = '5';
+                            } else if (type.equals("platform")){
+                                tileNr = '4';
+                            } else {
+                                System.out.println("Invalid type '"+type+"' of object #"+(j+1));
+                                tileNr = '0';
+                            }
+
+                            model.setTile(x, y, tileNr);
+                            model.setPath(x, y, pathString);
+                            grid.redrawGrid();
+                        }
+                    }
+
 				}
 			}
 		} catch (Exception e) {
@@ -379,4 +464,21 @@ public class Controller implements ActionListener, GUIInformation {
 	public Tile getSelectedTile() {
 		return selectedTile;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getCurrentPathString() {
+		return currentPathString;
+	}
+	
+	public void enablePathText(){
+		this.view.pathText.setEnabled(true);
+	}
+	
+	public void disablePathText(){
+		this.view.pathText.setEnabled(false);
+	}
+
 }

@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
+import editor.controllers.InputController;
 
 /**
  * Primary view class for the game, abstracting the basic graphics calls.
@@ -39,6 +40,7 @@ import com.badlogic.gdx.math.Vector2;
 public class GameCanvas {
 
 	public int tileSize = 100;
+    private int tileSpacing = 2;
 	private int xOffset = 0;
 	private int yOffset = 0;
 	private int bWidth = 1;
@@ -520,17 +522,33 @@ public class GameCanvas {
 	}
 
 	public Vector2 boardToScreen(float x, float y) {
-		return new Vector2(x * (tileSize + 2) + xOffset, y * (tileSize + 2) + yOffset);
+		return new Vector2(x * (tileSize + tileSpacing) + xOffset, y * (tileSize + tileSpacing) + yOffset);
 	}
+
+    public Vector2 screenToBoard(Vector2 mouse){
+        int row = (int) Math.floor((mouse.x- xOffset) / (tileSize+tileSpacing));
+        row = Math.max(0, row);
+        row = Math.min(row, bWidth-1);
+
+        int col = (int) Math.floor((mouse.y- yOffset) / (tileSize+tileSpacing));
+        col = Math.max(0, col);
+        col = Math.min(col, bHeight-1);
+
+        return new Vector2(row, col);
+    }
 
 	/* Takes in width and height of board and appropriately sets offsets. */
 	public void setOffsets(int boardW, int boardH) {
 		this.bWidth = boardW;
 		this.bHeight = boardH;
 		//TODO: Play with these scaling constants
-		tileSize = (this.getWidth() * 2 / 3) / boardW;
-		float startX = getWidth() / 2 - (tileSize * boardW) / 2;
-		float startY = getHeight() / 2 - (tileSize * boardH) / 2 - 50;
+        if (boardW > boardH) {
+            tileSize = (this.getWidth() * 3 / 5) / boardW;
+        }else{
+            tileSize = (this.getHeight() * 4/5) / boardH;
+        }
+		float startX = (getWidth()*2/3) / 2 - (tileSize * boardW) / 2;
+		float startY = getHeight() / 2 - (tileSize * boardH) / 2;
 		xOffset = (int)startX;
 		yOffset = (int)startY;
 		TICKER_SPACING = boardW * getWidth() / 500;

@@ -537,8 +537,8 @@ public class GameCanvas {
 	    yOffset = (int)startY;
         TICKER_SPACING = boardW*getWidth()/500;
         TICK_SQUARE_SIZE = (int)((float)boardH*getHeight()/64);
-        INDICATOR_HEIGHT = (int)((float)TICK_SQUARE_SIZE*1.26);
-        INDICATOR_WIDTH = (int)((float)TICK_SQUARE_SIZE*3.652);
+        INDICATOR_HEIGHT = (int)((float)TICK_SQUARE_SIZE);
+        INDICATOR_WIDTH = (int)((float)TICK_SQUARE_SIZE);
         HP_SIZE = (int)((float)TICK_SQUARE_SIZE*0.75);
     }
 

@@ -1,5 +1,5 @@
 {
-  "width": 15,
+  "width": 13,
   "height": 7,
   "tiles": [
       { "x": 0, "y": 3, "type": "start"},
@@ -18,8 +18,8 @@
       { "x": 9, "y": 3, "type": "obstacle"}, 
       { "x": 10, "y": 3, "type": "obstacle"}, 
       { "x": 12, "y": 2, "type": "obstacle"}, 
-      { "x": 12, "y": 3, "type": "goal"}, 
-      { "x": 12, "y": 4, "type": "obstacle"}
+      { "x": 12, "y": 4, "type": "obstacle"}, 
+      { "x": 12, "y": 3, "type": "goal"}
   ],
   "player": {"x": 0, "y": 3},
   "objects": [

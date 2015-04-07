@@ -156,6 +156,21 @@ public class GridCamera implements Camera {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void setPath(int x, int y, String path) {
+		model.setPath(camera.x + x, camera.y + y, path);
+		// firePropertyChange("changedTile", new Point(x, y));		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getPath(int x, int y) {
+		return model.getPath(camera.x + x, camera.y + y);	
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	public Rectangle getCamera() {
 		return new Rectangle(camera);
 	}
@@ -206,4 +221,6 @@ public class GridCamera implements Camera {
 	private void firePropertyChange(String propertyName, Object newValue) {
 		changeSupport.firePropertyChange(propertyName, false, newValue);
 	}
+
+	
 }

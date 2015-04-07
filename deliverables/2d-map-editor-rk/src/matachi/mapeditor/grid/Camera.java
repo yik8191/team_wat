@@ -65,6 +65,23 @@ public interface Camera {
 	public char getTile(int x, int y);
 	
 	/**
+	 * Set the string of a tile.
+	 * @param x The X-coordinate.
+	 * @param y The Y-coordinate.
+	 * @return char The string of the tile - a movement sequence.
+	 */
+	public void setPath(int x, int y, String path);
+	
+	/**
+	 * The string of a tile.
+	 * @param x The X-coordinate.
+	 * @param y The Y-coordinate.
+	 * @return char The string of the tile - a movement sequence.
+	 */
+	public String getPath(int x, int y);
+
+	
+	/**
 	 * Returns a copy of the camera.
 	 * @return Rectangle A copy of the camera.
 	 */

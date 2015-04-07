@@ -16,4 +16,14 @@ public interface GUIInformation {
 	 * @return Tile The selected tile.
 	 */
 	public Tile getSelectedTile();
+	
+	/**
+	 * Get the path that is given.
+	 * @return String The current path string on the right.
+	 */
+	public String getCurrentPathString();
+	
+	public void enablePathText();
+	
+	public void disablePathText();
 }

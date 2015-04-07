@@ -8,6 +8,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import matachi.mapeditor.editor.Constants;
 import matachi.mapeditor.editor.GUIInformation;
 
@@ -71,15 +74,19 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 		lastClickedTileY = e.getY() / Constants.TILE_HEIGHT;
 		if (ifLeftMouseButtonPressed(e)) {
 			updateTile(lastClickedTileX, lastClickedTileY);
-			// if the tile clicked was an enemy
-			char character = guiInformation.getSelectedTile().getCharacter();
-			System.out.println(character);
-			if (guiInformation.getSelectedTile().getCharacter() == '<'){
-				System.out.println("Need to display the direction inputs");
-			}
-			// launch a sidebar with text input available
+		}
+		// if the tile clicked was an enemy
+		char character = guiInformation.getSelectedTile().getCharacter();
+		System.out.println(character); // '5' for enemy
+		if (guiInformation.getSelectedTile().getCharacter() == '5'){
+			System.out.println("Need to display the direction inputs");
+			// enable sidebar for text input
+			guiInformation.enablePathText();
+		} else {
+			guiInformation.disablePathText();
 		}
 	}
+	
 
 	private boolean ifLeftMouseButtonPressed(MouseEvent e) {
 		return (e.getModifiers() & MouseEvent.BUTTON1_MASK) == MouseEvent.BUTTON1_MASK;
@@ -96,6 +103,18 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 			camera.setTile(xCor, yCor, guiInformation.getSelectedTile().getCharacter());
 		}
 	}
+	
+	private void updatePath(int xCor, int yCor) {
+		xCor = Math.max(0, Math.min(xCor, Constants.GRID_WIDTH-1));
+		yCor = Math.max(0, Math.min(yCor, Constants.GRID_HEIGHT-1));
+		System.out.println("Getting path string: " + guiInformation.getCurrentPathString());
+		if (guiInformation.getCurrentPathString() != null) {
+			camera.setPath(xCor, yCor, guiInformation.getCurrentPathString());
+			System.out.println("path of object updated");
+		}
+	}
+	
+	
 
 	private void updateCamera(int newTileX, int newTileY) {
 		if (newTileX != lastClickedTileX) {
@@ -156,6 +175,8 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 			camera.moveCamera(GridCamera.SOUTH);
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			camera.moveCamera(GridCamera.WEST);
+		} else if (e.getKeyCode() == KeyEvent.VK_S){
+			updatePath(lastClickedTileX, lastClickedTileY);
 		}
 	}
 

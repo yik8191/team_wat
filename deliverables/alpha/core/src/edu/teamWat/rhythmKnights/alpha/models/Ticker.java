@@ -80,7 +80,7 @@ public class Ticker {
 	            loc.x = startX + ((RhythmController.getCurrentTime() % tickerActions.length - 0.5f) * width);
                 // draw the indicator for current action
                 spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
-                canvas.draw(spriteIndicator, loc.x-TICK_SQUARE_SIZE*1.34f, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+                canvas.draw(spriteIndicator, loc.x-(TICK_SQUARE_SIZE/8), loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
             }
         }
 	}
