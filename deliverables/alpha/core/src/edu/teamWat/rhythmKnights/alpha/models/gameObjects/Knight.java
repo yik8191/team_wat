@@ -20,15 +20,17 @@ public class Knight extends GameObject {
     public static final String KNIGHT_NORMAL_FILE = "images/glowing.png";
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
+    public static final String KNIGHT_HP_ICON = "images/hpicon.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
     public static Texture knightHpEmptyTexture;
+    public static Texture knightHpIconTexture;
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
     protected int knightHP;
-    protected int INITIAL_HP = 5;
+    protected int INITIAL_HP = 10;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -142,23 +144,27 @@ public class Knight extends GameObject {
 	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
+        // Drawing the hp icon
+        FilmStrip spriteHpIcon = new FilmStrip(knightHpIconTexture, 1, 1);
+        canvas.draw(spriteHpIcon, (int) (HP_SIZE - HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, HP_SIZE, HP_SIZE);
+
         // Drawing code for the Knight HP
         HP_SIZE = canvas.HP_SIZE;
         // Draw remaining hearts
         if (this.knightHP == 0) {
             spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
             for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                canvas.draw(spriteHP, HP_SIZE + j* HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
+                canvas.draw(spriteHP, (int) (HP_SIZE + j* HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
             }
         }
 
         spriteHP = new FilmStrip(knightHpFullTexture, 1, 1);
         for (int i = 0; i < this.knightHP; i++) {
-            canvas.draw(spriteHP, HP_SIZE + i*HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
+            canvas.draw(spriteHP, (int) (HP_SIZE + i*HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
                 for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                    canvas.draw(spriteHP, HP_SIZE + (j+1+i)*HP_SIZE, canvas.getHeight() - 1.5f*HP_SIZE, HP_SIZE, HP_SIZE);
+                    canvas.draw(spriteHP, (int) (HP_SIZE + (j+1+i)*HP_SIZE/1.5), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
                 }
             }
         }
@@ -178,6 +184,7 @@ public class Knight extends GameObject {
         manager.load(KNIGHT_DASH_FILE, Texture.class);
         manager.load(KNIGHT_HP_FULL_FILE, Texture.class);
         manager.load(KNIGHT_HP_EMPTY_FILE, Texture.class);
+        manager.load(KNIGHT_HP_ICON, Texture.class);
     }
 
     /**
@@ -223,6 +230,14 @@ public class Knight extends GameObject {
         } else {
             knightHpEmptyTexture = null; //Failed to load
         }
+
+        // load hp icon
+        if (manager.isLoaded(KNIGHT_HP_ICON)) {
+            knightHpIconTexture = manager.get(KNIGHT_HP_ICON, Texture.class);
+            knightHpIconTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            knightHpIconTexture = null; //Failed to load
+        }
     }
 
     /**
@@ -249,6 +264,10 @@ public class Knight extends GameObject {
             knightHpEmptyTexture = null;
             manager.unload(KNIGHT_HP_EMPTY_FILE);
         }
+        if (knightHpIconTexture != null) {
+            knightHpIconTexture = null;
+            manager.unload(KNIGHT_HP_ICON);
+        }
     }
 
     /**
@@ -257,8 +276,8 @@ public class Knight extends GameObject {
      * GameplayController will handle invulnerability
      */
 	public void takeDamage() {
-        this.knightHP --;
-        if (this.knightHP == 0) {
+        this.knightHP -= 3;
+        if (this.knightHP <= 0) {
             this.isAlive = false;
         }
         curTime = animDelay;
@@ -268,8 +287,9 @@ public class Knight extends GameObject {
 	}
 
     public void showSuccess() {
-        //this.state = KnightState.MOVING;
-        // not yet implemented due to lack of sprites
+        if (this.knightHP < INITIAL_HP) {
+            this.knightHP ++;
+        }
         curFrame = SUCCESS_START;
         this.state = KnightState.MOVING;
     }
