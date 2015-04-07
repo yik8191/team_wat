@@ -54,14 +54,14 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
 	private static String BKGD_FILE = "images/background.png";
-	private static String LVL1_FILE = "images/level1.png";
+	// private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture background;
 	/** background image for level 1 */
-	private static Texture level1;
+	// private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
 
@@ -81,7 +81,6 @@ public class GameMode implements Screen{
 	public static void PreLoadContent(AssetManager manager){
 		// Load the background
 		manager.load(BKGD_FILE, Texture.class);
-		manager.load(LVL1_FILE, Texture.class);
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -120,13 +119,6 @@ public class GameMode implements Screen{
 		} else {
 			displayFont = null;
 		}
-		
-		if (manager.isLoaded(LVL1_FILE)) {
-			level1 = manager.get(LVL1_FILE, Texture.class);
-			level1.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		} else {
-			displayFont = null;
-		}
 
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
@@ -157,10 +149,6 @@ public class GameMode implements Screen{
 		if (background != null) {
 			background = null;
 			manager.unload(BKGD_FILE);
-		}
-		if (level1 != null) {
-			level1 = null;
-			manager.unload(LVL1_FILE);
 		}
 		if (displayFont != null) {
 			displayFont = null;

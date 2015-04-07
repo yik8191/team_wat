@@ -60,15 +60,19 @@ rhUpper = \relative c'' {
   b8 b b d d d  e4 d c   |  % bar 1
   b8 b b d8 d d a4 g fis |  % bar 2
   b8 b d d d b e e g g fis e | % bar 3
-  e8 d c b c d a4 g fis | % bar 4
+  e8 d c b c g a4 fis dis| % bar 4
   e8 fis g a b c b4 e,4 fis4 | % bar 5
   e8 fis g a b c b2. | % bar 6
-  e8 d c b c d c4 e,4 fis4 | % bar 7
+  e8 d c b c d c4 b4 a4 | % bar 7
   g8 fis e fis g fis dis4.~ dis4 dis8 | % bar 8
   e8 fis e g fis e a b c b g fis | % bar 9
-  e8 fis e g fis e a e' d c b c | % bar 11
-  d g fis a fis c b c b a b c | % bar 12
-  
+  e8 fis e g fis e a e' d c b c | % bar 10
+  b g' fis a fis c a fis' e fis b, a | % bar 11
+  g e' d e c a fis d' c b g e  | % bar 12
+  | % bar 13
+  | % bar 14
+  | % bar 15
+  | % bar 16
 }
 rhLower = \relative c' {
   \voiceTwo

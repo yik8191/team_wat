@@ -1,5 +1,5 @@
 {
-  "width": 13,
+  "width": 15,
   "height": 7,
   "tiles": [
       { "x": 0, "y": 3, "type": "start"},
