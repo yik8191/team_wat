@@ -30,13 +30,15 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import org.json.*;
+
 /**
  * Controller of the application.
- * 
+ *
  * @author Daniel "MaTachi" Jonsson
  * @version 1
  * @since v0.0.5
- * 
+ *
  */
 public class Controller implements ActionListener, GUIInformation {
 
@@ -71,7 +73,7 @@ public class Controller implements ActionListener, GUIInformation {
 				Constants.GRID_HEIGHT);
 
 		grid = new GridView(this, camera, tiles); // Every tile is
-													// 30x30 pixels
+		// 30x30 pixels
 
 		this.view = new View(this, camera, grid, tiles);
 	}
@@ -171,7 +173,7 @@ public class Controller implements ActionListener, GUIInformation {
 					for (int x = 0; x < width; x++) {
 						char tileChar = model.getTile(x,y);
 						String item = "";
-						String enemy = ""; 
+						String enemy = "";
 						String type = "AirTile";
 
 						if (tileChar == '1')
@@ -212,13 +214,22 @@ public class Controller implements ActionListener, GUIInformation {
 							e.setAttribute(new Attribute("item",item));
 						if(!enemy.equals(""))
 							e.setAttribute(new Attribute("enemy",enemy));
-						
+
 						row.addContent(e.setText(type));
 					}
 					doc.getRootElement().addContent(row);
 				}
 				XMLOutputter xmlOutput = new XMLOutputter();
 				xmlOutput.setFormat(Format.getPrettyFormat());
+
+				// To convert to JSON format
+				String convertMe = xmlOutput.outputString(doc);
+				try {
+					JSONObject toExport = XML.toJSONObject(convertMe);
+					String test = toExport.toString();
+					System.out.println(test);
+				} catch (JSONException e) {}
+
 				xmlOutput
 						.output(doc, new FileWriter(chooser.getSelectedFile()));
 
@@ -263,8 +274,8 @@ public class Controller implements ActionListener, GUIInformation {
 						for (int x = 0; x < cells.size(); x++) {
 							Element cell = (Element) cells.get(x);
 							String cellValue = cell.getText();
-							
-							
+
+
 							String item = cell.getAttributeValue("item");
 							String enemy = cell.getAttributeValue("enemy");
 							char tileNr;
