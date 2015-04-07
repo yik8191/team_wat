@@ -65,6 +65,7 @@ public class View {
 			JButton button = new JButton();
 			button.setPreferredSize(new Dimension(Constants.TILE_WIDTH,
 					Constants.TILE_HEIGHT));
+
 			button.setIcon(t.getIcon());
 			button.addActionListener(controller);
 			button.setActionCommand(Character.toString(t.getCharacter()));

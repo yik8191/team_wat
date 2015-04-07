@@ -9,8 +9,8 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class Enemy extends GameObject{
 
-    public static final String SKELETON_FILE = "images/skeleton.png";
-    public static final String SLIME_FILE = "images/slime.png";
+    public static final String SKELETON_FILE = "images/skeletonv2.png";
+    public static final String SLIME_FILE = "images/slimeside1.png";
     public static Texture skeletonTexture;
     public static Texture slimeTexture;
     private FilmStrip sprite;

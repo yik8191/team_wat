@@ -57,38 +57,38 @@ public class PlayerController implements InputController, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 			case Keys.A:
-				addKeyEvent(CONTROL_MOVE_LEFT, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getPosition()));
 				break;
 			case Keys.D:
-				addKeyEvent(CONTROL_MOVE_RIGHT, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getPosition()));
 				break;
 			case Keys.W:
-				addKeyEvent(CONTROL_MOVE_UP, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getPosition()));
 				break;
 			case Keys.S:
-				addKeyEvent(CONTROL_MOVE_DOWN, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getPosition()));
 				break;
 			case Keys.LEFT:
-				addKeyEvent(CONTROL_MOVE_LEFT, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getPosition()));
 				break;
 			case Keys.RIGHT:
-				addKeyEvent(CONTROL_MOVE_RIGHT, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getPosition()));
 				break;
 			case Keys.UP:
-				addKeyEvent(CONTROL_MOVE_UP, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getPosition()));
 				break;
 			case Keys.DOWN:
-				addKeyEvent(CONTROL_MOVE_DOWN, (long)(RhythmController.getPosition()));
+				addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getPosition()));
 				break;
 			case Keys.R:
 				didReset = true;
 				break;
 		}
-		System.out.println(RhythmController.toBeatTime((long)(RhythmController.getPosition())));
+		RhythmController.getPosition();
 		return true;
 	}
 
-	public synchronized void addKeyEvent(int code, long time) {
+	public synchronized void addKeyEvent(int code, float time) {
 		if (numKeyEvents < 5) {
 			keyEvents[numKeyEvents].code = code;
 			keyEvents[numKeyEvents].time = time;
@@ -133,6 +133,6 @@ public class PlayerController implements InputController, InputProcessor {
 
 	public class KeyEvent {
 		int code = 0;
-		long time = 0;
+		float time = 0;
 	}
 }

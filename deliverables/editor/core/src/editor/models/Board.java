@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import editor.controllers.InputController;
 import editor.views.GameCanvas;
 
 import java.awt.*;
@@ -63,6 +64,8 @@ public class Board {
     }
 
     public void draw(GameCanvas canvas){
+        Vector2 coords = canvas.screenToBoard(InputController.getMouseCoords(canvas.getHeight()));
+        setTile((int) coords.x, (int) coords.y, Tile.tileType.HIGHLIGHT);
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
                 Vector2 loc = canvas.boardToScreen(i,j);
@@ -70,6 +73,9 @@ public class Board {
                 float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
                 //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                if (tiles[i][j].type == Tile.tileType.HIGHLIGHT){
+                    setTile(i,j, Tile.tileType.NORMAL);
+                }
             }
         }
     }
@@ -185,7 +191,8 @@ public class Board {
             GOAL,
             START,
             OBSTACLE,
-            NORMAL
+            NORMAL,
+            HIGHLIGHT
         }
 
         public Tile() {
@@ -200,10 +207,13 @@ public class Board {
             }else if (this.type == tileType.OBSTACLE){
                 //dark gray
                 col = Color.DARK_GRAY;
-            }else if (this.type == tileType.GOAL){
+            }else if (this.type == tileType.GOAL) {
                 //bright green
-                col = new Color(27f/255f, 253f/255f,34f/255f, 1);
+                col = new Color(27f / 255f, 253f / 255f, 34f / 255f, 1);
                 col = Color.GREEN;
+            }else if (this.type == tileType.HIGHLIGHT){
+                //bright red
+                col = Color.RED;
             }else {
                 col = randCol;
             }
