@@ -42,14 +42,14 @@ public class Knight extends GameObject {
 
     // Constants for reference to the spritesheet
     private int IDLE_START = 0;
-    private int IDLE_END = 0;
-    private int HURT_START = 6;
-    private int HURT_END = 11;
-    private int SUCCESS_START = 3;
-    private int SUCCESS_END = 5;
+    private int IDLE_END = 4;
+    private int HURT_START = 5;
+    private int HURT_END = 9;
+    private int SUCCESS_START = 0;
+    private int SUCCESS_END = 0;
     private int SPRITE_ROWS = 2;
-    private int SPRITE_COLS = 6;
-    private int SPRITE_TOT = 12;
+    private int SPRITE_COLS = 5;
+    private int SPRITE_TOT = 10;
 
 	private boolean isInvulnerable;
 
