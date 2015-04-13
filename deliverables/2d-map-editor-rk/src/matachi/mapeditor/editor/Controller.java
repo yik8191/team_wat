@@ -104,11 +104,8 @@ public class Controller implements ActionListener, GUIInformation {
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWidth, gridHeight);
-		} else if (e.getActionCommand().equals("pathupdate")) {
-			// need to press Enter for this to happen...
-			currentPathString = view.getPath();
-			System.out.println(currentPathString);
-		}
+		} 
+
 	}
 
 	public void updateGrid(int width, int height) {
@@ -203,7 +200,7 @@ public class Controller implements ActionListener, GUIInformation {
 				for (int y = 0; y < height; y++) {
 					for (int x = 0; x < width; x++) {
 						char tileChar = model.getTile(x,y);
-						String path = "UDLR"; //model.getPath(x,y) un-hard code later
+						String path = model.getPath(x,y); // un-hard code later
 						String tileType = "";
                         String object = "";
 

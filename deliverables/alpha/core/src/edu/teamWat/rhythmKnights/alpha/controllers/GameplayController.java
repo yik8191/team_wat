@@ -239,7 +239,7 @@ public class GameplayController {
 					vel.y = -1;
 					break;
 			}
-			((AIController)controls[i]).nextAction();
+			((EnemyController)controls[i]).nextAction();
 			gameObjects.get(i).setVelocity(vel);
 		}
 	}

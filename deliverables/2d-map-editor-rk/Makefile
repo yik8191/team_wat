@@ -1,4 +1,4 @@
-CLASSPATH = .:./lib/jdom-1.1.3.jar
+CLASSPATH = .:./lib/jdom-1.1.3.jar:./lib/json-simple-1.1.1.jar
 TARGET = src/matachi/mapeditor/Main
 # Java Compiler
 JC = javac
@@ -12,3 +12,6 @@ run:
 
 clean:
 	rm -f *~ *.class
+
+jar:
+	jar cvf rk-lvl-editor.jar bin lib data

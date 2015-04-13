@@ -8,7 +8,7 @@ import edu.teamWat.rhythmKnights.alpha.models.gameObjects.GameObject;
 
 
 
-public class AIController implements InputController{
+public class EnemyController implements InputController{
 
 	// Instance Attributes
 	/** The GameObject being controlled by this AIController, typically 
@@ -26,7 +26,7 @@ public class AIController implements InputController{
 	/** The number of ticks since we started this controller. Use this 
 	 * 	to control how often enemies move*/
 	private long ticks;
-	public AIController(int id, GameObjectList gameobjs, int[] path) {
+	public EnemyController(int id, GameObjectList gameobjs, int[] path) {
 		this.enemy = gameobjs.get(id);
         this.curPathPlace = 0;
         this.path = path;

@@ -60,7 +60,7 @@ rhUpper = \relative c'' {
   b8 b b d d d  e4 d c   |  % bar 1
   b8 b b d8 d d a4 g fis |  % bar 2
   b8 b d d d b e e g g fis e | % bar 3
-  e8 d c b c g a4 fis dis| % bar 4
+  e8 d c b c d a4 fis dis| % bar 4
   e8 fis g a b c b4 e,4 fis4 | % bar 5
   e8 fis g a b c b2. | % bar 6
   e8 d c b c d c4 b4 a4 | % bar 7
@@ -69,10 +69,10 @@ rhUpper = \relative c'' {
   e8 fis e g fis e a e' d c b c | % bar 10
   b g' fis a fis c a fis' e fis b, a | % bar 11
   g e' d e c a fis d' c b g e  | % bar 12
-  | % bar 13
-  | % bar 14
-  | % bar 15
-  | % bar 16
+  c e a c b a c, e a c a fis | % bar 13
+  b, e g b g fis b g fis b g e | % bar 14
+  a g fis e fis g d c b a b c | % bar 15
+  b e d c b a g b d g a c | % bar 16
 }
 rhLower = \relative c' {
   \voiceTwo
@@ -139,12 +139,12 @@ drumContents = {
   \unfoldRepeats \articulate
     <<
       \new StaffGroup = "horns" <<
-	\new Staff = "trumpet" \trumpet
-	\new Staff = "altosax" \altoSax
+	\new Staff = "trumpet" \repeat volta 5 \trumpet
+	\new Staff = "altosax" \repeat volta 5 \altoSax
       >>
       \new StaffGroup = "rhythm" <<
-	\new PianoStaff = "piano" \piano
-	\new DrumStaff \drumContents
+	\new PianoStaff = "piano" \repeat volta 5 \piano
+	\new DrumStaff \repeat volta 5 \drumContents
       >>
     >>
   

@@ -4,10 +4,13 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.badlogic.gdx.files.FileHandle;
+
 import edu.teamWat.rhythmKnights.alpha.controllers.*;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,13 +23,13 @@ public class JSONReader {
 
     private static JSONObject level = null;
 
-    public static Board parseFile(String filePath) {
+    public static Board parseFile(String string) {
         //get the stuff from the file
         JSONParser parser = new JSONParser();
-
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         Object o;
         try {
-            FileReader f = new FileReader(filePath);
+            FileReader f = new FileReader(string);
             o = parser.parse(f);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -138,7 +141,7 @@ public class JSONReader {
                 } else {
                     System.out.println("Invalid type '"+type+"' of object #"+(j+1));
                 }
-                controls[j] = new AIController(j, gameObjects, path);
+                controls[j] = new EnemyController(j, gameObjects, path);
             }
         }else{
             System.out.println("No objects found! did you mean to do that?");

@@ -4,7 +4,7 @@
  * This is the primary class file for running the game. This class follows a
  * model-view-controller pattern fairly strictly.
  *
- * Author: Walker M. White
+ * Author: Walker M. White, modified TeamWat
  * Based on original Optimization Lab by Don Holden, 2007
  * LibGDX version, 2/2/2015
  * Modified: Gagik Hakobyan

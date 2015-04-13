@@ -107,6 +107,7 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 	private void updatePath(int xCor, int yCor) {
 		xCor = Math.max(0, Math.min(xCor, Constants.GRID_WIDTH-1));
 		yCor = Math.max(0, Math.min(yCor, Constants.GRID_HEIGHT-1));
+		System.out.printf("Cursor was last at, %d, %d", xCor, yCor);
 		System.out.println("Getting path string: " + guiInformation.getCurrentPathString());
 		if (guiInformation.getCurrentPathString() != null) {
 			camera.setPath(xCor, yCor, guiInformation.getCurrentPathString());
@@ -177,6 +178,7 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 			camera.moveCamera(GridCamera.WEST);
 		} else if (e.getKeyCode() == KeyEvent.VK_S){
 			updatePath(lastClickedTileX, lastClickedTileY);
+			guiInformation.disablePathText();
 		}
 	}
 
