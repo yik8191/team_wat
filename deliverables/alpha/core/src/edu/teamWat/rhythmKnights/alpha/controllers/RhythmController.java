@@ -22,6 +22,7 @@ public class RhythmController {
 	public static final String MUSIC_FILE = "music/game2longer.ogg";
 	public static final String HIT_FILE = "sounds/hit.ogg";
 	public static final String DMG_FILE = "sounds/dmg.ogg";
+	public static final String DASH_FILE = "sounds/hit.ogg";
 
 	/** Have we crossed final action threshold? */
 	private static boolean beatComplete;
@@ -37,12 +38,14 @@ public class RhythmController {
 	/** Sound effects */
 	protected static Sound hitSound;
 	protected static Sound dmgSound;
+	protected static Sound dashSound;
 
 
 	public static void PreloadContent(AssetManager manager) {
 		manager.load(MUSIC_FILE, Music.class);
 		manager.load(HIT_FILE, Sound.class);
 		manager.load(DMG_FILE, Sound.class);
+		manager.load(DASH_FILE, Sound.class);
 	}
 
 	public static void LoadContent(AssetManager manager) {
@@ -64,6 +67,12 @@ public class RhythmController {
 		} else {
 			dmgSound = null;	// Failed to load
 		}
+
+		if (manager.isLoaded(DASH_FILE)) {
+			dashSound = manager.get(DASH_FILE, Sound.class);
+		} else {
+			dashSound = null;	// Failed to load
+		}
 	}
 
 	public static void UnloadContent(AssetManager manager) {
@@ -80,6 +89,11 @@ public class RhythmController {
 		if (dmgSound != null) {
 			dmgSound = null;
 			manager.unload(DMG_FILE);
+		}
+
+		if (dashSound != null) {
+			dashSound = null;
+			manager.unload(DASH_FILE);
 		}
 	}
 
@@ -148,7 +162,7 @@ public class RhythmController {
 	}
 
 	public static float getPosition() {
-		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
+		//System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
 		return music.getPosition();
 	}
 
@@ -158,5 +172,9 @@ public class RhythmController {
 
 	public static void playDamage() {
 		dmgSound.play();
+	}
+
+	public static void playDash() {
+		dashSound.play();
 	}
 }
