@@ -41,6 +41,9 @@ public class View {
 
 	private JTextField txtWidth;
 	private JTextField txtHeight;
+	public JTextField pathText;
+	
+	
 
 	/**
 	 * Constructs the View.
@@ -65,6 +68,7 @@ public class View {
 			JButton button = new JButton();
 			button.setPreferredSize(new Dimension(Constants.TILE_WIDTH,
 					Constants.TILE_HEIGHT));
+
 			button.setIcon(t.getIcon());
 			button.addActionListener(controller);
 			button.setActionCommand(Character.toString(t.getCharacter()));
@@ -76,6 +80,14 @@ public class View {
 		// showGridButton.addActionListener(controller);
 		// showGridButton.setActionCommand("flipGrid");
 
+		/** Create the text field */
+		// test
+		pathText = new JTextField("UDLR", 10);
+		pathText.addActionListener(controller);
+		pathText.setActionCommand("pathupdate");
+		pathText.setEnabled(false);  
+		// end test
+		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(controller);
 		saveButton.setActionCommand("save");
@@ -91,6 +103,8 @@ public class View {
 		// right.add(showGridButton);
 		right.add(saveButton);
 		right.add(loadButton);
+		right.add(pathText);
+		
 
 		/** The top panel, that shows coordinates and stuff. */
 		CameraInformationLabel cameraInformationLabel = new CameraInformationLabel(
@@ -137,6 +151,7 @@ public class View {
 		frame.add(layout);
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 
 	public int getWidth() {
@@ -154,6 +169,13 @@ public class View {
 		}
 		return Integer.parseInt(value);
 	}
+	
+	/** Paths should only contain characters U, D, L, R, N, S. */
+	public String getPath() {
+		String value = pathText.getText();
+		return value;
+	}
+	
 	
 	public void setSize(int width, int height){
 		txtWidth.setText(width+"");

@@ -25,6 +25,7 @@ public class Tile {
 	 * The character that will be used in the map file when saved.
 	 */
 	private char character;
+	
 
 	/**
 	 * The image that will be used in the editor.
@@ -38,7 +39,7 @@ public class Tile {
 	 */
 	public Tile(final String filePath, final char character) {
 		try {
-			image = ImageIO.read(new File(filePath));
+            image = ImageIO.read(new File(filePath));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
@@ -62,7 +63,7 @@ public class Tile {
 	 * @return Icon The tile icon.
 	 */
 	public Icon getIcon() {
-		return new ImageIcon(image);
+        return new ImageIcon(image);
 	}
 	
 	/**

@@ -196,12 +196,12 @@ drumContents = {
   \unfoldRepeats \articulate <<
     <<
       \new StaffGroup = "horns" <<
-	\new Staff = "trumpet" \trumpet
-	\new Staff = "altosax" \altoSax
+	\new Staff = "trumpet" \repeat volta 5 \trumpet
+	\new Staff = "altosax" \repeat volta 5 \altoSax
       >>
       \new StaffGroup = "rhythm" <<
-	\new PianoStaff = "piano" \piano
-	\new DrumStaff \drumContents
+	\new PianoStaff = "piano" \repeat volta 5 \piano
+	\new DrumStaff \repeat volta 5 \drumContents
       >>
     >>
   >>

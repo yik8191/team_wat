@@ -32,6 +32,7 @@ public class GridModel implements Grid {
 	 * Announce changes.
 	 */
 	private PropertyChangeSupport changeSupport;
+	private String[][] strmap;
 	
 	/**
 	 * Constructs the model with number of rows and columns.
@@ -75,6 +76,21 @@ public class GridModel implements Grid {
 		return map[y][x];
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setPath(int x, int y, String path) {
+		strmap[y][x] = path;
+		// firePropertyChange();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getPath(int x, int y) {
+		return strmap[y][x];
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
