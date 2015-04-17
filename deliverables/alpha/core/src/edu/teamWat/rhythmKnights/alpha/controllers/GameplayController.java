@@ -44,10 +44,12 @@ public class GameplayController {
 
 	private boolean gameOver = false;
 
+	float prevBeatTime = 0;
+
 	public GameplayController() {	}
 
 	public void initialize() {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		board = JSONReader.parseFile("levels/level2.json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
@@ -67,6 +69,13 @@ public class GameplayController {
 
 
 	public void update() {
+
+//		float beatTIme = RhythmController.toBeatTime(RhythmController.getPosition());
+//		if ( beatTIme < prevBeatTime){
+//			System.out.println(TimeUtils.millis());
+//		}
+//		prevBeatTime = beatTIme;
+
 		if (playerController.didReset) {
 			playerController.clear();
 			gameOver = true;
@@ -119,15 +128,19 @@ public class GameplayController {
 								switch (event.code) {
 									case InputController.CONTROL_MOVE_RIGHT:
 										vel.x = 1;
+										knight.setDirection(Knight.KnightDirection.RIGHT);
 										break;
 									case InputController.CONTROL_MOVE_UP:
 										vel.y = 1;
+										knight.setDirection(Knight.KnightDirection.BACK);
 										break;
 									case InputController.CONTROL_MOVE_LEFT:
 										vel.x = -1;
+										knight.setDirection(Knight.KnightDirection.LEFT);
 										break;
 									case InputController.CONTROL_MOVE_DOWN:
 										vel.y = -1;
+										knight.setDirection(Knight.KnightDirection.FRONT);
 										break;
 								}
 								playerMoved = true;
@@ -165,20 +178,30 @@ public class GameplayController {
 								switch (event.code) {
 									case InputController.CONTROL_MOVE_RIGHT:
 										vel.x = 2;
+										knight.setDirection(Knight.KnightDirection.RIGHT);
 										break;
 									case InputController.CONTROL_MOVE_UP:
 										vel.y = 2;
+										knight.setDirection(Knight.KnightDirection.BACK);
 										break;
 									case InputController.CONTROL_MOVE_LEFT:
 										vel.x = -2;
+										knight.setDirection(Knight.KnightDirection.LEFT);
 										break;
 									case InputController.CONTROL_MOVE_DOWN:
 										vel.y = -2;
+										knight.setDirection(Knight.KnightDirection.FRONT);
 										break;
 								}
 								playerMoved = true;
 								knight.setVelocity(vel);
 								advanceGameState();
+
+								// Display visual feedback to show success
+								knight.showSuccess();
+								// Set current tile type to SUCCESS
+								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+								RhythmController.playSuccess();
 							}
 						}
 						break;
