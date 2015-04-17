@@ -20,12 +20,16 @@ public class Ticker {
     public static final String DASH_FILE = "images/tickerDash.png";
     public static final String FREEZE_FILE = "images/tickerFreeze.png";
     public static final String FIREBALL_FILE = "images/tickerFireball.png";
-    public static final String INDICATOR_FILE = "images/tickerCurrent.png";
+    public static final String INDICATOR_FILE = "images/knight2.0_idleboop.png";
+    public static final String BLANK_FILE_HL = "images/tickerBlankHighlighted.png";
+    public static final String DASH_FILE_HL = "images/tickerDashHighlighted.png";
     public static Texture blankTexture;
     public static Texture dashTexture;
     public static Texture freezeTexture;
     public static Texture fireballTexture;
     public static Texture indicatorTexture;
+    public static Texture blankHLTexture;
+    public static Texture dashHLTexture;
 
 	private TickerAction[] tickerActions;
 	private int beat;
@@ -58,24 +62,31 @@ public class Ticker {
         float startX = canvas.getWidth()/2 - (TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1))/2;
         FilmStrip sprite;
         FilmStrip spriteIndicator;
+        FilmStrip spriteHL;
         Vector2 loc = new Vector2(0,canvas.getHeight()-(TICK_SQUARE_SIZE + 70));
         for (int i=0; i < tickerActions.length; i++){
 
             if (tickerActions[i] == TickerAction.MOVE){
                 sprite = new FilmStrip(blankTexture, 1, 1);
+                spriteHL = new FilmStrip(blankHLTexture, 1, 1);
             }else if (tickerActions[i] == TickerAction.DASH){
                 sprite = new FilmStrip(dashTexture, 1, 1);
+                spriteHL = new FilmStrip(dashHLTexture, 1, 1);
             }else if (tickerActions[i] == TickerAction.FREEZE){
                 sprite = new FilmStrip(freezeTexture, 1, 1);
+                spriteHL = new FilmStrip(blankHLTexture, 1, 1);
             }else{ //fireball
                 sprite = new FilmStrip(fireballTexture, 1, 1);
+                spriteHL = new FilmStrip(blankHLTexture, 1, 1);
             }
 
             loc.x = startX + (width*i);
 
             canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+
             if (beat == i) {
 
+                canvas.draw(spriteHL, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
 	            float beatTime = RhythmController.toBeatTime(TimeUtils.millis());
 	            loc.x = startX + ((RhythmController.getCurrentTime() % tickerActions.length - 0.5f) * width);
                 // draw the indicator for current action
@@ -109,6 +120,8 @@ public class Ticker {
         manager.load(FREEZE_FILE, Texture.class);
         manager.load(FIREBALL_FILE, Texture.class);
         manager.load(INDICATOR_FILE, Texture.class);
+        manager.load(BLANK_FILE_HL, Texture.class);
+        manager.load(DASH_FILE_HL, Texture.class);
     }
 
     /**
@@ -160,6 +173,21 @@ public class Ticker {
             indicatorTexture = null; // Failed to load
         }
 
+        // load highlighted blank file
+        if (manager.isLoaded(BLANK_FILE_HL)) {
+            blankHLTexture = manager.get(BLANK_FILE_HL, Texture.class);
+            blankHLTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            blankHLTexture = null;  // Failed to load
+        }
+
+        // load highlighted dash file
+        if (manager.isLoaded(DASH_FILE_HL)) {
+            dashHLTexture = manager.get(DASH_FILE_HL, Texture.class);
+            dashHLTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            dashHLTexture = null;   // Failed to load
+        }
     }
 
     /**
@@ -189,6 +217,14 @@ public class Ticker {
         if (indicatorTexture != null) {
             indicatorTexture = null;
             manager.unload(INDICATOR_FILE);
+        }
+        if (blankHLTexture != null) {
+            blankHLTexture = null;
+            manager.unload(BLANK_FILE_HL);
+        }
+        if (dashHLTexture != null) {
+            dashHLTexture = null;
+            manager.unload(DASH_FILE_HL);
         }
     }
 
