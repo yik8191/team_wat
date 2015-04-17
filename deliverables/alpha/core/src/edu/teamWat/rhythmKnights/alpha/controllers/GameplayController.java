@@ -44,6 +44,8 @@ public class GameplayController {
 
 	private boolean gameOver = false;
 
+	float prevBeatTime = 0;
+
 	public GameplayController() {	}
 
 	public void initialize() {
@@ -67,6 +69,13 @@ public class GameplayController {
 
 
 	public void update() {
+
+//		float beatTIme = RhythmController.toBeatTime(RhythmController.getPosition());
+//		if ( beatTIme < prevBeatTime){
+//			System.out.println(TimeUtils.millis());
+//		}
+//		prevBeatTime = beatTIme;
+
 		if (playerController.didReset) {
 			playerController.clear();
 			gameOver = true;
