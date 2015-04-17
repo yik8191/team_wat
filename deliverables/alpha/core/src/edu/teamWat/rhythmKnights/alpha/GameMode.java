@@ -237,11 +237,16 @@ public class GameMode implements Screen{
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
                 else if (!knight.isAlive()) reset();
-                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y))
+                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
+					play();
+					play();
+					play();
+				}
 				else play();
 				break;
             case WIN:
+
                 // Print level complete message!
                 break;
 		}
