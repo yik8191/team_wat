@@ -16,8 +16,10 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
+    private KnightDirection facing = KnightDirection.FRONT;
+    private int facingFact = 0;
     public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
-    public static final String KNIGHT_NORMAL_FILE = "images/glowing.png";
+    public static final String KNIGHT_NORMAL_FILE = "images/knightsheet.png";
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
@@ -41,15 +43,34 @@ public class Knight extends GameObject {
     private int curFrame = 0;
 
     // Constants for reference to the spritesheet
+    // All loops take 5 frames
     private int IDLE_START = 0;
-    private int IDLE_END = 4;
+    private int IDLE_END = IDLE_START + 4;
     private int HURT_START = 5;
-    private int HURT_END = 9;
+    private int HURT_END = HURT_START + 4;
+    // Currently placeholders
     private int SUCCESS_START = 0;
     private int SUCCESS_END = 0;
-    private int SPRITE_ROWS = 2;
+    // Directional sprites
+    private int IDLE_UP_START = 10;
+    private int IDLE_UP_END = IDLE_UP_START + 4;
+    private int HURT_UP_START = 15;
+    private int HURT_UP_END = HURT_UP_START + 4;
+
+    private int IDLE_LEFT_START = 20;
+    private int IDLE_LEFT_END = IDLE_LEFT_START + 4;
+    private int HURT_LEFT_START = 25;
+    private int HURT_LEFT_END = HURT_LEFT_START + 4;
+
+    private int IDLE_RIGHT_START = 30;
+    private int IDLE_RIGHT_END = IDLE_RIGHT_START + 4;
+    private int HURT_RIGHT_START = 35;
+    private int HURT_RIGHT_END = HURT_RIGHT_START + 4;
+
+    // Sheet constants
+    private int SPRITE_ROWS = 8;
     private int SPRITE_COLS = 5;
-    private int SPRITE_TOT = 10;
+    private int SPRITE_TOT = 40;
 
 	private boolean isInvulnerable;
 
@@ -97,6 +118,27 @@ public class Knight extends GameObject {
         return this.state;
     }
 
+    public void setDirection(KnightDirection d) {
+        this.facing = d;
+        switch(d) {
+            case FRONT:
+                this.facingFact = 0;
+                break;
+            case BACK:
+                this.facingFact = 2;
+                break;
+            case LEFT:
+                this.facingFact = 4;
+                break;
+            case RIGHT:
+                this.facingFact = 6;
+                break;
+        }
+    }
+
+    public KnightDirection getDirection() {
+        return this.facing;
+    }
 
     public void draw(GameCanvas canvas) {
         // Animation code for knight
@@ -104,8 +146,8 @@ public class Knight extends GameObject {
             curTime --;
             if (curTime == 0) {
                 curFrame ++;
-                if (curFrame >= IDLE_END) {
-                    curFrame = IDLE_START;
+                if (curFrame >= (this.facingFact*5 + 4)) {
+                    curFrame = this.facingFact*5;
                 }
                 curTime = animDelay;
             } else {
@@ -116,22 +158,35 @@ public class Knight extends GameObject {
             if (curTime == 0) {
                 curFrame ++;
                 // Finished animating the "taking damage" frames
-                if (curFrame >= HURT_END) {
-                    curFrame = IDLE_START;
+                if (curFrame >= ((this.facingFact+1)*5 + 4)) {
+                    curFrame = (this.facingFact+1)*5;
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
             } else {
                 sprite.setFrame(curFrame);
             }
-        // Should not ever occur
+        // Used for changing sprite direction
         } else if (this.state == KnightState.MOVING) {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
                 // Finished animating the success frames
-                if (curFrame >= SUCCESS_END) {
-                    curFrame = IDLE_START;
+                if (curFrame >= (this.facingFact*5 + 4)) {
+                    curFrame = this.facingFact*5;
+                    this.setState(KnightState.NORMAL);
+                }
+                curTime = animDelay;
+            } else {
+                sprite.setFrame(curFrame);
+            }
+        } else if (this.state == KnightState.ATTACKING) {
+            curTime--;
+            if (curTime == 0) {
+                curFrame++;
+                // Finished animating the attack frames
+                if (curFrame >= (this.facingFact * 5 + 44)) {
+                    curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
@@ -146,7 +201,7 @@ public class Knight extends GameObject {
 
         // Drawing the hp icon
         FilmStrip spriteHpIcon = new FilmStrip(knightHpIconTexture, 1, 1);
-        canvas.draw(spriteHpIcon, (int) (HP_SIZE - HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, HP_SIZE, HP_SIZE);
+        canvas.draw(spriteHpIcon, (int) (HP_SIZE - HP_SIZE / 1.5f), canvas.getHeight() - 11.9f * HP_SIZE, HP_SIZE, HP_SIZE);
 
         // Drawing code for the Knight HP
         HP_SIZE = canvas.HP_SIZE;
@@ -281,17 +336,48 @@ public class Knight extends GameObject {
             this.isAlive = false;
         }
         curTime = animDelay;
-        curFrame = HURT_START;
+        switch(this.facing) {
+            case FRONT:
+                curFrame = HURT_START;
+                break;
+            case BACK:
+                curFrame = HURT_UP_START;
+                break;
+            case LEFT:
+                curFrame = HURT_LEFT_START;
+                break;
+            case RIGHT:
+                curFrame = HURT_RIGHT_START;
+                break;
+        }
         this.state = KnightState.TAKINGDMG;
         RhythmController.playDamage();
 	}
 
+    /** Called whenever the player successfully inputs a move on the beat */
     public void showSuccess() {
         if (this.knightHP < INITIAL_HP) {
             this.knightHP ++;
         }
-        curFrame = SUCCESS_START;
+        switch(this.facing) {
+            case FRONT:
+                curFrame = IDLE_START;
+                break;
+            case BACK:
+                curFrame = IDLE_UP_START;
+                break;
+            case LEFT:
+                curFrame = IDLE_LEFT_START;
+                break;
+            case RIGHT:
+                curFrame = IDLE_RIGHT_START;
+                break;
+        }
         this.state = KnightState.MOVING;
+    }
+
+    public void showDash() {
+
     }
 
 	public boolean isInvulnerable() {return isInvulnerable;}
@@ -314,4 +400,11 @@ public class Knight extends GameObject {
         MOVING
     }
 
+    // Used in animating the sprite of the knight
+    public enum KnightDirection {
+        FRONT,
+        BACK,
+        LEFT,
+        RIGHT
+    }
 }
