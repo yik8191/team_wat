@@ -77,7 +77,7 @@ public class GridController implements MouseListener, MouseMotionListener, Actio
 		}
 		// if the tile clicked was an enemy
 		char character = guiInformation.getSelectedTile().getCharacter();
-		System.out.println(character); // '5' for enemy
+		//System.out.println(character); // '5' for enemy
 		if (guiInformation.getSelectedTile().getCharacter() == '5'){
 			System.out.println("Need to display the direction inputs");
 			// enable sidebar for text input

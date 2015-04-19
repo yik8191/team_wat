@@ -273,7 +273,7 @@ public class Controller implements ActionListener, GUIInformation {
 
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
-                file.write(level.toJSONString());
+                file.write(JSONToString.ObjectToJSONString(level, 0));
                 file.flush();
                 file.close();
 			}
