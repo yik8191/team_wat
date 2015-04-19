@@ -197,6 +197,7 @@ public class Knight extends GameObject {
             sprite.setFrame(0);
         }
 	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
+//        Vector2 loc = canvas.boardToScreen(position.x, position.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
         // Drawing the hp icon

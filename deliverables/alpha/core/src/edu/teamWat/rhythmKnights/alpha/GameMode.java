@@ -234,7 +234,7 @@ public class GameMode implements Screen{
 				// TODO: Fill in other initialization code
 				gameplayController.initialize();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
-				RhythmController.launch(144);//143.882f
+				//143.882f
 				break;
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();

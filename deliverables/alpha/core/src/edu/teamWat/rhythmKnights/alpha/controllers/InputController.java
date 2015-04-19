@@ -24,6 +24,8 @@ public interface InputController {
     public static final int CONTROL_RESET = 0x20;
     /** Exit the game */
     public static final int CONTROL_EXIT = 0x40;
+	/** Released a key instead of pressing it */
+	public static final int CONTROL_RELEASE = 0x80;
 
 	/**
 	 * Return the action of this game object
