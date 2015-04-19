@@ -225,13 +225,13 @@ public class Controller implements ActionListener, GUIInformation {
 
                         if (!tileType.equals("")) {
                             curObj.put("x", x);
-                            curObj.put("y", height - y);
+                            curObj.put("y", height - y - 1);
                             curObj.put("type", tileType);
                             if (tileType.equals("start") && !hasStart) {
                                 hasStart = true;
                                 JSONObject player = new JSONObject();
                                 player.put("x", x);
-                                player.put("y", height - y);
+                                player.put("y", height - y - 1);
                                 level.put("player", player);
                             } else if (tileType.equals("start") && hasStart) {
                                 System.out.println("Error saving file! You can only have one start tile");
@@ -248,7 +248,7 @@ public class Controller implements ActionListener, GUIInformation {
                         } else if (!object.equals("")){
                             curObj.put("type", object);
                             curObj.put("x", x);
-                            curObj.put("y", height - y);
+                            curObj.put("y", height - y - 1);
                             //TODO: Correctly implement this so objects have paths
                             curObj.put("path", path);
 
