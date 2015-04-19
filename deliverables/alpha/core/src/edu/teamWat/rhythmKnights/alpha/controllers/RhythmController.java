@@ -19,7 +19,7 @@ public class RhythmController {
 	static long startTime;
 
 	/** Location of music file */
-	public static final String MUSIC_FILE = "music/game2longer.ogg";
+	public static final String MUSIC_FILE = "music/game21.ogg";
 	public static final String HIT_FILE = "sounds/hit.ogg";
 	public static final String DMG_FILE = "sounds/dmg.ogg";
 
@@ -90,6 +90,11 @@ public class RhythmController {
 	}
 
 	public static void launch(float tempo) {
+
+
+
+
+
 		period = 60.0f / tempo;
 		if (begun) {
 			music.stop();
@@ -98,7 +103,7 @@ public class RhythmController {
 		startTime = TimeUtils.millis();
 		begun = true;
 		music.play();
-		totalOffset = -0.7f;
+		totalOffset = -0f;
 	}
 
 	/**
@@ -133,10 +138,10 @@ public class RhythmController {
 	}
 
 	public static void sendCalibrationBeat(float time) {
-		float beatTime = toBeatTime(time);
-		if (beatTime > 0.5) beatTime--;
-		totalOffset += 0.5 * (1 - beatTime) * beatTime;
-		if (totalOffset > 0.5) totalOffset--;
+//		float beatTime = toBeatTime(time);
+//		if (beatTime > 0.5) beatTime--;
+//		totalOffset += 0.5 * (1 - beatTime) * beatTime;
+//		if (totalOffset > 0.5) totalOffset--;
 	}
 
 	public static float toBeatTime(float time) {
@@ -148,7 +153,7 @@ public class RhythmController {
 	}
 
 	public static float getPosition() {
-		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
+//		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
 		return music.getPosition();
 	}
 

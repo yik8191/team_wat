@@ -18,6 +18,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 
 import edu.teamWat.rhythmKnights.alpha.controllers.*;
@@ -47,7 +48,8 @@ public class GameMode implements Screen{
 		/** While we are playing the game */
 		PLAY,
         /** Player has won the game */
-        WIN
+        WIN,
+		LOSE
 	}
 
 	// GRAPHICS AND SOUND RESOURCES
@@ -184,6 +186,7 @@ public class GameMode implements Screen{
 	private boolean active;
 
 	/** Listener that will update the player mode when we are done */
+	private SpriteBatch spriteBatch;
 	private ScreenListener listener;
 
 	/**
@@ -237,8 +240,12 @@ public class GameMode implements Screen{
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
                 else if (!knight.isAlive()) reset();
-                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y))
+                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
+					play();
+					play();
+					play();
+				}
 				else play();
 				break;
             case WIN:
@@ -246,8 +253,17 @@ public class GameMode implements Screen{
                 this.curLevel = this.curLevel % this.numLevels;
                 //TODO: add some sort of 'good job you win!' message
                 gameState = GameState.INTRO;
+//				spriteBatch = new SpriteBatch();
+//				displayFont = new BitmapFont();
+//				spriteBatch.begin();
+//				displayFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+//				displayFont.draw(spriteBatch, "my-string", 30, 30);
+////				spriteBatch.end();
                 // Print level complete message!
                 break;
+			case LOSE:
+				// Print level failed message!
+				break;
 		}
 	}
 
