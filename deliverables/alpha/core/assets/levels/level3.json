@@ -1,0 +1,1 @@
+{"tiles":[{"x":11,"y":0,"type":"goal"},{"x":0,"y":5,"type":"start"}],"objects":[{"path":"UDLR","x":1,"y":3,"type":"slime"},{"path":"UDLR","x":3,"y":4,"type":"slime"},{"path":"UDLR","x":4,"y":5,"type":"slime"}],"width":12,"height":8,"player":{"x":0,"y":5} "ticker": "MMMD"}

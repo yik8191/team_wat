@@ -21,6 +21,10 @@ public class GDXRoot extends Game implements ScreenListener {
 	private LoadingMode loading;
 	/** Player mode for the game proper (CONTROLLER CLASS) */
 	private GameMode playing;
+    /** Player mode for the level select screen (CONTROLLER CLASS) */
+    private SelectMode selecting;
+
+    private int numLevels = 3;
 
 	public GDXRoot() {
 		// Start loading with the asset manager
@@ -39,7 +43,8 @@ public class GDXRoot extends Game implements ScreenListener {
 	public void create() {
 		canvas = new GameCanvas();
 		loading = new LoadingMode(canvas, manager, 1);
-		playing = null;
+		selecting = null;
+        playing = null;
 
 		loading.setScreenListener(this);
 		GameMode.PreLoadContent(manager); // Load game assets statically.
@@ -84,19 +89,27 @@ public class GDXRoot extends Game implements ScreenListener {
 	 * @param exitCode The state of the screen upon exit
 	 */
 	public void exitScreen(Screen screen, int exitCode) {
-		if (exitCode != 0) {
-			Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
-			Gdx.app.exit();
-		} else if (screen == loading) {
-			GameMode.LoadContent(manager);
-			playing = new GameMode(canvas);
+        if (screen == selecting) {
+            GameMode.LoadContent(manager);
+            playing = new GameMode(canvas);
+            selecting.dispose();
+            selecting = null;
 
-			playing.setScreenListener(this);
-			setScreen(playing);
+            playing.setNumLevels(this.numLevels);
+            playing.setLevel(exitCode);
+            playing.setScreenListener(this);
+            setScreen(playing);
+        } else if (exitCode != 0) {
+            Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
+            Gdx.app.exit();
+        } else if (screen == loading){
+            selecting = new SelectMode(canvas, this.numLevels);
+            selecting.setScreenListener(this);
+            setScreen(selecting);
+            loading.dispose();
+            loading = null;
 
-			loading.dispose();
-			loading = null;
-		} else {
+		}  else {
 			// We quit the main application
 			Gdx.app.exit();
 		}
