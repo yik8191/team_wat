@@ -84,7 +84,7 @@ public class PlayerController implements InputController, InputProcessor {
 				didReset = true;
 				break;
 		}
-		RhythmController.getPosition();
+		System.out.println(RhythmController.toBeatTime(RhythmController.getPosition()));
 		return true;
 	}
 

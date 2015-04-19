@@ -44,11 +44,15 @@ public class GameplayController {
 
 	private boolean gameOver = false;
 
+	float prevBeatTime = 0;
+
 	public GameplayController() {	}
 
-	public void initialize() {
+
+	public void initialize(int levelNum) {
 		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
-		board = JSONReader.parseFile("levels/level5.json");
+
+		board = JSONReader.parseFile("levels/level" + levelNum + ".json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
 
@@ -67,6 +71,13 @@ public class GameplayController {
 
 
 	public void update() {
+
+//		float beatTIme = RhythmController.toBeatTime(RhythmController.getPosition());
+//		if ( beatTIme < prevBeatTime){
+//			System.out.println(TimeUtils.millis());
+//		}
+//		prevBeatTime = beatTIme;
+
 		if (playerController.didReset) {
 			playerController.clear();
 			gameOver = true;

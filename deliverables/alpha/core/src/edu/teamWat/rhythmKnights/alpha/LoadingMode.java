@@ -305,7 +305,6 @@ public class LoadingMode implements Screen, InputProcessor {
 
 			// We are are ready, notify our listener
 			if (isReady() && listener != null) {
-				//TODO: remove rhythm controller and launch exit screen
 				listener.exitScreen(this, 0);
 			}
 		}
@@ -337,7 +336,6 @@ public class LoadingMode implements Screen, InputProcessor {
 	 * This is usually when it's not active or visible on screen. An Application is also paused before it is destroyed.
 	 */
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -347,7 +345,6 @@ public class LoadingMode implements Screen, InputProcessor {
 	 * This is usually when it regains focus.
 	 */
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 
