@@ -4,9 +4,10 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar  # Allow jars because of 3rd party libs
 *.war
 *.ear
+*.zip
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -35,3 +36,14 @@ hs_err_pid*
 *.mtc1
 *.out
 *.synctex.gz 
+
+# temporary files
+*~
+*#
+
+# ignore Eclipse and IntelliJ configuration files
+.metadata
+.idea
+.mf
+.MF
+.iml
