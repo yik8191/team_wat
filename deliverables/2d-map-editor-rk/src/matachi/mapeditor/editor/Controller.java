@@ -269,6 +269,8 @@ public class Controller implements ActionListener, GUIInformation {
                 level.put("tiles", tiles);
                 level.put("objects", objects);
 
+                level.put("ticker", "MMMD");
+
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
                 file.write(level.toJSONString());
