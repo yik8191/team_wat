@@ -51,6 +51,7 @@ public class GameplayController {
 
 	public void initialize(int levelNum) {
 		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        System.out.println("Looking for level " + levelNum);
 		board = JSONReader.parseFile("levels/level" + levelNum + ".json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
