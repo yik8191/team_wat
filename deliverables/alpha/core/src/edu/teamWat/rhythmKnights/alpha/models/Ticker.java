@@ -16,8 +16,8 @@ import java.sql.Time;
 /** Ticker */ // lol
 public class Ticker {
 
-    public static final String BLANK_FILE = "images/tickerBlank.png";
-    public static final String DASH_FILE = "images/tickerDash.png";
+    public static final String BLANK_FILE = "images/tickerBlankSheet.png";
+    public static final String DASH_FILE = "images/tickerDashSheet.png";
     public static final String FREEZE_FILE = "images/tickerFreeze.png";
     public static final String FIREBALL_FILE = "images/tickerFireball.png";
     public static final String INDICATOR_FILE = "images/tickerCurrent.png";
@@ -62,9 +62,9 @@ public class Ticker {
         for (int i=0; i < tickerActions.length; i++){
 
             if (tickerActions[i] == TickerAction.MOVE){
-                sprite = new FilmStrip(blankTexture, 1, 1);
+                sprite = new FilmStrip(blankTexture, 1, 2);
             }else if (tickerActions[i] == TickerAction.DASH){
-                sprite = new FilmStrip(dashTexture, 1, 1);
+                sprite = new FilmStrip(dashTexture, 1, 2);
             }else if (tickerActions[i] == TickerAction.FREEZE){
                 sprite = new FilmStrip(freezeTexture, 1, 1);
             }else{ //fireball
@@ -75,12 +75,13 @@ public class Ticker {
 
             canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
             if (beat == i) {
-
+                sprite.setFrame(1);
+                canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
 	            float beatTime = 0;// RhythmController.toBeatTime(TimeUtils.millis());
 	            loc.x = 0;// startX + ((RhythmController.getCurrentTime() % tickerActions.length - 0.5f) * width);
                 // draw the indicator for current action
-                spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
-                canvas.draw(spriteIndicator, loc.x-(TICK_SQUARE_SIZE/8), loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+//                spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
+//                canvas.draw(spriteIndicator, loc.x-(TICK_SQUARE_SIZE/8), loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
             }
         }
 	}

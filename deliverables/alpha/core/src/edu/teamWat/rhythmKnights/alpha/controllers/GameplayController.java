@@ -100,8 +100,8 @@ public class GameplayController {
 				knight.decrementHP();
 				timeHP = DOT_HP;
 			}
-			gameStateAdvanced = false;
 		}
+		gameStateAdvanced = false;
 
 		if (playerController.didReset) {
 			playerController.clear();
@@ -401,7 +401,7 @@ public class GameplayController {
 	private void advanceGameState () {
 		if (gameStateAdvanced) return;
 		gameStateAdvanced = true;
-		ticker.advance();
+		//ticker.advance();
 		board.updateColors();
 		moveEnemies();
 		collisionController.update();

@@ -420,6 +420,9 @@ public class Knight extends GameObject {
 
     public void decrementHP() {
         this.knightHP--;
+        if (this.knightHP < 0) {
+            this.knightHP = 0;
+        }
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
