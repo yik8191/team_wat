@@ -252,7 +252,7 @@ public class GameMode implements Screen{
 				break;
             case WIN:
                 this.curLevel++;
-                this.curLevel = this.curLevel % this.numLevels;
+                this.curLevel = this.curLevel % (this.numLevels+1);
                 //TODO: add some sort of 'good job you win!' message
                 gameState = GameState.INTRO;
 //				spriteBatch = new SpriteBatch();
