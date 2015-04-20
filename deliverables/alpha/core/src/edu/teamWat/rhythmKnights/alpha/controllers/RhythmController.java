@@ -377,4 +377,11 @@ public class RhythmController {
 		completedTicks[j] = false;
 		playerActions[j] = PlayerController.CONTROL_NO_ACTION;
 	}
+
+	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
+		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH2 || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL2) {
+			actionIndex = (actionIndex - 1 + numActions) % numActions;
+		}
+		return 0;
+	}
 }

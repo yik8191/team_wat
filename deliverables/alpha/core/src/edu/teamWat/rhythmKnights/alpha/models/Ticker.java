@@ -28,6 +28,7 @@ public class Ticker {
     public static Texture indicatorTexture;
 
 	private TickerAction[] tickerActions;
+    private int[] glowFrame;
 	private int beat;
 
     //how spaced out ticker squares should be
@@ -41,6 +42,7 @@ public class Ticker {
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
+        glowFrame = new int[actions.length];
 		beat = 0;
 	}
 
@@ -190,6 +192,10 @@ public class Ticker {
             indicatorTexture = null;
             manager.unload(INDICATOR_FILE);
         }
+    }
+
+    public void glowBeat(int beatNumber, int intensity) {
+        glowFrame[beatNumber] = intensity;
     }
 
 	public enum TickerAction {
