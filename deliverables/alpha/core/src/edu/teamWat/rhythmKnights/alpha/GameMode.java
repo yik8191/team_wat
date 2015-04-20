@@ -243,7 +243,7 @@ public class GameMode implements Screen{
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
-                else if (!knight.isAlive()) reset();
+                else if (!knight.isActive()) reset();
                 else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
 					play();
