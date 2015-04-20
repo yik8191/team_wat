@@ -74,7 +74,7 @@ public class CollisionController {
 		// initialize boolean
 		hasPlayerMoved = false;
 		// Move only the player
-		if (gameobjs.getPlayer().isActive()){
+		if (gameobjs.getPlayer().isAlive()){
 			moveIfSafe(gameobjs.getPlayer());
 		}
 		
@@ -92,7 +92,7 @@ public class CollisionController {
 		
 		// Move everything else
 		for (GameObject g: gameobjs){
-			if (g.isActive()){
+			if (g.isAlive()){
 				moveIfSafe(g);
 			}
 		}
@@ -146,6 +146,11 @@ public class CollisionController {
 			} else {
 				g.setPosition(tmp);
 			}
+		} else {
+			if ((g instanceof Knight) && nonzerov) {
+				g.setPosition(tmp);
+				((Knight)g).setFalling();
+			}
 		}
 		if ((g instanceof DynamicTile) && nonzerov){
 			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, Board.Tile.tileType.OBSTACLE);
@@ -179,7 +184,7 @@ public class CollisionController {
 	 */
 	private void checkForCollision(GameObject g1, GameObject g2) {
 		// Do nothing if either game object is off the board.
-		if (!g1.isActive() || !g2.isActive()) {
+		if (!g1.isAlive() || !g2.isAlive()) {
 			return;
 		}
 
@@ -219,7 +224,7 @@ public class CollisionController {
 
 	private void checkForCollision(GameObject g, Projectile p) {
 		// Do nothing if either game object is off the board.
-		if (!g.isActive() || !p.isAlive()) {
+		if (!g.isAlive() || !p.isAlive()) {
 			return;
 		}
 

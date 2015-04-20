@@ -75,6 +75,7 @@ public class GameplayController {
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
+		hasMoved = false;
 		gameOver = false;
 		try {
 			RhythmController.init(audio, ticker);
@@ -117,6 +118,14 @@ public class GameplayController {
 		long currentTick = RhythmController.getSequencePosition();
 		int prevActionIndex = RhythmController.getClosestEarlierActionIndex(currentTick);
 		int nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
+		ticker.setBeat(RhythmController.convertToTickerBeatNumber(prevActionIndex, ticker));
+		if (RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.DASH2) {
+			prevActionIndex--;
+		} else if (RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.DASH2){
+			nextActionIndex++;
+		}
+		ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)  - RhythmController.totalOffset / 2)/((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
+
 		int currentActionIndex;
 		// Keep clearing the action ahead of us! Simple! :D
 		RhythmController.clearNextAction(nextActionIndex);
@@ -140,7 +149,7 @@ public class GameplayController {
 				}
 
 				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
-					damagePlayer();
+					if (knight.isAlive()) damagePlayer();
 				} else {
 					switch (RhythmController.getTickerAction(currentActionIndex)) {
 						case MOVE:
@@ -154,6 +163,7 @@ public class GameplayController {
 							}
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
 							Vector2 vel = new Vector2(0, 0);
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
@@ -208,8 +218,9 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
 							if (RhythmController.getPlayerAction(currentActionIndex) != RhythmController.getPlayerAction(currentActionIndex - 1)) {
-								damagePlayer();
+								if (knight.isAlive()) damagePlayer();
 							} else {
 								vel = new Vector2(0, 0);
 								switch (keyEvent.code) {
@@ -232,6 +243,7 @@ public class GameplayController {
 
 								// Display visual feedback to show success
 								knight.showSuccess();
+								hasMoved = true;
 //							knight.setDashing();
 								// Set current tile type to SUCCESS
 								board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);

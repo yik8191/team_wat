@@ -349,6 +349,7 @@ public class RhythmController {
 	}
 
 	public static long getTick(int i) {
+		i = (i + numActions) % numActions;
 		return tickTimes[i];
 	}
 
@@ -379,9 +380,21 @@ public class RhythmController {
 	}
 
 	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
-		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH2 || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL2) {
-			actionIndex = (actionIndex - 1 + numActions) % numActions;
+		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL) {
+			actionIndex = (actionIndex + 1) % numActions;
 		}
-		return 0;
+
+		int countDown = (actionIndex - numTranslated + ticker.numExpandedActions) % ticker.numExpandedActions;
+
+		for (int i = 0; i < ticker.tickerActions.length; i++) {
+			if (countDown == 0) return i;
+			if (ticker.tickerActions[i+1] == Ticker.TickerAction.FIREBALL || ticker.tickerActions[i+1] == Ticker.TickerAction.DASH) {
+				countDown -= 2;
+			} else {
+				countDown -= 1;
+			}
+		}
+
+		return -1;
 	}
 }

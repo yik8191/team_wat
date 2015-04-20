@@ -308,8 +308,8 @@ public class GameMode implements Screen{
 		// NO UPDATE CODE HERE
         canvas.draw(background, 0, 0);
 		gameplayController.board.draw(canvas);
-		gameplayController.gameObjects.draw(canvas);
 		gameplayController.ticker.draw(canvas);
+		gameplayController.gameObjects.draw(canvas);
 		canvas.end();
 	}
 
