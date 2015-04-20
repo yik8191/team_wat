@@ -36,6 +36,8 @@ public class Board {
     private int SPRITE_COLS = 4;
     private int SPRITE_TOT = 4;
 
+    private float distanceToBeat;
+
     /* Holds the array of tiles that make up this board */
     private Tile[][] tiles;
 
@@ -199,22 +201,32 @@ public class Board {
     }
 
     public void updateColors() {
-	    int rand = colorInd % 2; 
-	    // Intentionally removed red and yellow, too jarring
-	    colorInd++;
-	    if (rand == 2) {
-		    //pinkish
-		    Tile.randCol = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
-	    } else if (rand == 1) {
-		    //blueish
-		    Tile.randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-	    } else if (rand == 0) {
-		    //greenish
-		    Tile.randCol = new Color(106f / 255f, 189f / 255f, 69f / 255f, 1);
-	    } else if (rand == 3) {
-		    //yellowish
-		    Tile.randCol = new Color(233f / 255f, 230f / 255f, 18f / 255f, 1);
-	    }
+        Color reddish = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
+        Color bluish = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+
+        distanceToBeat *= distanceToBeat;
+
+        reddish.mul(distanceToBeat);
+        bluish.mul(1 - distanceToBeat);
+
+        Tile.randCol = reddish.add(bluish);
+
+//	    int rand = colorInd % 2;
+//	    // Intentionally removed red and yellow, too jarring
+//	    colorInd++;
+//	    if (rand == 2) {
+//		    //pinkish
+//		    Tile.randCol = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
+//	    } else if (rand == 1) {
+//		    //blueish
+//		    Tile.randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+//	    } else if (rand == 0) {
+//		    //greenish
+//		    Tile.randCol = new Color(106f / 255f, 189f / 255f, 69f / 255f, 1);
+//	    } else if (rand == 3) {
+//		    //yellowish
+//		    Tile.randCol = new Color(233f / 255f, 230f / 255f, 18f / 255f, 1);
+//	    }
 	    for (int i = 0; i < width; i++) {
 		    for (int j = 0; j < height; j++) {
 			    tiles[i][j].setColor();
@@ -276,4 +288,8 @@ public class Board {
 		return (x >= 0 && y >= 0 && x < width && y < height && 
 				!isObstacleTile(x,y));
 	}
+
+    public void setDistanceToBeat(float ratio) {
+        distanceToBeat = ratio;
+    }
 }

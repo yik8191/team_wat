@@ -105,6 +105,8 @@ public class GameplayController {
 		}
 		gameStateAdvanced = false;
 
+		board.updateColors();
+
 		if (playerController.didReset) {
 			playerController.clear();
 			gameOver = true;
@@ -125,6 +127,7 @@ public class GameplayController {
 			nextActionIndex++;
 		}
 		ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)  - RhythmController.totalOffset / 2)/((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
+		board.setDistanceToBeat(Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 
 		int currentActionIndex;
 		// Keep clearing the action ahead of us! Simple! :D
@@ -417,7 +420,7 @@ public class GameplayController {
 		if (gameStateAdvanced) return;
 		gameStateAdvanced = true;
 		//ticker.advance();
-		board.updateColors();
+//		board.updateColors();
 		moveEnemies();
 		collisionController.update();
 		if (collisionController.hasPlayerMoved) knight.setInvulnerable(false);
