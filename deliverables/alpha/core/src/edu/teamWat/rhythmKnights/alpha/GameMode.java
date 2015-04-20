@@ -14,6 +14,7 @@ package edu.teamWat.rhythmKnights.alpha;
 // TODO: Import the package that contains our gameObjects
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -245,8 +246,6 @@ public class GameMode implements Screen{
                 else if (!knight.isAlive()) reset();
                 else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
-					play();
-					play();
 					play();
 				}
 				else play();
