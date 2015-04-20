@@ -152,6 +152,13 @@ public class GameplayController {
 						knight.setVelocity(vel);
 						advanceGameState();
 						RhythmController.playSuccess();
+
+						// Display visual feedback to show success
+						knight.showSuccess();
+						// Set current tile type to SUCCESS
+						board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+						RhythmController.playSuccess();
+
 						break;
 					case DASH:
 						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
@@ -196,6 +203,12 @@ public class GameplayController {
 							}
 							knight.setVelocity(vel);
 							advanceGameState();
+							RhythmController.playSuccess();
+
+							// Display visual feedback to show success
+							knight.showSuccess();
+							// Set current tile type to SUCCESS
+							board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
 							RhythmController.playSuccess();
 						}
 						break;
