@@ -24,7 +24,7 @@ public class RhythmController {
 	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
 	/** Offset to translate intervals in time */
-	static long totalOffset = (long)(-0.3 * 128);
+	static long totalOffset = 68;
 	/** Offset from perceived beat in time in the music */
 //	static float finalActionOffset = 0.5f;
 
@@ -58,6 +58,9 @@ public class RhythmController {
 
 	/** Total number of actions */
 	public static int numActions;
+
+	/** Number of actions translated forward... Java input is very lagging, making this necessary */
+	public static int numTranslated;
 
 	public static void PreloadContent(AssetManager manager) {
 //		manager.load(MUSIC_FILE, Music.class);
@@ -139,7 +142,7 @@ public class RhythmController {
 					prevEvent = event;
 					event = tempEvent;
 					if (addHalfBeat) {
-						tempTickTimes.add((event.getTick() + prevEvent.getTick())/2);
+						tempTickTimes.add((event.getTick() + prevEvent.getTick()) / 2);
 						addHalfBeat = false;
 					}
 					tempTickTimes.add(event.getTick());
@@ -163,23 +166,52 @@ public class RhythmController {
 			}
 		}
 		if (addHalfBeat) {
-			tempTickTimes.add(event.getTick() +  (event.getTick() - prevEvent.getTick())/2);
+			tempTickTimes.add(event.getTick() + (event.getTick() - prevEvent.getTick()) / 2);
 		}
 
 		trackLength = sequence.getTickLength();
 //		trackLength = 128 * 32;
 
-		tickTimes = new long[tempTickTimes.size()];
-		completedTicks = new boolean[tempTickTimes.size()];
-		tickerActions = new Ticker.TickerAction[tempTickTimes.size()];
-		playerActions = new int[tempTickTimes.size()];
+		numActions = tempTickTimes.size();
+
+		long[] tempTempTickTimes = new long[numActions];
+		tickTimes = new long[numActions];
+		completedTicks = new boolean[numActions];
+		tickerActions = new Ticker.TickerAction[numActions];
+		playerActions = new int[numActions];
+
 		for (int i = 0; i < tempTickTimes.size(); i++) {
-			tickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
+			tempTempTickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
+		}
+
+		numTranslated = 0;
+		for (int i = 0; i < numActions; i++) {
+			if (tempTempTickTimes[numActions - i - 1] < tempTempTickTimes[numActions - i - 2]) {
+				numTranslated = i + 1;
+				break;
+			}
+		}
+
+		for (int i = 0; i < numTranslated; i++) {
+			tickTimes[i] = tempTempTickTimes[numActions - numTranslated + i];
 			completedTicks[i] = false;
-			tickerActions[i] = tempTickerActions.get(i);
+			tickerActions[i] = tempTickerActions.get(numActions - numTranslated + i);
 			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
 		}
-		numActions = tickerActions.length;
+
+		for (int i = 0; i < numActions - numTranslated; i++) {
+			tickTimes[i + numTranslated] = tempTempTickTimes[i];
+			completedTicks[i + numTranslated] = false;
+			tickerActions[i + numTranslated] = tempTickerActions.get(i);
+			playerActions[i + numTranslated] = PlayerController.CONTROL_NO_ACTION;
+		}
+
+//		for (int i = 0; i < tempTickTimes.size(); i++) {
+//			tickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
+//			completedTicks[i] = false;
+//			tickerActions[i] = tempTickerActions.get(i);
+//			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
+//		}
 
 		InputStream is = new BufferedInputStream(new FileInputStream(midiFile));
 
@@ -328,6 +360,7 @@ public class RhythmController {
 	}
 
 	public static int getPlayerAction(int i) {
+		i = (i + numActions) % numActions;
 		return playerActions[i];
 	}
 

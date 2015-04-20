@@ -62,7 +62,8 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		gameOver = false;
 		try {
-			RhythmController.init(audio, ticker);
+
+			RhythmController.init("music/track2.mid", ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -208,6 +209,7 @@ public class GameplayController {
 
 							// Display visual feedback to show success
 							knight.showSuccess();
+//							knight.setDashing();
 							// Set current tile type to SUCCESS
 							board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
 							RhythmController.playSuccess();
