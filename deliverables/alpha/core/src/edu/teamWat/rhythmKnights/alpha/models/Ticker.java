@@ -17,8 +17,8 @@ import java.sql.Time;
 /** Ticker */ // lol
 public class Ticker {
 
-    public static final String BLANK_FILE = "images/tickerBlank.png";
-    public static final String DASH_FILE = "images/tickerDash.png";
+    public static final String BLANK_FILE = "images/tickerBlankSheet.png";
+    public static final String DASH_FILE = "images/tickerDashSheet.png";
     public static final String FREEZE_FILE = "images/tickerFreeze.png";
     public static final String FIREBALL_FILE = "images/tickerFireball.png";
     public static final String INDICATOR_FILE = "images/tickerCurrent.png";
@@ -110,14 +110,22 @@ public class Ticker {
             }
 
             loc.x = startX + (width * i);
+            float oldx = loc.x;
 
-
+            sprite.setFrame(0);
             canvas.draw(sprite, loc.x, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
             if (glowFrame[i] > 0) glowFrame[i]--;
             if (beat == i) {
 
 	            float beatTime = 0;// RhythmController.toBeatTime(TimeUtils.millis());
 	            loc.x += indicatorOffsetRatio*width;
+
+                if (loc.x >= oldx) {
+                    System.out.println("hi");
+                    sprite.setFrame(1);
+                    canvas.draw(sprite, oldx, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+                }
+
                 // draw the indicator for current action
                 canvas.draw(indicatorSprite, loc.x, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
             }
@@ -167,7 +175,7 @@ public class Ticker {
         if (manager.isLoaded(BLANK_FILE)) {
             blankTexture = manager.get(BLANK_FILE,Texture.class);
             blankTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            moveSprite = new FilmStrip(blankTexture, 1, 1);
+            moveSprite = new FilmStrip(blankTexture, 1, 2);
         } else {
             blankTexture = null;  // Failed to load
         }
@@ -175,7 +183,7 @@ public class Ticker {
         if (manager.isLoaded(DASH_FILE)) {
             dashTexture = manager.get(DASH_FILE,Texture.class);
             dashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            dashSprite = new FilmStrip(dashTexture, 1, 1);
+            dashSprite = new FilmStrip(dashTexture, 1, 2);
         } else {
             dashTexture = null;  // Failed to load
         }
