@@ -50,12 +50,22 @@ public class GameplayController {
 
 
 	public void initialize(int levelNum) {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        String[] path = (System.getProperty("user.dir")).split("\\\\");
+//        for (int i=0;i<path.length; i++) {
+//            System.out.println(path[i]);
+//        }
 
-		board = JSONReader.parseFile("/levels/level" + levelNum + ".json");
+        String audio;
+        if (path[path.length-1].equals("assets")){
+            board = JSONReader.parseFile("levels/level" + levelNum + ".json");
+            audio = JSONReader.getAudio(false);
+        }else {
+            board = JSONReader.parseFile("core/assets/levels/level" + levelNum + ".json");
+            audio = JSONReader.getAudio(true);
+        }
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
-        String audio = JSONReader.getAudio();
 
 		// Preallocate memory
 		ProjectilePool projs = new ProjectilePool();
