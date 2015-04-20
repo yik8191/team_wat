@@ -50,14 +50,13 @@ public class GameplayController {
 
 
 	public void initialize(int levelNum) {
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        String[] path = (System.getProperty("user.dir")).split("\\\\");
-//        for (int i=0;i<path.length; i++) {
-//            System.out.println(path[i]);
-//        }
+		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        String path = (System.getProperty("user.dir"));
+		path = path.substring(path.length()-6);
+		//System.out.println(path);
 
         String audio;
-        if (path[path.length-1].equals("assets")){
+        if (path.equals("assets")){
             board = JSONReader.parseFile("levels/level" + levelNum + ".json");
             audio = JSONReader.getAudio(false);
         }else {
@@ -120,33 +119,35 @@ public class GameplayController {
 		// Keep clearing the action ahead of us! Simple! :D
 		RhythmController.clearNextAction(nextActionIndex);
 
-		for (PlayerController.KeyEvent keyEvent : playerController.keyEvents) {
-			prevActionIndex = RhythmController.getClosestEarlierActionIndex(keyEvent.time);
-			nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
-			if (nextActionIndex < prevActionIndex) {
-				if (RhythmController.getTrackLength() - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
-					currentActionIndex = prevActionIndex;
+		if (knight.isAlive()) {
+			for (PlayerController.KeyEvent keyEvent : playerController.keyEvents) {
+				prevActionIndex = RhythmController.getClosestEarlierActionIndex(keyEvent.time);
+				nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
+				if (nextActionIndex < prevActionIndex) {
+					if (RhythmController.getTrackLength() - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
+						currentActionIndex = prevActionIndex;
+					} else {
+						currentActionIndex = nextActionIndex;
+					}
 				} else {
-					currentActionIndex = nextActionIndex;
+					if (RhythmController.getTick(nextActionIndex) - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
+						currentActionIndex = prevActionIndex;
+					} else {
+						currentActionIndex = nextActionIndex;
+					}
 				}
-			} else {
-				if (RhythmController.getTick(nextActionIndex) - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
-					currentActionIndex = prevActionIndex;
-				} else {
-					currentActionIndex = nextActionIndex;
-				}
-			}
 
-			if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 &&  RhythmController.getCompleted(currentActionIndex)) {
-				damagePlayer();
-			} else {
-				switch (RhythmController.getTickerAction(currentActionIndex)) {
-					case MOVE:
+				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
+					damagePlayer();
+				} else {
+					switch (RhythmController.getTickerAction(currentActionIndex)) {
+						case MOVE:
 //						if (moved > 2) {
 //							double a = 0;
 //						}
-						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
+							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 //						moved++;
+
 						if (knight.getPosition().y == 4) {
 							double a = 0;
 						}
@@ -210,38 +211,39 @@ public class GameplayController {
 							damagePlayer();
 						} else {
 							vel = new Vector2(0, 0);
-							switch (keyEvent.code) {
-								case PlayerController.CONTROL_MOVE_RIGHT:
-									vel.x = 2;
-									break;
-								case PlayerController.CONTROL_MOVE_UP:
-									vel.y = 2;
-									break;
-								case PlayerController.CONTROL_MOVE_LEFT:
-									vel.x = -2;
-									break;
-								case PlayerController.CONTROL_MOVE_DOWN:
-									vel.y = -2;
-									break;
-							}
-							knight.setVelocity(vel);
-							advanceGameState();
-							RhythmController.playSuccess();
+								switch (keyEvent.code) {
+									case PlayerController.CONTROL_MOVE_RIGHT:
+										vel.x = 2;
+										break;
+									case PlayerController.CONTROL_MOVE_UP:
+										vel.y = 2;
+										break;
+									case PlayerController.CONTROL_MOVE_LEFT:
+										vel.x = -2;
+										break;
+									case PlayerController.CONTROL_MOVE_DOWN:
+										vel.y = -2;
+										break;
+								}
+								knight.setVelocity(vel);
+								advanceGameState();
+								RhythmController.playSuccess();
 
-							// Display visual feedback to show success
-							knight.showSuccess();
+								// Display visual feedback to show success
+								knight.showSuccess();
 //							knight.setDashing();
-							// Set current tile type to SUCCESS
-							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
-							RhythmController.playSuccess();
-						}
-						break;
-					case FIREBALL:
-						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
-						break;
-					case FIREBALL2:
-						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) == 0) break;
-						break;
+								// Set current tile type to SUCCESS
+								board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
+								RhythmController.playSuccess();
+							}
+							break;
+						case FIREBALL:
+							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
+							break;
+						case FIREBALL2:
+							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) == 0) break;
+							break;
+					}
 				}
 			}
 		}
@@ -266,7 +268,7 @@ public class GameplayController {
 		}
 
 		if ((currentActionIndex == nextActionIndex) && !RhythmController.getCompleted(prevActionIndex)){
-			damagePlayer();
+			if (knight.isAlive()) damagePlayer();
 			RhythmController.setCompleted(prevActionIndex, true);
 			if (RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.DASH2 && RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.FIREBALL2) {
 				advanceGameState();
