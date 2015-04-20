@@ -23,10 +23,30 @@ public class JSONReader {
 
     private static JSONObject level = null;
 
+    private static void getAllFilse(File curDir) {
+
+        File[] filesList = curDir.listFiles();
+        for (File f : filesList) {
+            if (f.isDirectory())
+                System.out.println(f.getName());
+            if (f.isFile()) {
+                System.out.println(f.getName());
+            }
+        }
+
+    }
+
     public static Board parseFile(String string) {
         //get the stuff from the file
         JSONParser parser = new JSONParser();
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+//        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
+
+            File curDir = new File(".");
+            getAllFilse(curDir);
+
+
+
         Object o;
         try {
             FileReader f = new FileReader(string);
@@ -78,7 +98,7 @@ public class JSONReader {
             o = null;
 	        System.out.println("IOException");
         }
-        level = (JSONObject) o;//new JSONObject(filePath);
+        level = (JSONObject) o;
 
         //get base info and create board
         //also look at this stupid conversion bullshit because you can't cast directly to int
@@ -119,7 +139,7 @@ public class JSONReader {
                 b.setTile(x, y, t);
             }
         } else {
-            System.out.println("No tiles found! that's bad! you at least need a start/goal tile");
+            System.out.println("No tiles found! that's bad! you at least need a start/goal tile!");
         }
 
         return b;
@@ -203,4 +223,15 @@ public class JSONReader {
         }
         return new Ticker(actionArray);
     }
+
+    public static String getAudio(){
+        String audio = (String) level.get("audio");
+        if (audio != null) {
+            return "music/" + audio;
+        } else{
+            return "music/track1.mid";
+        }
+    }
+
+
 }

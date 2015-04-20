@@ -243,7 +243,7 @@ public class GameMode implements Screen{
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
-                else if (!knight.isAlive()) reset();
+                else if (!knight.isActive()) reset();
                 else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
 					play();
@@ -252,7 +252,7 @@ public class GameMode implements Screen{
 				break;
             case WIN:
                 this.curLevel++;
-                this.curLevel = this.curLevel % this.numLevels;
+                this.curLevel = this.curLevel % (this.numLevels+1);
                 //TODO: add some sort of 'good job you win!' message
                 gameState = GameState.INTRO;
 //				spriteBatch = new SpriteBatch();

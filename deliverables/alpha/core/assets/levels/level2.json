@@ -53,5 +53,6 @@
   {  "path":"UUUUDDDD",  "x":7,  "y":1,  "type":"slime"}],
 "width":12,
 "height":8,
-"player":{"x":1,
-"y":1}}
+"player":{"x":1, "y":1},
+"audio":"track2.mid"
+}
