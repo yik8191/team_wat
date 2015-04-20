@@ -61,7 +61,7 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		gameOver = false;
 		try {
-			RhythmController.init("music/track1.mid", ticker);
+			RhythmController.init("music/track2.mid", ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
