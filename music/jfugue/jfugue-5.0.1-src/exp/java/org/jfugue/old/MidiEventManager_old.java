@@ -1,0 +1,402 @@
+/*
+ * JFugue, an Application Programming Interface (API) for Music Programming
+ * http://www.jfugue.org
+ *
+ * Copyright (C) 2003-2014 David Koelle
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.jfugue.old;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.SysexMessage;
+import javax.sound.midi.Track;
+
+import org.jfugue.midi.MidiDefaults;
+import org.jfugue.theory.Note;
+
+/**
+ * Places musical data into the MIDI sequence.
+ * Package scope, final class.
+ * 
+ *@author David Koelle
+ */
+final class MidiEventManager_old
+{
+    private Sequence sequence;
+    private Track[] track;
+    private float divisionType;
+    private int resolutionTicksPerBeat;
+    private int tempoBeatsPerMinute;
+    private float mpqn; 
+    private int beatsPerWhole;
+    private byte metronomePulse; 
+    private byte thirtysecondNotesPer24MidiClockSignals;
+    private byte currentTrack;
+    private byte lastCreatedTrack;
+    private byte[] currentLayer;
+    private double[][] beatTime;
+    private double initialNoteBeatTime;  
+    private Map<String, Double> bookmarkedTrackTimeMap;
+    private Logger logger = Logger.getLogger("org.jfugue");
+
+    public MidiEventManager_old() { 
+    	setDefaults();
+    }
+    
+    public MidiEventManager_old(float divisionType, int resolution) {
+    	this();
+        this.divisionType = divisionType;
+        this.resolutionTicksPerBeat = resolution;
+    }
+
+    private void setDefaults() {
+        sequence = null;
+        track = new Track[MidiDefaults.TRACKS];
+        divisionType = MidiDefaults.DEFAULT_DIVISION_TYPE;
+        resolutionTicksPerBeat = MidiDefaults.DEFAULT_RESOLUTION_TICKS_PER_BEAT;
+        tempoBeatsPerMinute = MidiDefaults.DEFAULT_TEMPO_BEATS_PER_MINUTE;
+        mpqn = 60000000 / MidiDefaults.DEFAULT_TEMPO_BEATS_PER_MINUTE; // MPQN = Milliseconds per quarter note 
+        beatsPerWhole = MidiDefaults.DEFAULT_TEMPO_BEATS_PER_WHOLE;
+        metronomePulse = MidiDefaults.DEFAULT_METRONOME_PULSE; 
+        thirtysecondNotesPer24MidiClockSignals = MidiDefaults.DEFAULT_THIRTYSECOND_NOTES_PER_24_MIDI_CLOCK_SIGNALS; // Default value
+        currentTrack = 0;
+        lastCreatedTrack = 0;
+        currentLayer = new byte[MidiDefaults.TRACKS];
+        beatTime = new double[MidiDefaults.TRACKS][MidiDefaults.LAYERS];
+        initialNoteBeatTime = 0.0d;  
+        bookmarkedTrackTimeMap = new HashMap<String, Double>();;
+    }
+    
+    public void reset() {
+    	setDefaults();
+        try {
+            buildSequence();
+        } catch (InvalidMidiDataException e) {
+            logger.warning(e.getMessage());
+        }
+        this.tempoBeatsPerMinute = MidiDefaults.DEFAULT_TEMPO_BEATS_PER_MINUTE;
+        
+    }
+    
+    public void setDivisionType(float divisionType) {
+        this.divisionType = divisionType;
+    }
+    
+    public float getDivisionType() {
+        return this.divisionType;
+    }
+    
+    public void setResolution(int resolution) {
+        this.resolutionTicksPerBeat = resolution; 
+    }
+    
+    public void setTempo(int tempoBPM) {
+    	this.tempoBeatsPerMinute = tempoBPM;
+    	this.mpqn = 60000000 / tempoBPM; // MPQN = microseconds per minute / BPM
+
+    	// Tempo is set in terms of microseconds per quarter note (MPQN), encoded in three big-endian bytes.
+    	byte[] bytes = new byte[3];
+    	bytes[0] = (byte)((int)mpqn >> 16);
+    	bytes[1] = (byte)((int)mpqn >> 8);
+    	bytes[2] = (byte)((int)mpqn);
+    	this.addMetaMessage(0x51, bytes);
+    }
+    
+    public void setTimeSignature(byte numerator, byte denominator) {
+        // Denominator passed to meta message is actually the power by which 2 must be raised to equal the
+    	// duration of a beat. Example: Given a time signature of 5/8, we must pass 3, because 2^3 = 8. 
+    	byte d2 = (byte)(Math.log(denominator) / Math.log(2));
+        this.addMetaMessage(0x58, new byte[] { numerator, d2, getMetronomePulse(), get32ndNotesPer24MidiClockSignals() } );
+    }
+    
+    /* MIDI-Specific Settings */
+    
+    public void setMetronomePulse(byte metronomePulse) {
+        this.metronomePulse = metronomePulse;
+    }
+    
+    public byte getMetronomePulse() { 
+        return this.metronomePulse;
+    }
+    
+    public void set32ndNotesPer24MidiClockSignals(byte t) {
+        this.thirtysecondNotesPer24MidiClockSignals = t;
+    }
+    
+    public byte get32ndNotesPer24MidiClockSignals() {
+        return this.thirtysecondNotesPer24MidiClockSignals;
+    }
+    
+    public void setSequenceResolution(float divisionType, int resolution) {
+        this.setDivisionType(divisionType);
+        this.setResolution(resolution);
+    }
+    
+    public float getSequenceDivisionType() {
+        return this.divisionType;
+    }
+    
+    public int getSequenceResolution() {
+        return this.resolutionTicksPerBeat;
+    }
+    
+    
+    private void buildSequence() throws InvalidMidiDataException { 
+        this.sequence = new Sequence(divisionType, resolutionTicksPerBeat);
+        this.lastCreatedTrack = 0;
+        createTrack((byte)0);
+    }
+    
+    /**
+     * Sets the current track, or channel, to which new events will be added.
+     * @param track the track to select
+     */
+    public void setCurrentTrack(byte track) {
+        if (track > this.lastCreatedTrack) {
+            for (int i = this.lastCreatedTrack+1; i < track; i++) {
+                createTrack((byte)i);
+            }
+            this.lastCreatedTrack = track;
+        }
+        this.currentTrack = track;
+    }
+    
+    private void createTrack(byte track) {
+        for (byte layer = 0; layer < MidiDefaults.LAYERS; layer++) {
+            beatTime[track][layer] = 0;
+        }
+        currentLayer[track] = 0;
+        this.track[track] = sequence.createTrack();
+    }        
+
+    /**
+     * Sets the current layer within the track to which new events will be added.
+     * @param layer the layer to select
+     */
+    public void setCurrentLayer(byte layer) {
+        currentLayer[currentTrack] = layer;
+    }
+
+    /**
+     * Advances the timer for the current track by the specified duration,
+     * which is specified in Pulses Per Quarter (PPQ)
+     * @param duration the duration to increase the track timer
+     */
+    public void advanceTrackBeatTime(double advanceTime) {
+        beatTime[currentTrack][currentLayer[currentTrack]] += advanceTime;
+    }
+
+    /**
+     * Sets the timer for the current track by the given time,
+     * which is specified in Pulses Per Quarter (PPQ)
+     * @param newTickTime the time at which to set the track timer
+     */
+    public void setTrackBeatTime(double newTime) {
+        beatTime[currentTrack][currentLayer[currentTrack]] = newTime;
+    }
+
+    /**
+     * Returns the timer for the current track and current layer.
+     * @return the timer value for the current track, specified in Pulses Per Quarter (PPQ)
+     */
+    public double getTrackBeatTime() {
+        return beatTime[currentTrack][currentLayer[currentTrack]];
+    }
+
+    public void addTrackTickTimeBookmark(String timeBookmarkID) {
+        bookmarkedTrackTimeMap.put(timeBookmarkID, getTrackBeatTime());
+    }
+
+    public double getTrackBeatTimeBookmark(String timeBookmarkID) {
+    	return bookmarkedTrackTimeMap.get(timeBookmarkID);
+    }
+
+    /**
+     * Returns the latest track time across all layers in the given track
+     * @param track
+     */
+    public double getLatestTrackBeatTime(byte track) {
+    	double latestTime = 0.0D;
+    	for (byte i=0; i < MidiDefaults.LAYERS; i++) {
+    		if (beatTime[track][i] > latestTime) {
+    			latestTime = beatTime[track][i];
+    		}
+    	}
+    	return latestTime;
+    }
+    
+    /**
+     * Finishes the sequence by adding an End of Track meta message (0x2F) to each track 
+     * that has been used in this sequence. 
+     */
+    public void finishSequence() {
+        MetaMessage message = new MetaMessage();
+        try {
+            message.setMessage(0x2F, null, 0);
+            for (byte i=0; i < lastCreatedTrack; i++) {
+                track[i].add(new MidiEvent(message, convertBeatsToTicks(getLatestTrackBeatTime(i))));
+            }
+        } catch (InvalidMidiDataException e) {
+            // We know what's going into this message.  This exception won't happen.
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    /**
+     * Adds a MetaMessage to the current track.  
+     *
+     * @param type the type of the MetaMessage
+     * @param bytes the data of the MetaMessage
+     */
+    public void addMetaMessage(int type, byte[] bytes) {
+        try {
+            MetaMessage message = new MetaMessage();
+            message.setMessage(type, bytes, bytes.length);
+            MidiEvent event = new MidiEvent(message, convertBeatsToTicks(getTrackBeatTime()));
+            track[currentTrack].add(event);
+        } catch (InvalidMidiDataException e)
+        {
+            // We've kept a good eye on the data.  This exception won't happen.
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    /**
+     * Adds a SysexMessage to the current track.  
+     *
+     * @param bytes the data of the SysexMessage
+     */
+    public void addSystemExclusiveEvent(byte[] bytes) {
+    	try {
+    		SysexMessage message = new SysexMessage();
+    		message.setMessage(bytes, bytes.length);
+            MidiEvent event = new MidiEvent(message, convertBeatsToTicks(getTrackBeatTime()));
+            track[currentTrack].add(event);
+        } catch (InvalidMidiDataException e)
+        {
+            // We've kept a good eye on the data.  This exception won't happen.
+            logger.warning(e.getMessage());
+        }
+    }
+
+    /**
+     * Adds a MIDI event to the current track.  
+     *
+     * @param command the MIDI command represented by this message
+     * @param data1 the first data byte
+     */
+    public void addEvent(int command, int data1) {
+        try {
+            ShortMessage message = new ShortMessage();
+            message.setMessage(command, currentTrack, data1);
+            track[currentTrack].add(new MidiEvent(message, convertBeatsToTicks(getTrackBeatTime())));
+        } catch (InvalidMidiDataException e)
+        {
+            // We've kept a good eye on the data.  This exception won't happen.
+            logger.warning(e.getMessage());
+        }
+    }
+
+    /**
+     * Adds a MIDI event to the current track.  
+     *
+     * @param command the MIDI command represented by this message
+     * @param data1 the first data byte
+     * @param data2 the second data byte
+     */
+    public void addEvent(int command, int data1, int data2) {
+        try {
+            if (track[currentTrack] == null) {
+                track[currentTrack] = sequence.createTrack();
+            }
+            track[currentTrack].add(new MidiEvent(createShortMessage(command, data1, data2), convertBeatsToTicks(getTrackBeatTime())));
+        } catch (InvalidMidiDataException e)
+        {
+            // We've kept a good eye on the data.  This exception won't happen.
+            logger.warning(e.getMessage());
+        }
+    }
+
+    private ShortMessage createShortMessage(int status,int data1, int data2) throws InvalidMidiDataException {
+        ShortMessage message = new ShortMessage();
+        message.setMessage(status, currentTrack, data1, data2);
+        return message;
+    }
+
+    public void addNote(Note note) {
+    	if (note.getDuration() == 0.0) {
+    		note.useDefaultDuration();
+    	}
+
+    	// If this is the first note in a sequence of harmonic or melodic notes, remember what time it is.
+    	if (note.isFirstNote()) {
+    		this.initialNoteBeatTime = getTrackBeatTime(); 
+    	}
+    	
+    	// If we're going to the next sequence in a parallel note situation, roll back the time to the beginning of the first note.
+    	// A note will never be a parallel note if a first note has not happened first.
+    	if (note.isHarmonicNote()) {
+    		setTrackBeatTime(this.initialNoteBeatTime);
+    	} 
+
+    	// If the note is a rest, simply advance the track time and get outta here
+    	if (note.isRest()) {
+    		advanceTrackBeatTime(note.getDuration());  
+    		return;
+    	}
+    	
+    	// Add a NOTE_ON event.
+    	// If the note is continuing a tie, it is already sounding, and there is not need to turn the note on
+    	if (!note.isEndOfTie()) {
+    		addEvent(ShortMessage.NOTE_ON, note.getValue(), note.getOnVelocity());
+    	}
+    	
+    	// Advance the track timer
+    	advanceTrackBeatTime(note.getDuration());  
+    	
+    	// Add a NOTE_OFF event.
+    	// If this note is the start of a tie, the note will continue to sound, so we don't want to turn it off.
+    	if (!note.isStartOfTie()) {
+    		addEvent(ShortMessage.NOTE_OFF, note.getValue(), note.getOffVelocity());
+    	}
+    }
+    
+    private float getTicksPerMicrosecond() {
+    	return (resolutionTicksPerBeat * tempoBeatsPerMinute) / 60000000.0F;
+    }
+    
+    private long convertBeatsToTicks(double beats) {
+    	return (long)(resolutionTicksPerBeat * beats * beatsPerWhole);
+    }
+    
+    /**
+     * Returns the current sequence, which is a collection of tracks.
+     * If your goal is to add events to the sequence, you don't want to use this method to
+     * get the sequence; instead, use the addEvent methods to add your events.
+     * @return the current sequence
+     */
+    public Sequence getSequence() {
+        return this.sequence;
+    }
+
+}

@@ -1,3 +1,17 @@
+/**
+ * GDXRoot.java
+ *
+ * This is the primary class file for running the game.  It is the "static main" of
+ * LibGDX; it must extend ApplicationAdapter to work properly. 
+ *
+ * We prefer to keep this class fairly lightweight.  We want the ModeControllers to
+ * do the hard work.  This class should just schedule the ModeControllers and allow
+ * the player to switch between them. We will see more on this in a later lab. 
+ *
+ * Author: Walker M. White, modified TeamWat
+ * Based on original GameX Ship Demo by Rama C. Hoetzlein, 2002
+ * LibGDX version, 1/16/2015
+ */
 package edu.teamWat.rhythmKnights.alpha;
 
 
@@ -11,7 +25,18 @@ import com.badlogic.gdx.assets.loaders.resolvers.*;
 import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
-
+/**
+ * Root class for a LibGDX.  
+ * 
+ * This class is technically not the ROOT CLASS. Each platform has another class above
+ * this (e.g. PC games use DesktopLauncher) which serves as the true root.  However, 
+ * those classes are unique to each platform, while this class is the same across all 
+ * plaforms. In addition, this functions as the root class all intents and purposes, 
+ * and you would draw it as a root class in an architecture specification.  
+ *
+ * All of the methods of ApplicationAdapter are extremely important.  You should study
+ * how each one is used.
+ */
 public class GDXRoot extends Game implements ScreenListener {
 	/** AssetManager to load game assets (textures, sounds, etc.) */
 	private AssetManager manager;
@@ -24,7 +49,7 @@ public class GDXRoot extends Game implements ScreenListener {
     /** Player mode for the level select screen (CONTROLLER CLASS) */
     private SelectMode selecting;
 
-    private int numLevels = 5;
+    private int numLevels = 2;
 
 	public GDXRoot() {
 		// Start loading with the asset manager

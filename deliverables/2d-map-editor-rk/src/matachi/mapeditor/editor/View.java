@@ -83,8 +83,8 @@ public class View {
 		/** Create the text field */
 		// test
 		pathText = new JTextField("UDLR", 10);
-		pathText.addActionListener(controller);
-		pathText.setActionCommand("pathupdate");
+		pathText.getDocument()
+		.addDocumentListener(controller.updatePathString);
 		pathText.setEnabled(false);  
 		// end test
 		

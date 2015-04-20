@@ -38,8 +38,6 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class LoadingMode implements Screen, InputProcessor {
 	// Textures necessary to support the loading screen
-	// TODO: make sure these paths are correct
-	// We could just use the ones from the labs
 	private static final String BACKGROUND_FILE = "images/splash_screen.png";
 	private static final String PROGRESS_FILE = "images/progressbar.png";
 	private static final String PLAY_BTN_FILE = "images/play.png";

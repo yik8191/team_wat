@@ -45,6 +45,7 @@ public class GridModel implements Grid {
 		this.defaultChar = defaultChar;
 		this.changeSupport = new PropertyChangeSupport(this);
 		this.map = createEmptyMap(columns, rows);
+		this.strmap = new String[rows][columns];
 	}
 
 	/**
