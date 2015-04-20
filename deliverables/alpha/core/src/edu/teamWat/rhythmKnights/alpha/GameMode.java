@@ -247,8 +247,6 @@ public class GameMode implements Screen{
                 else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
 					play();
-					play();
-					play();
 				}
 				else play();
 				break;
