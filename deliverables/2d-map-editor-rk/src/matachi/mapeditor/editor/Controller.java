@@ -274,6 +274,8 @@ public class Controller implements ActionListener, GUIInformation {
 
                 level.put("ticker", "MMMD");
 
+                level.put("audio", "track1.mid");
+
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
 
