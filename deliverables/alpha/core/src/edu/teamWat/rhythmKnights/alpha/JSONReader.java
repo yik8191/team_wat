@@ -78,7 +78,7 @@ public class JSONReader {
             o = null;
 	        System.out.println("IOException");
         }
-        level = (JSONObject) o;//new JSONObject(filePath);
+        level = (JSONObject) o;
 
         //get base info and create board
         //also look at this stupid conversion bullshit because you can't cast directly to int
@@ -203,4 +203,15 @@ public class JSONReader {
         }
         return new Ticker(actionArray);
     }
+
+    public static String getAudio(){
+        String audio = (String) level.get("audio");
+        if (audio != null) {
+            return "music/" + audio;
+        } else{
+            return "music/track1.mid";
+        }
+    }
+
+
 }

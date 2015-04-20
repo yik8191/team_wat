@@ -51,6 +51,7 @@ public class GameplayController {
 		board = JSONReader.parseFile("levels/level" + levelNum + ".json");
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
+        String audio = JSONReader.getAudio();
 
 		// Preallocate memory
 		ProjectilePool projs = new ProjectilePool();
@@ -61,6 +62,7 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		gameOver = false;
 		try {
+
 			RhythmController.init("music/track2.mid", ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
