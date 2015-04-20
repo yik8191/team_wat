@@ -63,7 +63,7 @@ public class GameplayController {
 		gameOver = false;
 		try {
 
-			RhythmController.init("music/track2.mid", ticker);
+			RhythmController.init(audio, ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
