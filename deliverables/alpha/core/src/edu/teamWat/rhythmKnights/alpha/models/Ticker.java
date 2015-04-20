@@ -1,7 +1,7 @@
 package edu.teamWat.rhythmKnights.alpha.models;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.utils.TimeUtils;
@@ -9,6 +9,7 @@ import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
+import javax.xml.transform.sax.SAXTransformerFactory;
 import java.awt.*;
 import java.sql.Time;
 
@@ -27,8 +28,17 @@ public class Ticker {
     public static Texture fireballTexture;
     public static Texture indicatorTexture;
 
-	private TickerAction[] tickerActions;
+    public static FilmStrip moveSprite;
+    public static FilmStrip dashSprite;
+    public static FilmStrip fireballSprite;
+    public static FilmStrip freezeSprite;
+    public static FilmStrip indicatorSprite;
+
+	public TickerAction[] tickerActions;
+    private int[] glowFrame;
 	private int beat;
+    public int numExpandedActions;
+    public float indicatorOffsetRatio;
 
     //how spaced out ticker squares should be
     //TODO: THese should be changed when the screen is rescaled.
@@ -41,7 +51,16 @@ public class Ticker {
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
+        glowFrame = new int[actions.length];
 		beat = 0;
+        numExpandedActions = 0;
+        for (TickerAction action : tickerActions) {
+            if (action == TickerAction.DASH || action == TickerAction.FIREBALL) {
+                numExpandedActions += 2;
+            } else {
+                numExpandedActions += 1;
+            }
+        }
 	}
 
 	public void reset(TickerAction[] actions) {
@@ -55,35 +74,55 @@ public class Ticker {
         INDICATOR_HEIGHT = canvas.INDICATOR_HEIGHT;
         INDICATOR_WIDTH = canvas.INDICATOR_WIDTH;
         float width = TICK_SQUARE_SIZE + SPACING;
-        float startX = canvas.getWidth()/2 - (TICK_SQUARE_SIZE*tickerActions.length + SPACING*(tickerActions.length-1))/2;
+        float startX = canvas.getWidth() / 2 - (TICK_SQUARE_SIZE * tickerActions.length + SPACING * (tickerActions.length - 1)) / 2;
         FilmStrip sprite;
         FilmStrip spriteIndicator;
-        Vector2 loc = new Vector2(0,canvas.getHeight()-(TICK_SQUARE_SIZE + 70));
-        for (int i=0; i < tickerActions.length; i++){
+        Vector2 loc = new Vector2(0, canvas.getHeight() - (TICK_SQUARE_SIZE + 70));
 
-            if (tickerActions[i] == TickerAction.MOVE){
-                sprite = new FilmStrip(blankTexture, 1, 1);
-            }else if (tickerActions[i] == TickerAction.DASH){
-                sprite = new FilmStrip(dashTexture, 1, 1);
-            }else if (tickerActions[i] == TickerAction.FREEZE){
-                sprite = new FilmStrip(freezeTexture, 1, 1);
-            }else{ //fireball
-                sprite = new FilmStrip(fireballTexture, 1, 1);
+//        for (int i = 0; i < tickerActions.length; i++) {
+//
+//            if (tickerActions[i] == TickerAction.MOVE) {
+//                sprite = moveSprite;
+//            } else if (tickerActions[i] == TickerAction.DASH) {
+//                sprite = dashSprite;
+//            } else if (tickerActions[i] == TickerAction.FREEZE) {
+//                sprite = freezeSprite;
+//            } else { //fireball
+//                sprite = fireballSprite;
+//            }
+//
+//            loc.x = startX + (width * i);
+//
+////            canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+//            canvas.draw(sprite, com.badlogic.gdx.graphics.Color.WHITE, 0, 0, loc.x, loc.y, 0, 1f, 1f);
+//        }
+
+        for (int i = 0; i < tickerActions.length; i++) {
+
+            if (tickerActions[i] == TickerAction.MOVE) {
+                sprite = moveSprite;
+            } else if (tickerActions[i] == TickerAction.DASH) {
+                sprite = dashSprite;
+            } else if (tickerActions[i] == TickerAction.FREEZE) {
+                sprite = freezeSprite;
+            } else { //fireball
+                sprite = fireballSprite;
             }
 
-            loc.x = startX + (width*i);
+            loc.x = startX + (width * i);
 
-            canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+
+            canvas.draw(sprite, loc.x, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+            if (glowFrame[i] > 0) glowFrame[i]--;
             if (beat == i) {
 
 	            float beatTime = 0;// RhythmController.toBeatTime(TimeUtils.millis());
-	            loc.x = 0;// startX + ((RhythmController.getCurrentTime() % tickerActions.length - 0.5f) * width);
+	            loc.x += indicatorOffsetRatio*width;
                 // draw the indicator for current action
-                spriteIndicator = new FilmStrip(indicatorTexture, 1, 1);
-                canvas.draw(spriteIndicator, loc.x-(TICK_SQUARE_SIZE/8), loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+                canvas.draw(indicatorSprite, loc.x, loc.y-5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
             }
         }
-	}
+    }
 
 	public TickerAction getAction() {
 		return tickerActions[beat];
@@ -128,6 +167,7 @@ public class Ticker {
         if (manager.isLoaded(BLANK_FILE)) {
             blankTexture = manager.get(BLANK_FILE,Texture.class);
             blankTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            moveSprite = new FilmStrip(blankTexture, 1, 1);
         } else {
             blankTexture = null;  // Failed to load
         }
@@ -135,6 +175,7 @@ public class Ticker {
         if (manager.isLoaded(DASH_FILE)) {
             dashTexture = manager.get(DASH_FILE,Texture.class);
             dashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            dashSprite = new FilmStrip(dashTexture, 1, 1);
         } else {
             dashTexture = null;  // Failed to load
         }
@@ -142,6 +183,7 @@ public class Ticker {
         if (manager.isLoaded(FREEZE_FILE)) {
             freezeTexture = manager.get(FREEZE_FILE,Texture.class);
             freezeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            freezeSprite = new FilmStrip(freezeTexture, 1, 1);
         } else {
             freezeTexture = null;  // Failed to load
         }
@@ -149,6 +191,7 @@ public class Ticker {
         if (manager.isLoaded(FIREBALL_FILE)) {
             fireballTexture = manager.get(FIREBALL_FILE,Texture.class);
             fireballTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            fireballSprite = new FilmStrip(fireballTexture, 1, 1);
         } else {
             fireballTexture = null;  // Failed to load
         }
@@ -156,6 +199,7 @@ public class Ticker {
         if (manager.isLoaded(INDICATOR_FILE)) {
             indicatorTexture = manager.get(INDICATOR_FILE, Texture.class);
             indicatorTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            indicatorSprite = new FilmStrip(indicatorTexture, 1, 1);
         } else {
             indicatorTexture = null; // Failed to load
         }
@@ -190,6 +234,14 @@ public class Ticker {
             indicatorTexture = null;
             manager.unload(INDICATOR_FILE);
         }
+    }
+
+    public void glowBeat(int beatNumber, int intensity) {
+        glowFrame[beatNumber] = intensity;
+    }
+
+    public void setBeat(int beat) {
+        this.beat = beat;
     }
 
 	public enum TickerAction {

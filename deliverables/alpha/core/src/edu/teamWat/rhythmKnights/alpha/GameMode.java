@@ -14,6 +14,7 @@ package edu.teamWat.rhythmKnights.alpha;
 // TODO: Import the package that contains our gameObjects
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -242,18 +243,19 @@ public class GameMode implements Screen{
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
 				if (gameplayController.isGameOver()) reset();
-                else if (!knight.isAlive()) reset();
+                else if (!knight.isActive()) reset();
                 else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
 					gameState = GameState.WIN;
-					play();
-					play();
 					play();
 				}
 				else play();
 				break;
             case WIN:
                 this.curLevel++;
-                this.curLevel = this.curLevel % this.numLevels;
+                this.curLevel = this.curLevel % (this.numLevels+1);
+                if (this.curLevel == 0) {
+                    this.curLevel = 1;
+                }
                 //TODO: add some sort of 'good job you win!' message
                 gameState = GameState.INTRO;
 //				spriteBatch = new SpriteBatch();
@@ -306,8 +308,8 @@ public class GameMode implements Screen{
 		// NO UPDATE CODE HERE
         canvas.draw(background, 0, 0);
 		gameplayController.board.draw(canvas);
-		gameplayController.gameObjects.draw(canvas);
 		gameplayController.ticker.draw(canvas);
+		gameplayController.gameObjects.draw(canvas);
 		canvas.end();
 	}
 

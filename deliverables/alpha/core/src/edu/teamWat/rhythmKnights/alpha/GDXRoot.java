@@ -1,3 +1,4 @@
+
 /**
  * GDXRoot.java
  *
@@ -139,4 +140,3 @@ public class GDXRoot extends Game implements ScreenListener {
 			Gdx.app.exit();
 		}
 	}
-}

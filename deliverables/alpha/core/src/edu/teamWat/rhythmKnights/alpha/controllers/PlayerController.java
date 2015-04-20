@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.org.apache.bcel.internal.classfile.Code;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +77,7 @@ public class PlayerController implements InputController, InputProcessor {
 				didReset = true;
 				break;
 		}
-		System.out.println(RhythmController.getSequencePosition() - inputOffset);
+		//System.out.println(RhythmController.getSequencePosition() - inputOffset);
 		return true;
 	}
 

@@ -223,7 +223,7 @@ public class Controller implements ActionListener, GUIInformation {
                         if (!tileType.equals("")) {
                             curObj.put("x", x);
 
-                            curObj.put("y", height - y);
+                            curObj.put("y", height - y - 1);
 
                             curObj.put("type", tileType);
                             if (tileType.equals("start") && !hasStart) {
@@ -231,7 +231,7 @@ public class Controller implements ActionListener, GUIInformation {
                                 JSONObject player = new JSONObject();
                                 player.put("x", x);
 
-                                player.put("y", height - y);
+                                player.put("y", height - y - 1);
 
                                 level.put("player", player);
                             } else if (tileType.equals("start") && hasStart) {
@@ -250,7 +250,7 @@ public class Controller implements ActionListener, GUIInformation {
                             curObj.put("type", object);
                             curObj.put("x", x);
 
-                            curObj.put("y", height - y);
+                            curObj.put("y", height - y - 1);
 
                             //TODO: Correctly implement this so objects have paths
                             curObj.put("path", path);
@@ -273,6 +273,8 @@ public class Controller implements ActionListener, GUIInformation {
                 level.put("objects", objects);
 
                 level.put("ticker", "MMMD");
+
+                level.put("audio", "track1.mid");
 
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
@@ -346,7 +348,7 @@ public class Controller implements ActionListener, GUIInformation {
 
                             //get coordinates of tile
                             int x = ((Long) curTile.get("x")).intValue();
-                            int y = ((Long) curTile.get("y")).intValue();
+                            int y = height - ((Long) curTile.get("y")).intValue() - 1;
 
                             char tileNr;
 
@@ -377,7 +379,7 @@ public class Controller implements ActionListener, GUIInformation {
                             JSONObject curObj = (JSONObject) objects.get(j-1);
                             //get where enemy starts
                             int x = ((Long) curObj.get("x")).intValue();
-                            int y = ((Long) curObj.get("y")).intValue();
+                            int y = height - ((Long) curObj.get("y")).intValue() - 1;
 
                             char tileNr;
 
