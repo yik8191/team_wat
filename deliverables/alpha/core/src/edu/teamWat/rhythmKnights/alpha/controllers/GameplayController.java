@@ -42,16 +42,29 @@ public class GameplayController {
 
 	public boolean gameStateAdvanced;
 
+	private final int DOT_HP = 3;
+	private int timeHP = DOT_HP;
+	private boolean hasMoved = false;
+
 	public GameplayController() {	}
 
 
 	public void initialize(int levelNum) {
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        String path = (System.getProperty("user.dir"));
+		path = path.substring(path.length()-6);
+		//System.out.println(path);
 
-		board = JSONReader.parseFile("levels/level" + levelNum + ".json");
+        String audio;
+        if (path.equals("assets")){
+            board = JSONReader.parseFile("levels/level" + levelNum + ".json");
+            audio = JSONReader.getAudio(false);
+        }else {
+            board = JSONReader.parseFile("core/assets/levels/level" + levelNum + ".json");
+            audio = JSONReader.getAudio(true);
+        }
         JSONReader.getObjects();
         ticker = JSONReader.initializeTicker();
-        String audio = JSONReader.getAudio();
 
 		// Preallocate memory
 		ProjectilePool projs = new ProjectilePool();
@@ -80,7 +93,14 @@ public class GameplayController {
 //		}
 //		prevBeatTime = beatTIme;
 
-		gameStateAdvanced = false;
+		if (hasMoved) {
+			timeHP--;
+			if (timeHP == 0) {
+				knight.decrementHP();
+				timeHP = DOT_HP;
+			}
+			gameStateAdvanced = false;
+		}
 
 		if (playerController.didReset) {
 			playerController.clear();
@@ -127,68 +147,70 @@ public class GameplayController {
 //						}
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 //						moved++;
-							if (knight.getPosition().y == 4) {
-								double a = 0;
-							}
-							RhythmController.setCompleted(currentActionIndex, true);
-							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							Vector2 vel = new Vector2(0, 0);
-							switch (keyEvent.code) {
-								case PlayerController.CONTROL_MOVE_RIGHT:
-									vel.x = 1;
-									knight.setDirection(Knight.KnightDirection.RIGHT);
-									break;
-								case PlayerController.CONTROL_MOVE_UP:
-									vel.y = 1;
-									knight.setDirection(Knight.KnightDirection.BACK);
-									break;
-								case PlayerController.CONTROL_MOVE_LEFT:
-									vel.x = -1;
-									knight.setDirection(Knight.KnightDirection.LEFT);
-									break;
-								case PlayerController.CONTROL_MOVE_DOWN:
-									vel.y = -1;
-									knight.setDirection(Knight.KnightDirection.FRONT);
-									break;
-							}
-							knight.setVelocity(vel);
-							advanceGameState();
-							RhythmController.playSuccess();
 
-							// Display visual feedback to show success
-							knight.showSuccess();
-							// Set current tile type to SUCCESS
-							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
-							RhythmController.playSuccess();
+						if (knight.getPosition().y == 4) {
+							double a = 0;
+						}
+						RhythmController.setCompleted(currentActionIndex, true);
+						RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+						Vector2 vel = new Vector2(0, 0);
+						switch (keyEvent.code) {
+							case PlayerController.CONTROL_MOVE_RIGHT:
+								vel.x = 1;
+								knight.setDirection(Knight.KnightDirection.RIGHT);
+								break;
+							case PlayerController.CONTROL_MOVE_UP:
+								vel.y = 1;
+								knight.setDirection(Knight.KnightDirection.BACK);
+								break;
+							case PlayerController.CONTROL_MOVE_LEFT:
+								vel.x = -1;
+								knight.setDirection(Knight.KnightDirection.LEFT);
+								break;
+							case PlayerController.CONTROL_MOVE_DOWN:
+								vel.y = -1;
+								knight.setDirection(Knight.KnightDirection.FRONT);
+								break;
+						}
+						hasMoved = true;
+						knight.setVelocity(vel);
+						advanceGameState();
+						RhythmController.playSuccess();
 
-							break;
-						case DASH:
-							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
-							RhythmController.setCompleted(currentActionIndex, true);
-							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							switch (keyEvent.code) {
-								case PlayerController.CONTROL_MOVE_RIGHT:
-									knight.setDirection(Knight.KnightDirection.RIGHT);
-									break;
-								case PlayerController.CONTROL_MOVE_UP:
-									knight.setDirection(Knight.KnightDirection.BACK);
-									break;
-								case PlayerController.CONTROL_MOVE_LEFT:
-									knight.setDirection(Knight.KnightDirection.LEFT);
-									break;
-								case PlayerController.CONTROL_MOVE_DOWN:
-									knight.setDirection(Knight.KnightDirection.FRONT);
-									break;
-							}
-							break;
-						case DASH2:
-							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
-							RhythmController.setCompleted(currentActionIndex, true);
-							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							if (RhythmController.getPlayerAction(currentActionIndex) != RhythmController.getPlayerAction(currentActionIndex - 1)) {
-								damagePlayer();
-							} else {
-								vel = new Vector2(0, 0);
+						// Display visual feedback to show success
+						knight.showSuccess();
+						// Set current tile type to SUCCESS
+						board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
+						RhythmController.playSuccess();
+
+						break;
+					case DASH:
+						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
+						RhythmController.setCompleted(currentActionIndex, true);
+						RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+						switch (keyEvent.code) {
+							case PlayerController.CONTROL_MOVE_RIGHT:
+								knight.setDirection(Knight.KnightDirection.RIGHT);
+								break;
+							case PlayerController.CONTROL_MOVE_UP:
+								knight.setDirection(Knight.KnightDirection.BACK);
+								break;
+							case PlayerController.CONTROL_MOVE_LEFT:
+								knight.setDirection(Knight.KnightDirection.LEFT);
+								break;
+							case PlayerController.CONTROL_MOVE_DOWN:
+								knight.setDirection(Knight.KnightDirection.FRONT);
+								break;
+						}
+						break;
+					case DASH2:
+						if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
+						RhythmController.setCompleted(currentActionIndex, true);
+						RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+						if (RhythmController.getPlayerAction(currentActionIndex) != RhythmController.getPlayerAction(currentActionIndex - 1)) {
+							damagePlayer();
+						} else {
+							vel = new Vector2(0, 0);
 								switch (keyEvent.code) {
 									case PlayerController.CONTROL_MOVE_RIGHT:
 										vel.x = 2;

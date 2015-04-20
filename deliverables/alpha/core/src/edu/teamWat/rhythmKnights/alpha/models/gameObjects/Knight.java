@@ -32,7 +32,7 @@ public class Knight extends GameObject {
     // Constants relating to Knight HP
     private static int HP_SIZE;
     protected int knightHP;
-    protected int INITIAL_HP = 10;
+    protected int INITIAL_HP = 80;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -246,30 +246,32 @@ public class Knight extends GameObject {
         // Draw main knight
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
-        // Drawing the hp icon
-        FilmStrip spriteHpIcon = new FilmStrip(knightHpIconTexture, 1, 1);
-        canvas.draw(spriteHpIcon, (int) (HP_SIZE - HP_SIZE / 1.5f), canvas.getHeight() - 11.9f * HP_SIZE, HP_SIZE, HP_SIZE);
-
         // Drawing code for the Knight HP
-        HP_SIZE = canvas.HP_SIZE;
+        HP_SIZE = (int) ((float) canvas.HP_SIZE/1.5f);
+        int barWidth = HP_SIZE/5;
         // Draw remaining hearts
         if (this.knightHP == 0) {
             spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
             for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                canvas.draw(spriteHP, (int) (HP_SIZE + j* HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
+                canvas.draw(spriteHP, (j+1)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
             }
         }
 
         spriteHP = new FilmStrip(knightHpFullTexture, 1, 1);
         for (int i = 0; i < this.knightHP; i++) {
-            canvas.draw(spriteHP, (int) (HP_SIZE + i*HP_SIZE/1.5f), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
+            canvas.draw(spriteHP, (i+1)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
                 for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                    canvas.draw(spriteHP, (int) (HP_SIZE + (j+1+i)*HP_SIZE/1.5), canvas.getHeight() - 11.9f*HP_SIZE, (int) (HP_SIZE/1.3), HP_SIZE);
+                    canvas.draw(spriteHP, (i+j+2)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
                 }
             }
         }
+
+        // Drawing the hp icon
+        HP_SIZE = canvas.HP_SIZE;
+        FilmStrip spriteHpIcon = new FilmStrip(knightHpIconTexture, 1, 1);
+        canvas.draw(spriteHpIcon, 0, 0, HP_SIZE, HP_SIZE);
     }
 
     /**
@@ -418,10 +420,35 @@ public class Knight extends GameObject {
         RhythmController.playDamage();
 	}
 
+    public void decrementHP() {
+        this.knightHP--;
+        if (this.knightHP <= 0) {
+            this.isAlive = false;
+            this.setState(KnightState.DEAD);
+            switch(this.facing) {
+                case FRONT:
+                    curFrame = DEAD_START;
+                    break;
+                case BACK:
+                    curFrame = DEAD_UP_START;
+                    break;
+                case LEFT:
+                    curFrame = DEAD_LEFT_START;
+                    break;
+                case RIGHT:
+                    curFrame = DEAD_RIGHT_START;
+                    break;
+            }
+        }
+    }
+
     /** Called whenever the player successfully inputs a move on the beat */
     public void showSuccess() {
         if (this.knightHP < INITIAL_HP) {
-            this.knightHP ++;
+            this.knightHP +=10;
+            if (this.knightHP > INITIAL_HP) {
+                this.knightHP = INITIAL_HP;
+            }
         }
         switch(this.facing) {
             case FRONT:

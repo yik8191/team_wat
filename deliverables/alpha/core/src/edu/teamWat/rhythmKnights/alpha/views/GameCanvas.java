@@ -49,7 +49,7 @@ public class GameCanvas {
     public int TICK_SQUARE_SIZE = 115;
     public int INDICATOR_HEIGHT = 145;
     public int INDICATOR_WIDTH = 420;
-    public int HP_SIZE = 100;
+    public int HP_SIZE;
 
 
 	/** Drawing context to handle textures as sprites */
@@ -536,7 +536,7 @@ public class GameCanvas {
 	    xOffset = (int)startX;
 	    yOffset = (int)startY;
         TICKER_SPACING = boardW*getWidth()/500;
-        TICK_SQUARE_SIZE = (int)((float)boardH*getHeight()/64);
+        TICK_SQUARE_SIZE = (int) getHeight()/7;
         INDICATOR_HEIGHT = (int)((float)TICK_SQUARE_SIZE);
         INDICATOR_WIDTH = (int)((float)TICK_SQUARE_SIZE);
         HP_SIZE = (int)((float)TICK_SQUARE_SIZE*0.75);
