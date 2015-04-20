@@ -185,7 +185,7 @@ public class RhythmController {
 		}
 
 		numTranslated = 0;
-		for (int i = 0; i < numActions; i++) {
+		for (int i = 0; i < numActions - 1; i++) {
 			if (tempTempTickTimes[numActions - i - 1] < tempTempTickTimes[numActions - i - 2]) {
 				numTranslated = i + 1;
 				break;
