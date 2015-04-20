@@ -75,7 +75,9 @@ public abstract class GameObject {
 	
 	public void setAlive(boolean alive){
 		this.isAlive = alive;
-		this.isActive = alive;
 	}
-	
+	public void setActive(boolean active) {
+		this.isAlive = active;
+		this.isActive = active;
+	}
 }

@@ -121,7 +121,7 @@ public class JSONReader {
                 b.setTile(x, y, t);
             }
         } else {
-            System.out.println("No tiles found! that's bad! you at least need a start/goal tile");
+            System.out.println("No tiles found! that's bad! you at least need a start/goal tile!");
         }
 
         return b;

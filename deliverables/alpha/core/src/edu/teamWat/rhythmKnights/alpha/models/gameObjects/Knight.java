@@ -218,6 +218,7 @@ public class Knight extends GameObject {
                 curFrame++;
                 // Finished animating the death frames
                 if (curFrame >= (this.facingFact/2 * 5 + 44)) {
+                    this.setActive(false);
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
