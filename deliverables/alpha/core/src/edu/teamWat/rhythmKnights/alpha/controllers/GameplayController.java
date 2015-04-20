@@ -42,6 +42,10 @@ public class GameplayController {
 
 	public boolean gameStateAdvanced;
 
+	private final int DOT_HP = 3;
+	private int timeHP = DOT_HP;
+	private boolean hasMoved = false;
+
 	public GameplayController() {	}
 
 
@@ -90,7 +94,14 @@ public class GameplayController {
 //		}
 //		prevBeatTime = beatTIme;
 
-		gameStateAdvanced = false;
+		if (hasMoved) {
+			timeHP--;
+			if (timeHP == 0) {
+				knight.decrementHP();
+				timeHP = DOT_HP;
+			}
+			gameStateAdvanced = false;
+		}
 
 		if (playerController.didReset) {
 			playerController.clear();
@@ -160,6 +171,7 @@ public class GameplayController {
 								knight.setDirection(Knight.KnightDirection.FRONT);
 								break;
 						}
+						hasMoved = true;
 						knight.setVelocity(vel);
 						advanceGameState();
 						RhythmController.playSuccess();
