@@ -50,14 +50,13 @@ public class GameplayController {
 
 
 	public void initialize(int levelNum) {
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        String[] path = (System.getProperty("user.dir")).split("\\\\");
-//        for (int i=0;i<path.length; i++) {
-//            System.out.println(path[i]);
-//        }
+		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        String path = (System.getProperty("user.dir"));
+		path = path.substring(path.length()-6);
+		//System.out.println(path);
 
         String audio;
-        if (path[path.length-1].equals("assets")){
+        if (path.equals("assets")){
             board = JSONReader.parseFile("levels/level" + levelNum + ".json");
             audio = JSONReader.getAudio(false);
         }else {
