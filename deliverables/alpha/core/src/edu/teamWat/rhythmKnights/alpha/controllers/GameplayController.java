@@ -207,6 +207,7 @@ public class GameplayController {
 
 							// Display visual feedback to show success
 							knight.showSuccess();
+//							knight.setDashing();
 							// Set current tile type to SUCCESS
 							board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
 							RhythmController.playSuccess();
