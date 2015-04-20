@@ -23,18 +23,18 @@ public class JSONReader {
 
     private static JSONObject level = null;
 
-    private static void getAllFilse(File curDir) {
-
-        File[] filesList = curDir.listFiles();
-        for (File f : filesList) {
-            if (f.isDirectory())
-                System.out.println(f.getName());
-            if (f.isFile()) {
-                System.out.println(f.getName());
-            }
-        }
-
-    }
+//    private static void getAllFilse(File curDir) {
+//
+//        File[] filesList = curDir.listFiles();
+//        for (File f : filesList) {
+//            if (f.isDirectory())
+//                System.out.println(f.getName());
+//            if (f.isFile()) {
+//                System.out.println(f.getName());
+//            }
+//        }
+//
+//    }
 
     public static Board parseFile(String string) {
         //get the stuff from the file
@@ -42,8 +42,8 @@ public class JSONReader {
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 
-            File curDir = new File(".");
-            getAllFilse(curDir);
+//            File curDir = new File(".");
+//            getAllFilse(curDir);
 
 
 

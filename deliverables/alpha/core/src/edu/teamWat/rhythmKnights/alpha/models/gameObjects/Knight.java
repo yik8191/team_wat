@@ -219,7 +219,7 @@ public class Knight extends GameObject {
                 // Finished animating the death frames
                 if (curFrame >= (this.facingFact/2 * 5 + 44)) {
                     this.setActive(false);
-                    this.setState(KnightState.NORMAL);
+//                    this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
             } else {
@@ -380,6 +380,7 @@ public class Knight extends GameObject {
 	public void takeDamage() {
         this.knightHP -= 3;
         if (this.knightHP <= 0) {
+            curTime = animDelay;
             this.isAlive = false;
             this.setState(KnightState.DEAD);
             switch(this.facing) {
@@ -396,23 +397,24 @@ public class Knight extends GameObject {
                     curFrame = DEAD_RIGHT_START;
                     break;
             }
+        } else {
+            curTime = animDelay;
+            switch (this.facing) {
+                case FRONT:
+                    curFrame = HURT_START;
+                    break;
+                case BACK:
+                    curFrame = HURT_UP_START;
+                    break;
+                case LEFT:
+                    curFrame = HURT_LEFT_START;
+                    break;
+                case RIGHT:
+                    curFrame = HURT_RIGHT_START;
+                    break;
+            }
+            this.state = KnightState.TAKINGDMG;
         }
-        curTime = animDelay;
-        switch(this.facing) {
-            case FRONT:
-                curFrame = HURT_START;
-                break;
-            case BACK:
-                curFrame = HURT_UP_START;
-                break;
-            case LEFT:
-                curFrame = HURT_LEFT_START;
-                break;
-            case RIGHT:
-                curFrame = HURT_RIGHT_START;
-                break;
-        }
-        this.state = KnightState.TAKINGDMG;
         RhythmController.playDamage();
 	}
 
