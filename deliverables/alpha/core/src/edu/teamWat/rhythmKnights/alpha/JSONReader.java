@@ -23,29 +23,11 @@ public class JSONReader {
 
     private static JSONObject level = null;
 
-    private static void getAllFilse(File curDir) {
-
-        File[] filesList = curDir.listFiles();
-        for (File f : filesList) {
-            if (f.isDirectory())
-                System.out.println(f.getName());
-            if (f.isFile()) {
-                System.out.println(f.getName());
-            }
-        }
-
-    }
 
     public static Board parseFile(String string) {
         //get the stuff from the file
         JSONParser parser = new JSONParser();
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
-
-            File curDir = new File(".");
-            getAllFilse(curDir);
-
-
 
         Object o;
         try {
@@ -224,12 +206,16 @@ public class JSONReader {
         return new Ticker(actionArray);
     }
 
-    public static String getAudio(){
+    public static String getAudio(Boolean isJar){
         String audio = (String) level.get("audio");
+        String source = "";
+        if (isJar){
+            source = "core/assets/";
+        }
         if (audio != null) {
-            return "core/assets/music/" + audio;
+            return source + "music/" + audio;
         } else{
-            return "core/assets/music/track1.mid";
+            return source + "music/track1.mid";
         }
     }
 
