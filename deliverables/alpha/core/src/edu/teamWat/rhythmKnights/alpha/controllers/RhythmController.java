@@ -24,7 +24,7 @@ public class RhythmController {
 	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
 	/** Offset to translate intervals in time */
-	static long totalOffset = (long)(0.7 * 128);
+	static long totalOffset = (long)(-0.3 * 128);
 	/** Offset from perceived beat in time in the music */
 //	static float finalActionOffset = 0.5f;
 
@@ -132,6 +132,9 @@ public class RhythmController {
 			tempEvent = track.get(i);
 			MidiMessage message = tempEvent.getMessage();
 			if (message instanceof ShortMessage) {
+
+//				System.out.println(((ShortMessage)message).getCommand() + " " + tempEvent.getTick());
+
 				if (((ShortMessage)message).getCommand() == NOTE_ON) {
 					prevEvent = event;
 					event = tempEvent;
@@ -163,8 +166,8 @@ public class RhythmController {
 			tempTickTimes.add(event.getTick() +  (event.getTick() - prevEvent.getTick())/2);
 		}
 
-//		trackLength = sequence.getTickLength();
-		trackLength = 128 * 32;
+		trackLength = sequence.getTickLength();
+//		trackLength = 128 * 32;
 
 		tickTimes = new long[tempTickTimes.size()];
 		completedTicks = new boolean[tempTickTimes.size()];
@@ -294,7 +297,7 @@ public class RhythmController {
 	}
 
 	public static void playSuccess() {
-		hitSound.play();
+//		hitSound.play();
 	}
 
 	public static void playDamage() {

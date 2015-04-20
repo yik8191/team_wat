@@ -61,7 +61,7 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		gameOver = false;
 		try {
-			RhythmController.init("music/144beat.mid", ticker);
+			RhythmController.init("music/track2.mid", ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,7 +71,7 @@ public class GameplayController {
 //	int moved = 0;
 
 	public void update() {
-		System.out.println("Time: " + RhythmController.getSequencePosition());
+//		System.out.println("Time: " + RhythmController.getSequencePosition());
 
 //		float beatTIme = RhythmController.toBeatTime(RhythmController.getPosition());
 //		if ( beatTIme < prevBeatTime){
