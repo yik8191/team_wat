@@ -115,7 +115,7 @@ public class Knight extends GameObject {
 
     public void update() {
         // If we are dead do nothing.
-        if (!isAlive) {
+        if (!isActive) {
             return;
         }
 
@@ -223,7 +223,6 @@ public class Knight extends GameObject {
                 // Finished animating the death frames
                 if (curFrame >= (this.facingFact / 2 * 5 + 44)) {
                     this.setActive(false);
-                    this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
             } else {
@@ -235,10 +234,20 @@ public class Knight extends GameObject {
                 curFrame++;
                 // Finished animating the death frames
                 if (curFrame >= (this.facingFact / 2 * 5 + 84)) {
-                    this.setActive(false);
-                    if (this.isAlive) {
-                        this.setState(KnightState.DEAD);
-                        this.isAlive = false;
+                    this.setState(KnightState.DEAD);
+                    switch (this.facing) {
+                        case FRONT:
+                            curFrame = DEAD_START;
+                            break;
+                        case BACK:
+                            curFrame = DEAD_UP_START;
+                            break;
+                        case LEFT:
+                            curFrame = DEAD_LEFT_START;
+                            break;
+                        case RIGHT:
+                            curFrame = DEAD_RIGHT_START;
+                            break;
                     }
                 }
                 curTime = animDelay;
@@ -393,20 +402,23 @@ public class Knight extends GameObject {
     }
 
     public void setFalling() {
-        this.setState(KnightState.FALLING);
-        switch (this.facing) {
-            case FRONT:
-                curFrame = FALL_START;
-                break;
-            case BACK:
-                curFrame = FALL_UP_START;
-                break;
-            case LEFT:
-                curFrame = FALL_LEFT_START;
-                break;
-            case RIGHT:
-                curFrame = FALL_RIGHT_START;
-                break;
+        if (this.isAlive) {
+            this.isAlive = false;
+            this.setState(KnightState.FALLING);
+            switch (this.facing) {
+                case FRONT:
+                    curFrame = FALL_START;
+                    break;
+                case BACK:
+                    curFrame = FALL_UP_START;
+                    break;
+                case LEFT:
+                    curFrame = FALL_LEFT_START;
+                    break;
+                case RIGHT:
+                    curFrame = FALL_RIGHT_START;
+                    break;
+            }
         }
     }
 

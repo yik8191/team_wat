@@ -189,7 +189,7 @@ public class GameplayController {
 							RhythmController.playSuccess();
 
 							// Display visual feedback to show success
-							knight.showSuccess();
+							if (knight.isAlive()) knight.showSuccess();
 							// Set current tile type to SUCCESS
 							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
 							RhythmController.playSuccess();
@@ -242,7 +242,7 @@ public class GameplayController {
 								RhythmController.playSuccess();
 
 								// Display visual feedback to show success
-								knight.showSuccess();
+								if (knight.isAlive()) knight.showSuccess();
 								hasMoved = true;
 //							knight.setDashing();
 								// Set current tile type to SUCCESS
