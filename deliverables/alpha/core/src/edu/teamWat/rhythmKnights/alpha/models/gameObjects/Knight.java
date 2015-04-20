@@ -81,10 +81,15 @@ public class Knight extends GameObject {
     private int DASH_LEFT_START = 70;
     private int DASH_RIGHT_START = 75;
 
+    private int FALL_START = 80;
+    private int FALL_UP_START = 85;
+    private int FALL_LEFT_START = 90;
+    private int FALL_RIGHT_START = 95;
+
     // Sheet constants
-    private int SPRITE_ROWS = 16;
+    private int SPRITE_ROWS = 20;
     private int SPRITE_COLS = 5;
-    private int SPRITE_TOT = 80;
+    private int SPRITE_TOT = 100;
 
     private boolean isInvulnerable;
     private boolean isDashing = false;
@@ -219,6 +224,22 @@ public class Knight extends GameObject {
                 if (curFrame >= (this.facingFact / 2 * 5 + 44)) {
                     this.setActive(false);
                     this.setState(KnightState.NORMAL);
+                }
+                curTime = animDelay;
+            } else {
+                sprite.setFrame(curFrame);
+            }
+        } else if (this.state == KnightState.FALLING) {
+            curTime--;
+            if (curTime == 0) {
+                curFrame++;
+                // Finished animating the death frames
+                if (curFrame >= (this.facingFact / 2 * 5 + 84)) {
+                    this.setActive(false);
+                    if (this.isAlive) {
+                        this.setState(KnightState.DEAD);
+                        this.isAlive = false;
+                    }
                 }
                 curTime = animDelay;
             } else {
@@ -371,6 +392,24 @@ public class Knight extends GameObject {
         }
     }
 
+    public void setFalling() {
+        this.setState(KnightState.FALLING);
+        switch (this.facing) {
+            case FRONT:
+                curFrame = FALL_START;
+                break;
+            case BACK:
+                curFrame = FALL_UP_START;
+                break;
+            case LEFT:
+                curFrame = FALL_LEFT_START;
+                break;
+            case RIGHT:
+                curFrame = FALL_RIGHT_START;
+                break;
+        }
+    }
+
     /**
      * Decrements the player health by 1
      *
@@ -506,6 +545,8 @@ public class Knight extends GameObject {
         TAKINGDMG,
         /** Knight has successfully taken an action */
         MOVING,
+        /** Knight is falling into an empty tile */
+        FALLING,
         /** Knight is dead */
         DEAD
     }
