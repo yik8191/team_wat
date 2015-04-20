@@ -83,7 +83,7 @@ public class GameTrack2 {
     	    "G3i Ri Eb3i Ri D3i Ri G3i Ri ";
 	
 	Rhythm rhythm = new Rhythm()
-	    .addLayer("O...O...O...O...") // This is Layer 0
+	    .addLayer("O...O...") // This is Layer 0
 	    // .addLayer("..S...S...S...S.")
 	    // .addLayer("````````````````")
 	    // .addLayer("...............+") // This is Layer 3
@@ -94,7 +94,7 @@ public class GameTrack2 {
 	Pattern rpattern = rhythm.getPattern();
 
 	Pattern bpattern =
-	    new Pattern("Cq Cq Cq Ci Ci")
+	    new Pattern("Cq Cq Cq Cq")
 	    .repeat(16);
 	
         pattern.add("T144 V0 I[Bass_Drum] " +

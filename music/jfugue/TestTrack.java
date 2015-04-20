@@ -1,5 +1,8 @@
 import java.io.File;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.MidiSystem;
 
@@ -11,14 +14,16 @@ import org.jfugue.tools.GetPatternStats;
 import org.jfugue.mitools.Rearranger;
 
 
-public class MyMusicApp {
-    public static void main(String[] args) {
-	System.out.println("Enter tempo: ");
-	String input = System.console().readline();
-	int tempo = Integer.parseInt(input);
+public class TestTrack {
+    public static void main(String[] args) throws IOException {
+	InputStreamReader isr = new InputStreamReader(System.in);
+	BufferedReader br = new BufferedReader(isr);
+        System.out.print("Enter tempo: \n");
+        String tempo = br.readLine();
+	int t = Integer.parseInt(tempo);
 	Pattern pattern =
-	    new Pattern("V0 I[Steel_Drums] Cq Cq Cq Cq")
-	    .setTempo(tempo)
+	    new Pattern("V0 I[Steel_Drums] Cq Cq Cq Cq ")
+	    .setTempo(t)
 	    .repeat(2);
 	
 	MidiFileManager mymanager = new MidiFileManager();
@@ -27,8 +32,8 @@ public class MyMusicApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-	Player player = new Player();
-	player.play(pattern);
+	// Player player = new Player();
+	// player.play(pattern);
     }
 } 
 
