@@ -10,9 +10,8 @@ import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 /**
- * Knight class!
- * Fill in description here!
- * */
+ * Knight class! Fill in description here!
+ */
 public class Knight extends GameObject {
 
     private KnightState state = KnightState.NORMAL;
@@ -87,18 +86,18 @@ public class Knight extends GameObject {
     private int SPRITE_COLS = 5;
     private int SPRITE_TOT = 80;
 
-	private boolean isInvulnerable;
+    private boolean isInvulnerable;
     private boolean isDashing = false;
 
-    public Knight(int id, float x, float y){
+    public Knight(int id, float x, float y) {
         this.id = id;
-        this.position = new Vector2(x,y);
-	    this.animatedPosition.set(position);
-	    this.oldPosition.set(position);
+        this.position = new Vector2(x, y);
+        this.animatedPosition.set(position);
+        this.oldPosition.set(position);
         this.isAlive = true;
         this.isActive = true;
         this.knightHP = INITIAL_HP;
-	    this.animFrames = 3;
+        this.animFrames = 3;
 
         // Set current knight image
         sprite = new FilmStrip(knightTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
@@ -115,31 +114,31 @@ public class Knight extends GameObject {
             return;
         }
 
-	    if (moved) {
-		    animAge++;
-		    if (animAge == animFrames) {
-			    animAge = 0;
-			    animatedPosition.set(position);
-			    oldPosition.set(position);
-			    moved = false;
-		    } else {
-			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
-		    }
-	    }
+        if (moved) {
+            animAge++;
+            if (animAge == animFrames) {
+                animAge = 0;
+                animatedPosition.set(position);
+                oldPosition.set(position);
+                moved = false;
+            } else {
+                animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
+            }
+        }
         //TODO: implement this
     }
 
-    public void setState(KnightState ks){
+    public void setState(KnightState ks) {
         this.state = ks;
     }
 
-    public KnightState getState(){
+    public KnightState getState() {
         return this.state;
     }
 
     public void setDirection(KnightDirection d) {
         this.facing = d;
-        switch(d) {
+        switch (d) {
             case FRONT:
                 this.facingFact = 0;
                 break;
@@ -162,37 +161,37 @@ public class Knight extends GameObject {
     public void draw(GameCanvas canvas) {
         // Animation code for knight
         if (this.state == KnightState.NORMAL) {
-            curTime --;
+            curTime--;
             if (curTime == 0) {
-                curFrame ++;
-                if (curFrame >= (this.facingFact*5 + 4)) {
-                    curFrame = this.facingFact*5;
+                curFrame++;
+                if (curFrame >= (this.facingFact * 5 + 4)) {
+                    curFrame = this.facingFact * 5;
                 }
                 curTime = animDelay;
             } else {
                 sprite.setFrame(curFrame);
             }
         } else if (this.state == KnightState.TAKINGDMG) {
-            curTime --;
+            curTime--;
             if (curTime == 0) {
-                curFrame ++;
+                curFrame++;
                 // Finished animating the "taking damage" frames
-                if (curFrame >= ((this.facingFact+1)*5 + 4)) {
-                    curFrame = (this.facingFact+1)*5;
+                if (curFrame >= ((this.facingFact + 1) * 5 + 4)) {
+                    curFrame = (this.facingFact + 1) * 5;
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
             } else {
                 sprite.setFrame(curFrame);
             }
-        // Used for changing sprite direction
+            // Used for changing sprite direction
         } else if (this.state == KnightState.MOVING) {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
                 // Finished animating the success frames
-                if (curFrame >= (this.facingFact*5 + 4)) {
-                    curFrame = this.facingFact*5;
+                if (curFrame >= (this.facingFact * 5 + 4)) {
+                    curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
@@ -217,7 +216,8 @@ public class Knight extends GameObject {
             if (curTime == 0) {
                 curFrame++;
                 // Finished animating the death frames
-                if (curFrame >= (this.facingFact/2 * 5 + 44)) {
+                if (curFrame >= (this.facingFact / 2 * 5 + 44)) {
+                    this.setActive(false);
                     this.setState(KnightState.NORMAL);
                 }
                 curTime = animDelay;
@@ -228,7 +228,7 @@ public class Knight extends GameObject {
             sprite.setFrame(0);
         }
 
-	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
+        Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
 //        Vector2 loc = canvas.boardToScreen(position.x, position.y);
 //        // Animate afterimages for dashing
 //        if (this.isDashing) {
@@ -246,23 +246,23 @@ public class Knight extends GameObject {
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
         // Drawing code for the Knight HP
-        HP_SIZE = (int) ((float) canvas.HP_SIZE/1.5f);
-        int barWidth = HP_SIZE/5;
+        HP_SIZE = (int)((float)canvas.HP_SIZE / 1.5f);
+        int barWidth = HP_SIZE / 5;
         // Draw remaining hearts
         if (this.knightHP == 0) {
             spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
             for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                canvas.draw(spriteHP, (j+1)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
+                canvas.draw(spriteHP, (j + 1) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
             }
         }
 
         spriteHP = new FilmStrip(knightHpFullTexture, 1, 1);
         for (int i = 0; i < this.knightHP; i++) {
-            canvas.draw(spriteHP, (i+1)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
+            canvas.draw(spriteHP, (i + 1) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
                 for (int j = 0; j < (INITIAL_HP - this.knightHP); j++) {
-                    canvas.draw(spriteHP, (i+j+2)*HP_SIZE/7f, 0, barWidth, HP_SIZE);
+                    canvas.draw(spriteHP, (i + j + 2) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
                 }
             }
         }
@@ -276,8 +276,7 @@ public class Knight extends GameObject {
     /**
      * Preloads the assets for the Knight.
      *
-     * The asset manager for LibGDX is asynchronous.  That means that
-     * you tell it what to load and then wait while it
+     * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
      * loads them.  This is the first step: telling it what to load.
      *
      * @param manager Reference to global asset manager.
@@ -293,8 +292,7 @@ public class Knight extends GameObject {
     /**
      * Loads the assets for the Knight.
      *
-     * All shell objects use one of two textures, so this is a static method.
-     * This keeps us from loading the same images
+     * All shell objects use one of two textures, so this is a static method. This keeps us from loading the same images
      * multiple times for more than one Shell object.
      *
      * The asset manager for LibGDX is asynchronous.  That means that you tell it what to load and then wait while it
@@ -305,14 +303,14 @@ public class Knight extends GameObject {
     public static void LoadContent(AssetManager manager) {
         //load normal file
         if (manager.isLoaded(KNIGHT_NORMAL_FILE)) {
-            knightTexture = manager.get(KNIGHT_NORMAL_FILE,Texture.class);
+            knightTexture = manager.get(KNIGHT_NORMAL_FILE, Texture.class);
             knightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             knightTexture = null;  // Failed to load
         }
         //load dash file
         if (manager.isLoaded(KNIGHT_DASH_FILE)) {
-            knightDashTexture = manager.get(KNIGHT_DASH_FILE,Texture.class);
+            knightDashTexture = manager.get(KNIGHT_DASH_FILE, Texture.class);
             knightDashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             knightDashTexture = null;  // Failed to load
@@ -378,12 +376,12 @@ public class Knight extends GameObject {
      *
      * GameplayController will handle invulnerability
      */
-	public void takeDamage() {
+    public void takeDamage() {
         this.knightHP -= 3;
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
-            switch(this.facing) {
+            switch (this.facing) {
                 case FRONT:
                     curFrame = DEAD_START;
                     break;
@@ -399,7 +397,7 @@ public class Knight extends GameObject {
             }
         }
         curTime = animDelay;
-        switch(this.facing) {
+        switch (this.facing) {
             case FRONT:
                 curFrame = HURT_START;
                 break;
@@ -415,26 +413,31 @@ public class Knight extends GameObject {
         }
         this.state = KnightState.TAKINGDMG;
         RhythmController.playDamage();
-	}
+    }
 
     public void decrementHP() {
         this.knightHP--;
+        if (this.knightHP < 0) {
+            this.knightHP = 0;
+        }
         if (this.knightHP <= 0) {
-            this.isAlive = false;
-            this.setState(KnightState.DEAD);
-            switch(this.facing) {
-                case FRONT:
-                    curFrame = DEAD_START;
-                    break;
-                case BACK:
-                    curFrame = DEAD_UP_START;
-                    break;
-                case LEFT:
-                    curFrame = DEAD_LEFT_START;
-                    break;
-                case RIGHT:
-                    curFrame = DEAD_RIGHT_START;
-                    break;
+            if (this.isAlive) {
+                this.isAlive = false;
+                this.setState(KnightState.DEAD);
+                switch (this.facing) {
+                    case FRONT:
+                        curFrame = DEAD_START;
+                        break;
+                    case BACK:
+                        curFrame = DEAD_UP_START;
+                        break;
+                    case LEFT:
+                        curFrame = DEAD_LEFT_START;
+                        break;
+                    case RIGHT:
+                        curFrame = DEAD_RIGHT_START;
+                        break;
+                }
             }
         }
     }
@@ -442,12 +445,12 @@ public class Knight extends GameObject {
     /** Called whenever the player successfully inputs a move on the beat */
     public void showSuccess() {
         if (this.knightHP < INITIAL_HP) {
-            this.knightHP +=10;
+            this.knightHP += 10;
             if (this.knightHP > INITIAL_HP) {
                 this.knightHP = INITIAL_HP;
             }
         }
-        switch(this.facing) {
+        switch (this.facing) {
             case FRONT:
                 curFrame = IDLE_START;
                 break;
@@ -467,7 +470,7 @@ public class Knight extends GameObject {
     public void setDashing() {
         this.isDashing = true;
         curTime = animDelay;
-        switch(this.facing) {
+        switch (this.facing) {
             case FRONT:
                 curFrameDash = DASH_START;
                 break;
@@ -483,9 +486,13 @@ public class Knight extends GameObject {
         }
     }
 
-	public boolean isInvulnerable() {return isInvulnerable;}
+    public boolean isInvulnerable() {
+        return isInvulnerable;
+    }
 
-	public void setInvulnerable(boolean invulnerable) {this.isInvulnerable = invulnerable;}
+    public void setInvulnerable(boolean invulnerable) {
+        this.isInvulnerable = invulnerable;
+    }
 
     // Currently being used for animation of the knight
     public enum KnightState {
