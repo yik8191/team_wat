@@ -156,7 +156,7 @@ public class GameplayController {
 						// Display visual feedback to show success
 						knight.showSuccess();
 						// Set current tile type to SUCCESS
-						board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+						board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
 						RhythmController.playSuccess();
 
 						break;
@@ -208,7 +208,7 @@ public class GameplayController {
 							// Display visual feedback to show success
 							knight.showSuccess();
 							// Set current tile type to SUCCESS
-							board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
+							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
 							RhythmController.playSuccess();
 						}
 						break;
@@ -243,8 +243,10 @@ public class GameplayController {
 
 		if ((currentActionIndex == nextActionIndex) && !RhythmController.getCompleted(prevActionIndex)){
 			damagePlayer();
-			advanceGameState();
 			RhythmController.setCompleted(prevActionIndex, true);
+			if (RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.DASH2 && RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.FIREBALL2) {
+				advanceGameState();
+			}
 		}
 
 
