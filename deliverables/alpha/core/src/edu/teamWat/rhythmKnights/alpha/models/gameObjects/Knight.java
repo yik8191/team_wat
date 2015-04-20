@@ -416,28 +416,30 @@ public class Knight extends GameObject {
                     break;
             }
             this.state = KnightState.TAKINGDMG;
+            RhythmController.playDamage();
         }
-        RhythmController.playDamage();
 	}
 
     public void decrementHP() {
         this.knightHP--;
         if (this.knightHP <= 0) {
-            this.isAlive = false;
-            this.setState(KnightState.DEAD);
-            switch(this.facing) {
-                case FRONT:
-                    curFrame = DEAD_START;
-                    break;
-                case BACK:
-                    curFrame = DEAD_UP_START;
-                    break;
-                case LEFT:
-                    curFrame = DEAD_LEFT_START;
-                    break;
-                case RIGHT:
-                    curFrame = DEAD_RIGHT_START;
-                    break;
+            if (this.isAlive) {
+                this.isAlive = false;
+                this.setState(KnightState.DEAD);
+                switch (this.facing) {
+                    case FRONT:
+                        curFrame = DEAD_START;
+                        break;
+                    case BACK:
+                        curFrame = DEAD_UP_START;
+                        break;
+                    case LEFT:
+                        curFrame = DEAD_LEFT_START;
+                        break;
+                    case RIGHT:
+                        curFrame = DEAD_RIGHT_START;
+                        break;
+                }
             }
         }
     }
