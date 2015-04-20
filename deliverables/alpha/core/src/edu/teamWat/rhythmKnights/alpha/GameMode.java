@@ -55,11 +55,14 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
 	private static String BKGD_FILE = "images/game_background.png";
+//	private static String LVL1_FILE = "images/level1.png";
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture background;
+	/** background image for level 1 */
+	// private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
 
@@ -234,7 +237,7 @@ public class GameMode implements Screen{
 				// TODO: Fill in other initialization code
 				gameplayController.initialize(this.curLevel);
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
-				RhythmController.launch(144);//143.882f
+				//143.882f
 				break;
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();

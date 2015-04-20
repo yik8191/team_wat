@@ -218,7 +218,7 @@ public class SelectMode implements Screen, InputProcessor {
         for (int i=0; i<numLevels; i++){
             if (pointInBox(screenX, screenY, i)){
                 //TODO: process button push
-                this.levelNum = i;
+                this.levelNum = i+1;
                 return false;
             }
         }
