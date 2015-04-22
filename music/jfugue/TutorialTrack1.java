@@ -30,6 +30,7 @@ public class TutorialTrack1 {
         Pattern pattern = tt1.getPattern();
 	MidiFileManager mymanager = new MidiFileManager();
 
+	
 	Player player = new Player();
    	File track = new File("tutorialtrack1.mid");
 	
@@ -48,10 +49,14 @@ public class TutorialTrack1 {
 	String voice2 = "";
 
 	Rhythm rhythm = new Rhythm()
-	    .addLayer("O..oO...O..oOO..")
-	    .addLayer("..S...S...S...S.")
-	    .addLayer("````````````````")
-	    .addLayer("...............+");
+	    .addLayer("O...O...O...O...")
+	    .addLayer("^^^^^^^^^^^^^^^^")
+	    .addSubstitution('O', "[BASS_DRUM]i")
+	    .addSubstitution('o', "Rs [BASS_DRUM]s")
+	    .addSubstitution('*', "[ACOUSTIC_SNARE]i")
+	    .addSubstitution('^', "[PEDAL_HI_HAT]t Rt [CLOSED_HI_HAT]t Rt");
+
+	
 	Pattern rpattern = rhythm.getPattern();
 	rpattern.repeat(8);
 

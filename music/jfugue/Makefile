@@ -1,4 +1,4 @@
-CLASSPATH = .:./jfugue-5.0.1.jar:./gervill.jar
+CLASSPATH = .:./jfugue-5.0.1.jar # :./gervill.jar
 
 # Java Compiler
 JC = javac
