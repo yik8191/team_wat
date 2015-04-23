@@ -1,4 +1,4 @@
-CLASSPATH = .:./jfugue-5.0.1.jar # :./gervill.jar
+CLASSPATH = .:./jfugue-5.0.1.jar:./gervill.jar
 
 # Java Compiler
 JC = javac
@@ -15,6 +15,12 @@ tuttrack1:
 
 playtut1:
 	$(JRE) -cp $(CLASSPATH) TutorialTrack1
+
+tuttrack2:
+	$(JC) -cp $(CLASSPATH) TutorialTrack2.java
+
+playtut2:
+	$(JRE) -cp $(CLASSPATH) TutorialTrack2
 
 track1:
 	$(JC) -cp $(CLASSPATH) GameTrack1.java
@@ -40,7 +46,11 @@ reader:
 runreader:
 	$(JRE) -cp $(CLASSPATH) MusicReader
 
+seemidi:
+	$(JC) -cp $(CLASSPATH) SeeMidi.java
 
+runseemidi:
+	$(JRE) -cp $(CLASSPATH) SeeMidi
 
 clean:
 	rm -f *~ *.class

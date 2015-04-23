@@ -63,7 +63,7 @@ public class GameTrack1 {
 	    "C5i E5i A5i C6i B5i A5i C5i E5i A5i C6i A5i F#5i " +
 	    "B4i E5i G5i B5i G5i F#5i B5i G5i F#5i B5i G5i E5i " +
 	    "A5i G5i F#5i E5i F#5i G5i D5i C5i B4i A4i B4i C5i " +
-    	    "B4i E5i D5i C5i B4i A4i G4i B4i D5i G5i A5i C5i " ;
+    	    "B4i E5i D5i C5i B4i A4i G4i B4i D5i G5i A5i C6i " ;
 
 	String voice2 = "G3h.- G3-q.- G3-i A3i B3i " + 
 	    "G3h.- G3-q.- G3-i A3i B3i " +
@@ -81,21 +81,27 @@ public class GameTrack1 {
 	    "E4w. " +
 	    "D4h. A3h. " +
 	    "E3q. F#3q. G3h. ";
+
+	String voice3 = "B4i Ri B4i Ri B4i B4i ";
+	Pattern spattern = new Pattern(voice3)
+	    .repeat(16);
 	
 	Rhythm rhythm = new Rhythm()
 	    .addLayer("O.....O.....") // This is Layer 0
-	    .setLength(16); // Set the length of the rhythm to 16 measures
+	    .addLayer("^.^.^^^.^.^^");
+	// Set the length of the rhythm to 16 measures
 
-	Pattern rpattern = rhythm.getPattern();
+	Pattern rpattern = rhythm.getPattern()
+	    .repeat(16);
 
-	Pattern bpattern =
-	    new Pattern("Ch. Ch.")
+	Pattern bpattern = new Pattern("Ch. Ch. ")
 	    .repeat(16);
 	
         pattern.add("T180 V0 I[Bass_Drum] " +
 		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
         pattern.add("V1 I[Guitar] X[Volume_Coarse]=192 " + voice1);
 	pattern.add("V2 I[Cello] X[Volume_Coarse]=192 " + voice2);
+	pattern.add("V3 I[Steel_Drums] X[Volume_Coarse]=192 " + voice3);
 	pattern.add("V9 X[Volume_Coarse]=255 " + rpattern);
         return pattern;
     }

@@ -31,7 +31,7 @@ public class TutorialTrack1 {
 	MidiFileManager mymanager = new MidiFileManager();
 
 	
-	Player player = new Player();
+	// Player player = new Player();
    	File track = new File("tutorialtrack1.mid");
 	
 	try {
@@ -40,7 +40,7 @@ public class TutorialTrack1 {
 	    e.printStackTrace();
 	}
 	
-     	player.play(pattern);
+     	// player.play(pattern);
     }
 
     public Pattern getPattern() {
@@ -49,22 +49,18 @@ public class TutorialTrack1 {
 	String voice2 = "";
 
 	Rhythm rhythm = new Rhythm()
-	    .addLayer("O...O...O...O...")
-	    .addLayer("^^^^^^^^^^^^^^^^")
-	    .addSubstitution('O', "[BASS_DRUM]i")
-	    .addSubstitution('o', "Rs [BASS_DRUM]s")
-	    .addSubstitution('*', "[ACOUSTIC_SNARE]i")
-	    .addSubstitution('^', "[PEDAL_HI_HAT]t Rt [CLOSED_HI_HAT]t Rt");
+	    .addLayer("O..oO..oO..oO..o")
+	    .addLayer("^^^^^^^^^^^^^^^^");
 
 	
 	Pattern rpattern = rhythm.getPattern();
-	rpattern.repeat(8);
+	rpattern.repeat(2);
 
 	Pattern bpattern = new Pattern("Ch Ch")
-	    .repeat(16);
-
+	    .repeat(4);
+	
         pattern.add("T144 V0 I[Steel_Drums] " +
-		    "X[Volume_Coarse]=255 X[Volume_Fine]=0 " + bpattern);
+		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
         pattern.add("V9 " + rpattern);
 
         return pattern;
