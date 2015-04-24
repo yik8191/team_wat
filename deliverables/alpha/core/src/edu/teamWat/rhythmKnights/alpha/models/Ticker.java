@@ -121,7 +121,7 @@ public class Ticker {
 	            loc.x += indicatorOffsetRatio*width;
 
                 if (loc.x >= oldx) {
-                    System.out.println("hi");
+                    // System.out.println("hi");
                     sprite.setFrame(1);
                     canvas.draw(sprite, oldx, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
                 }

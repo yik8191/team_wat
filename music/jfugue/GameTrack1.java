@@ -99,9 +99,9 @@ public class GameTrack1 {
 	
         pattern.add("T180 V0 I[Bass_Drum] " +
 		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
-        pattern.add("V1 I[Guitar] X[Volume_Coarse]=192 " + voice1);
-	pattern.add("V2 I[Cello] X[Volume_Coarse]=192 " + voice2);
-	pattern.add("V3 I[Steel_Drums] X[Volume_Coarse]=192 " + voice3);
+        // pattern.add("V1 I[Guitar] X[Volume_Coarse]=192 " + voice1);
+	// pattern.add("V2 I[Cello] X[Volume_Coarse]=192 " + voice2);
+	// pattern.add("V3 I[Cowbell] X[Volume_Coarse]=192 " + voice3);
 	pattern.add("V9 X[Volume_Coarse]=255 " + rpattern);
         return pattern;
     }

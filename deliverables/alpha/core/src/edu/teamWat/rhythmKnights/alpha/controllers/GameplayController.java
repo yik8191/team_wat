@@ -1,11 +1,13 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.javafx.collections.VetoableListDecorator;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
@@ -51,20 +53,25 @@ public class GameplayController {
 
 
 	public void initialize(int levelNum) {
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 		String path = (System.getProperty("user.dir"));
 		path = path.substring(path.length() - 6);
-		//System.out.println(path);
+		System.out.println(path);
 
-		String audio;
-		if (path.equals("assets")) {
-			board = JSONReader.parseFile("levels/level" + levelNum + ".json");
-			audio = JSONReader.getAudio(false);
-		} else {
-			board = JSONReader.parseFile("core/assets/levels/level" + levelNum + ".json");
-			audio = JSONReader.getAudio(true);
-		}
+		FileHandle levelhandle = Gdx.files.internal("levels/level" + levelNum + ".json");
+		FileHandle audiohandle;
+		board = JSONReader.parseFile(levelhandle.readString());
+		audiohandle = JSONReader.getAudioHandle();
+		
+		
+//		if (path.equals("assets")) {
+//			board = JSONReader.parseFile("levels/level" + levelNum + ".json");
+//			audio = JSONReader.getAudio(false);
+//		} else {
+//			board = JSONReader.parseFile(System.getProperty("user.dir") + "/beta/levels/level" + levelNum + ".json");
+//			audio = JSONReader.getAudio(true);
+//		}
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
@@ -78,7 +85,7 @@ public class GameplayController {
 		hasMoved = false;
 		gameOver = false;
 		try {
-			RhythmController.init(audio, ticker);
+			RhythmController.init(audiohandle, ticker);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -3,14 +3,18 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.jndi.toolkit.ctx.StringHeadTail;
+
 import edu.teamWat.rhythmKnights.alpha.models.Ticker;
 import jdk.nashorn.internal.ir.ReturnNode;
+
 import org.jfugue.theory.Note;
 
 import javax.sound.midi.*;
 import javax.swing.*;
+
 import java.beans.beancontext.BeanContext;
 import java.io.*;
 import java.nio.channels.AlreadyBoundException;
@@ -119,9 +123,8 @@ public class RhythmController {
 //		music.setLooping(true);
 //	}
 
-	public static void init(String filename, Ticker ticker) throws Exception{
-		File midiFile = new File(filename);
-		sequence = MidiSystem.getSequence(midiFile);
+	public static void init(FileHandle audiohandle, Ticker ticker) throws Exception{
+		sequence = MidiSystem.getSequence(audiohandle.read());
 		Track track = sequence.getTracks()[0];
 		ArrayList<Long> tempTickTimes = new ArrayList<Long>();
 		ArrayList<Ticker.TickerAction> tempTickerActions = new ArrayList<Ticker.TickerAction>();
@@ -213,7 +216,7 @@ public class RhythmController {
 //			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
 //		}
 
-		InputStream is = new BufferedInputStream(new FileInputStream(midiFile));
+		InputStream is = audiohandle.read();
 
 		sequencer.setSequence(is);
 		sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);

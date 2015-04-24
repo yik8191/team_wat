@@ -4,6 +4,7 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import edu.teamWat.rhythmKnights.alpha.controllers.*;
@@ -27,59 +28,64 @@ public class JSONReader {
     public static Board parseFile(String string) {
         //get the stuff from the file
         JSONParser parser = new JSONParser();
-//        System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
         Object o;
         try {
-            FileReader f = new FileReader(string);
-            o = parser.parse(f);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            o = null;
-            try {
-                o = parser.parse("{\n" +
-                        "    \"tiles\": [\n" +
-                        "\t{\"x\":4,\"y\":0,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":11,\"y\":0,\"type\":\"goal\"},\n" +
-                        "\t{\"x\":2,\"y\":1,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":5,\"y\":1,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":9,\"y\":1,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":2,\"y\":2,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":6,\"y\":2,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":10,\"y\":2,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":2,\"y\":3,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":7,\"y\":3,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":11,\"y\":3,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":2,\"y\":4,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":8,\"y\":4,\"type\":\"obstacle\"},\n" +
-                        "\t{\"x\":0,\"y\":5,\"type\":\"start\"},\n" +
-                        "\t{\"x\":2,\"y\":5,\"type\":\"obstacle\"}\n" +
-                        "    ],\n" +
-                        "    \"objects\":[\n" +
-                        "\t{\"path\":\"UDLR\",\"x\":5,\"y\":0,\"type\":\"skeleton\"},\n" +
-                        "\t{\"path\":\"RUDL\",\"x\":1,\"y\":1,\"type\":\"slime\"},\n" +
-                        "\t{\"path\":\"UDLR\",\"x\":5,\"y\":2,\"type\":\"skeleton\"},\n" +
-                        "\t{\"path\":\"UDLR\",\"x\":7,\"y\":4,\"type\":\"skeleton\"},\n" +
-                        "\t{\"path\":\"RUDL\",\"x\":3,\"y\":5,\"type\":\"slime\"}\n" +
-                        "    ],\n" +
-                        "    \"width\":12,\n" +
-                        "    \"height\":6,\n" +
-                        "    \"player\":{\"x\":0,\"y\":5}\n" +
-                        "    \"ticker\": \"MMMM\"\n" +
-                        "}\n");
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            System.out.println("File not found!");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            o = null;
-            System.out.println("ParseException");
-        } catch (IOException e) {
-            e.printStackTrace();
-            o = null;
-            System.out.println("IOException");
-        }
+			o = parser.parse(string);
+		} catch (ParseException e) {
+			o = null;
+			e.printStackTrace();	
+		}
+//        try {
+//            FileReader f = new FileReader(string);
+//            o = parser.parse(f);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            o = null;
+//            try {
+//                o = parser.parse("{\n" +
+//                        "    \"tiles\": [\n" +
+//                        "\t{\"x\":4,\"y\":0,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":11,\"y\":0,\"type\":\"goal\"},\n" +
+//                        "\t{\"x\":2,\"y\":1,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":5,\"y\":1,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":9,\"y\":1,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":2,\"y\":2,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":6,\"y\":2,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":10,\"y\":2,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":2,\"y\":3,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":7,\"y\":3,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":11,\"y\":3,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":2,\"y\":4,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":8,\"y\":4,\"type\":\"obstacle\"},\n" +
+//                        "\t{\"x\":0,\"y\":5,\"type\":\"start\"},\n" +
+//                        "\t{\"x\":2,\"y\":5,\"type\":\"obstacle\"}\n" +
+//                        "    ],\n" +
+//                        "    \"objects\":[\n" +
+//                        "\t{\"path\":\"UDLR\",\"x\":5,\"y\":0,\"type\":\"skeleton\"},\n" +
+//                        "\t{\"path\":\"RUDL\",\"x\":1,\"y\":1,\"type\":\"slime\"},\n" +
+//                        "\t{\"path\":\"UDLR\",\"x\":5,\"y\":2,\"type\":\"skeleton\"},\n" +
+//                        "\t{\"path\":\"UDLR\",\"x\":7,\"y\":4,\"type\":\"skeleton\"},\n" +
+//                        "\t{\"path\":\"RUDL\",\"x\":3,\"y\":5,\"type\":\"slime\"}\n" +
+//                        "    ],\n" +
+//                        "    \"width\":12,\n" +
+//                        "    \"height\":6,\n" +
+//                        "    \"player\":{\"x\":0,\"y\":5}\n" +
+//                        "    \"ticker\": \"MMMM\"\n" +
+//                        "}\n");
+//            } catch (ParseException e1) {
+//                e1.printStackTrace();
+//            }
+//            System.out.println("File not found!");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            o = null;
+//            System.out.println("ParseException");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            o = null;
+//            System.out.println("IOException");
+//        }
         level = (JSONObject)o;
 
         //get base info and create board
@@ -229,17 +235,9 @@ public class JSONReader {
         return new Ticker(actionArray);
     }
 
-    public static String getAudio(Boolean isJar) {
+    public static FileHandle getAudioHandle() {
         String audio = (String)level.get("audio");
-        String source = "";
-        if (isJar) {
-            source = "core/assets/";
-        }
-        if (audio != null) {
-            return source + "music/" + audio;
-        } else {
-            return source + "music/track1.mid";
-        }
+        return Gdx.files.internal("music/" + audio);
     }
 
 
