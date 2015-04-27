@@ -242,5 +242,10 @@ public class JSONReader {
         }
     }
 
+    public static int getBackground(){
+        String n = (String)level.get("backNum");
+        return Integer.parseInt(n);
+    }
+
 
 }

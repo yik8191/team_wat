@@ -29,6 +29,7 @@ import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import javax.naming.ldap.ManageReferralControl;
+import java.util.ArrayList;
 
 
 /**
@@ -55,13 +56,14 @@ public class GameMode implements Screen{
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
-	private static String BKGD_FILE = "images/game_background.png";
-//	private static String LVL1_FILE = "images/level1.png";
+    private static ArrayList<String> BKGD_FILES; //7
+    private static int numBackgrounds = 7;
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
+    private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
-	private static Texture background;
+	private static Texture[] backgrounds;
 	/** background image for level 1 */
 	// private static Texture level1;
 	/** The font for giving messages to the player*/
@@ -83,7 +85,9 @@ public class GameMode implements Screen{
 	 */
 	public static void PreLoadContent(AssetManager manager){
 		// Load the background
-		manager.load(BKGD_FILE, Texture.class);
+        for (int i=0; i<BKGD_FILES.size(); i++) {
+            manager.load(BKGD_FILES.get(i), Texture.class);
+        }
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -116,12 +120,14 @@ public class GameMode implements Screen{
 	 */
 	public static void LoadContent(AssetManager manager){
 		// Allocate the background
-		if (manager.isLoaded(BKGD_FILE)) {
-			background = manager.get(BKGD_FILE, Texture.class);
-			background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		} else {
-			displayFont = null;
-		}
+        for (int i=0; i<BKGD_FILES.size(); i++) {
+            if (manager.isLoaded(BKGD_FILES.get(i))) {
+                backgrounds[i] = manager.get(BKGD_FILES.get(i), Texture.class);
+                backgrounds[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            } else {
+                backgrounds[i] = null;
+            }
+        }
 
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
@@ -149,14 +155,16 @@ public class GameMode implements Screen{
 	 * @param manager Reference to global asset manager.
 	 */
 	public static void UnloadContent(AssetManager manager) {
-		if (background != null) {
-			background = null;
-			manager.unload(BKGD_FILE);
-		}
-		if (displayFont != null) {
-			displayFont = null;
-			manager.unload(FONT_FILE);
-		}
+        for (int i=0; i<BKGD_FILES.size(); i++) {
+            if (backgrounds[i] != null) {
+                backgrounds[i] = null;
+                manager.unload(BKGD_FILES.get(i));
+            }
+        }
+        if (displayFont != null) {
+            displayFont = null;
+            manager.unload(FONT_FILE);
+        }
 
 		// Load the other assets
 		// TODO: Fill in the other assets we'll be using in this style:
@@ -200,6 +208,10 @@ public class GameMode implements Screen{
 	 * view has already been initialized by the root class.
 	 */
 	public GameMode(GameCanvas canvas) {
+        for (int i=0; i<this.numBackgrounds; i++){
+            this.BKGD_FILES.add("images/bg"+i+".png");
+        }
+
 		this.canvas = canvas;
 		active = false;
 		// Null out all pointers, 0 out all ints, etc
@@ -237,6 +249,7 @@ public class GameMode implements Screen{
 				gameState = GameState.PLAY;
 				// TODO: Fill in other initialization code
 				gameplayController.initialize(this.curLevel);
+                this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				//143.882f
 				break;
@@ -306,7 +319,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
-        canvas.draw(background, 0, 0);
+        canvas.draw(backgrounds[this.backNum], 0, 0);
 		gameplayController.board.draw(canvas);
 		gameplayController.ticker.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);

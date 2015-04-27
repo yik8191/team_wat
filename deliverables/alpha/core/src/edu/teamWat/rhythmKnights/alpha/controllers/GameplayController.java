@@ -1,26 +1,10 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.sun.javafx.collections.VetoableListDecorator;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.assets.AssetManager;
 
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
-import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
-import jdk.nashorn.internal.ir.IfNode;
-
-import javax.swing.*;
-import javax.swing.plaf.TreeUI;
-
-import java.awt.*;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.function.DoubleUnaryOperator;
 
 public class GameplayController {
 	/** Reference to the game board */
@@ -46,6 +30,8 @@ public class GameplayController {
 	private int timeHP = DOT_HP;
 	private boolean hasMoved = false;
 
+    private int backgroundNum = 0;
+
 	public GameplayController() {
 	}
 
@@ -68,6 +54,8 @@ public class GameplayController {
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
+
+
 		// Preallocate memory
 		ProjectilePool projs = new ProjectilePool();
 
@@ -88,14 +76,6 @@ public class GameplayController {
 //	int moved = 0;
 
 	public void update() {
-//		System.out.println("Time: " + RhythmController.getSequencePosition());
-
-//		float beatTIme = RhythmController.toBeatTime(RhythmController.getPosition());
-//		if ( beatTIme < prevBeatTime){
-//			System.out.println(TimeUtils.millis());
-//		}
-//		prevBeatTime = beatTIme;
-
 		if (hasMoved) {
 			timeHP--;
 			if (timeHP == 0) {
