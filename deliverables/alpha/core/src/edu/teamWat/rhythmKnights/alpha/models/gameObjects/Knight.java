@@ -31,7 +31,7 @@ public class Knight extends GameObject {
     // Constants relating to Knight HP
     private static int HP_SIZE;
     protected int knightHP;
-    protected int INITIAL_HP = 80;
+    protected int INITIAL_HP = 160;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -428,7 +428,7 @@ public class Knight extends GameObject {
      * GameplayController will handle invulnerability
      */
     public void takeDamage() {
-        this.knightHP -= 3;
+        this.knightHP -= 1;
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
