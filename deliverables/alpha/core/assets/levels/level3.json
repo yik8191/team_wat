@@ -94,4 +94,5 @@
 "width":18,
 "height":10,
 "player":{"x":1, "y":1},
-"audio": "tutorialtrack2.mid"}
+"audio": "tutorialtrack2.mid",
+"backNum":2}

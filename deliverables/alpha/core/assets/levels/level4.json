@@ -30,4 +30,5 @@
  "height":6,
  "player":{"x":0,"y":5},
  "ticker": "MMMD",
- "audio": "track1.mid"}
+ "audio": "track1.mid",
+ "backNum":3}

@@ -54,5 +54,5 @@
 "width":12,
 "height":8,
 "player":{"x":1, "y":1},
-"audio":"track2.mid"
-}
+"audio":"track2.mid",
+"backNum":5}

@@ -56,14 +56,14 @@ public class GameMode implements Screen{
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
-    private static ArrayList<String> BKGD_FILES; //7
+    private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
     private static int numBackgrounds = 7;
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
-	private static Texture[] backgrounds;
+	private static Texture[] backgrounds = new Texture[numBackgrounds+1];
 	/** background image for level 1 */
 	// private static Texture level1;
 	/** The font for giving messages to the player*/
@@ -84,6 +84,10 @@ public class GameMode implements Screen{
 	 * @param manager Reference to global asset manager
 	 */
 	public static void PreLoadContent(AssetManager manager){
+        //Populate background list
+        for (int i=0; i<numBackgrounds; i++){
+            BKGD_FILES.add("images/bg"+(i+1)+".png");
+        }
 		// Load the background
         for (int i=0; i<BKGD_FILES.size(); i++) {
             manager.load(BKGD_FILES.get(i), Texture.class);
@@ -319,7 +323,7 @@ public class GameMode implements Screen{
 		canvas.begin();
 		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
 		// NO UPDATE CODE HERE
-        canvas.draw(backgrounds[this.backNum], 0, 0);
+        canvas.draw(backgrounds[this.backNum-1], 0, 0);
 		gameplayController.board.draw(canvas);
 		gameplayController.ticker.draw(canvas);
 		gameplayController.gameObjects.draw(canvas);
