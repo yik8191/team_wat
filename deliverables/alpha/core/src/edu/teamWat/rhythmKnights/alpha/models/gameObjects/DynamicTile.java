@@ -38,8 +38,6 @@ public class DynamicTile extends GameObject {
 				animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
 			}
 		}
-        //TODO: implement this
-
     }
 
     public void draw(GameCanvas canvas) {

@@ -400,4 +400,9 @@ public class RhythmController {
 
 		return -1;
 	}
+
+    public static void stopMusic(){
+        sequencer.stop();
+        return;
+    }
 }

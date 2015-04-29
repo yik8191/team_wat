@@ -63,8 +63,6 @@ public class Enemy extends GameObject{
 			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
 		    }
 	    }
-        //TODO: implement this
-
     }
 
     public Texture getTexture(){

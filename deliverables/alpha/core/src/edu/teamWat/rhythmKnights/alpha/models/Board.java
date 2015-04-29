@@ -72,7 +72,6 @@ public class Board {
     }
 
     public void update(float delta) {
-        // TODO: Update the board; E.g state of each tile
         // Might not need this method.
     }
 

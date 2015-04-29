@@ -392,7 +392,6 @@ public class LoadingMode implements Screen, InputProcessor {
 		// Flip to match graphics coordinates
 		screenY = heightY - screenY;
 
-		// TODO: Fix scaling
 		// Play button is a circle.
 		float radius = BUTTON_SCALE * scale * playButton.getWidth() / 2.0f;
 		float dist = (screenX - centerX) * (screenX - centerX) + (screenY - centerY) * (screenY - centerY);

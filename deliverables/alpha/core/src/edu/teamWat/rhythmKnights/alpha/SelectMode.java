@@ -36,14 +36,6 @@ public class SelectMode implements Screen, InputProcessor {
 
     private boolean active;
 
-    private int maxWTiles = 5;
-    private int maxHTiles = 5;
-    private int tileSpacing = 15;
-    private int tileSize = 150;
-    private int tilesPerRow = 1;
-    private int tilesPerCol = 1;
-    private int startWidth = 0;
-    private int startHeight = 0;
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
     private int levelNum = -1;
 
@@ -67,10 +59,10 @@ public class SelectMode implements Screen, InputProcessor {
         tileTexture = new Texture(TILE_FILE);
         background = new Texture(BACKGROUND_FILE);
 
-        setConstants();
+        canvas.setMenuConstants(this.numLevels);
 
         for (int i=0;i<numLevels; i++){
-            bounds.add(getButtonBounds(i));
+            bounds.add(canvas.getButtonBounds(i));
         }
 
         Gdx.input.setInputProcessor(this);
@@ -106,14 +98,14 @@ public class SelectMode implements Screen, InputProcessor {
         canvas.begin();
         canvas.draw(background, 0, 0);
         BitmapFont font = new BitmapFont();
-        float scale = (float)this.tileSize/(float)tileTexture.getHeight();
+        float scale = (float)canvas.menuTileSize/(float)tileTexture.getHeight();
         for (int i=0; i<numLevels; i++){
             Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-            loc.y = canvas.getHeight() - loc.y - this.tileSize;
+            loc.y = canvas.getHeight() - loc.y - canvas.menuTileSize;
             Color c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
             canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             font.setScale(2);
-            canvas.drawText("Level \n" + (i + 1), font, loc.x + tileSize / 5, loc.y + tileSize * 3 /5);
+            canvas.drawText("Level \n" + (i + 1), font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
         }
         canvas.end();
     }
@@ -149,11 +141,11 @@ public class SelectMode implements Screen, InputProcessor {
      * @param height The new height in pixels
      */
     public void resize(int width, int height) {
-        setConstants();
+        canvas.setMenuConstants(this.numLevels);
 
         bounds.clear();
         for (int i=0;i<numLevels; i++){
-            bounds.add(getButtonBounds(i));
+            bounds.add(canvas.getButtonBounds(i));
         }
     }
 
@@ -216,7 +208,7 @@ public class SelectMode implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         System.out.println("Mouse clicked at " + screenX + ", " + screenY);
         for (int i=0; i<numLevels; i++){
-            if (pointInBox(screenX, screenY, i)){
+            if (canvas.pointInBox(screenX, screenY, i)){
                 this.levelNum = i+1;
                 return false;
             }
@@ -225,43 +217,7 @@ public class SelectMode implements Screen, InputProcessor {
         return true;
     }
 
-    private boolean pointInBox(int screenX, int screenY, int i){
-        int[] b = bounds.get(i);
-        return (screenX > b[0]) && (screenX < b[2]) &&
-                (screenY > b[1]) && (screenY < b[3]);
-    }
 
-    private int[] getButtonBounds(int i){
-        int x = i % maxWTiles;
-        int y = i / maxWTiles;
-
-        int[] bounds = new int[4];
-
-        //left x
-        bounds[0] = (x*(tileSize+tileSpacing) + startWidth);
-        //top y
-        bounds[1] = (y*(tileSize+tileSpacing)) + startHeight;
-
-        //right x
-        bounds[2] = bounds[0] + tileSize;
-        //bottom y
-        bounds[3] = bounds[1] + tileSize;
-
-        return bounds;
-    }
-
-    private void setConstants(){
-        tilesPerRow = Math.min(maxWTiles, numLevels);
-        System.out.println("tilesPerRow:" + tilesPerRow);
-        startWidth = (canvas.getWidth()/2) - ((tilesPerRow*tileSize) + ((tilesPerRow-1)*tileSpacing))/2;
-        System.out.println("Canvas width: "+canvas.getWidth() + ", width/2: " + canvas.getWidth()/2);
-        System.out.println("startWidth: " + startWidth);
-
-        tilesPerCol = Math.min(maxHTiles, numLevels/tilesPerRow+1);
-        System.out.println("tilesPerCol:" + tilesPerCol);
-        startHeight = (canvas.getHeight()/2) - ((tilesPerCol*tileSize) + ((tilesPerCol - 1)*tileSpacing))/2;
-        System.out.println("Start drawing at y=" + startHeight);
-    }
 
 
     /**

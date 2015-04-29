@@ -130,7 +130,6 @@ public class Knight extends GameObject {
                 animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
             }
         }
-        //TODO: implement this
     }
 
     public void setState(KnightState ks) {
