@@ -1,10 +1,10 @@
 {"tiles":[  {  "x":7,  "y":7,  "type":"start"},
   {  "x":0,  "y":0,  "type":"goal"}],
-"ticker":"MMMD",
+"ticker":"MM",
 "backNum":1,
 "objects":[],
 "width":15,
-"audio":"track1.mid",
+"audio":"track2.mid",
 "height":15,
 "player":{"x":7,
 "y":7}}
