@@ -52,6 +52,8 @@ public class GameMode implements Screen{
         WIN,
         /** Player has won the game */
         COMPLETE,
+        /** Player has paused the game */
+        PAUSE,
 		LOSE
 	}
 
@@ -263,22 +265,29 @@ public class GameMode implements Screen{
                 this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				//143.882f
+                playerController.setListenForInput(true);
 				break;
 			case PLAY:
-				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
-				if (gameplayController.isGameOver()) reset();
-                else if (!knight.isActive()) reset();
-                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
-					gameState = GameState.WIN;
-					play();
-                    bounds.clear();
-                    canvas.setMenuConstants(3);
-                    for (int i=0;i<3; i++){
-                        bounds.add(canvas.getButtonBounds(i));
-                    }
-				}
-				else play();
-				break;
+                if (playerController.getEscape()){
+                    this.gameState = GameState.PAUSE;
+                    playerController.setListenForInput(false);
+                    break;
+                }else{
+                    Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
+                    if (gameplayController.isGameOver()) reset();
+                    else if (!knight.isActive()) reset();
+                    else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
+                        gameState = GameState.WIN;
+                        bounds.clear();
+                        canvas.setMenuConstants(3);
+                        for (int i = 0; i < 3; i++) {
+                            bounds.add(canvas.getButtonBounds(i));
+                        }
+                        playerController.setListenForInput(false);
+                        play();
+                    } else play();
+                    break;
+                }
             case WIN:
                 if (this.curLevel+1 % (this.numLevels+1) == 0){
                     gameState = GameState.COMPLETE;
