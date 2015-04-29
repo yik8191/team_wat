@@ -63,7 +63,7 @@ public class GameMode implements Screen{
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
-	private static Texture[] backgrounds = new Texture[numBackgrounds+1];
+	private static Texture[] backgrounds = new Texture[numBackgrounds];
 	/** background image for level 1 */
 	// private static Texture level1;
 	/** The font for giving messages to the player*/
@@ -88,7 +88,7 @@ public class GameMode implements Screen{
         for (int i=0; i<numBackgrounds; i++){
             BKGD_FILES.add("images/bg"+(i+1)+".png");
         }
-		// Load the background
+        // Load the background
         for (int i=0; i<BKGD_FILES.size(); i++) {
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
@@ -165,6 +165,7 @@ public class GameMode implements Screen{
                 manager.unload(BKGD_FILES.get(i));
             }
         }
+
         if (displayFont != null) {
             displayFont = null;
             manager.unload(FONT_FILE);
@@ -212,7 +213,8 @@ public class GameMode implements Screen{
 	 * view has already been initialized by the root class.
 	 */
 	public GameMode(GameCanvas canvas) {
-        for (int i=0; i<this.numBackgrounds; i++){
+        this.BKGD_FILES.clear();
+        for (int i=1; i<=this.numBackgrounds; i++){
             this.BKGD_FILES.add("images/bg"+i+".png");
         }
 
@@ -352,6 +354,7 @@ public class GameMode implements Screen{
 	 */
 	public void render(float delta) {
 		if (active) {
+            //TODO:
 			update(delta);
 			draw(delta);
 		}

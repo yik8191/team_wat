@@ -18,8 +18,6 @@ import java.util.ArrayList;
 
 public class SelectMode implements Screen, InputProcessor {
     // Textures necessary to support the loading screen
-    // TODO: make sure these paths are correct
-    // We could just use the ones from the labs
     private static final String BACKGROUND_FILE = "images/game_background.png";
     private static final String TILE_FILE = "images/tileFull.png";
 
@@ -111,6 +109,7 @@ public class SelectMode implements Screen, InputProcessor {
         float scale = (float)this.tileSize/(float)tileTexture.getHeight();
         for (int i=0; i<numLevels; i++){
             Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
+            loc.y = canvas.getHeight() - loc.y - this.tileSize;
             Color c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
             canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
             font.setScale(2);
@@ -152,6 +151,7 @@ public class SelectMode implements Screen, InputProcessor {
     public void resize(int width, int height) {
         setConstants();
 
+        bounds.clear();
         for (int i=0;i<numLevels; i++){
             bounds.add(getButtonBounds(i));
         }
@@ -217,7 +217,6 @@ public class SelectMode implements Screen, InputProcessor {
         System.out.println("Mouse clicked at " + screenX + ", " + screenY);
         for (int i=0; i<numLevels; i++){
             if (pointInBox(screenX, screenY, i)){
-                //TODO: process button push
                 this.levelNum = i+1;
                 return false;
             }
@@ -238,10 +237,14 @@ public class SelectMode implements Screen, InputProcessor {
 
         int[] bounds = new int[4];
 
+        //left x
         bounds[0] = (x*(tileSize+tileSpacing) + startWidth);
-        bounds[1] = (y*(tileSize+tileSpacing) + startHeight);
+        //top y
+        bounds[1] = (y*(tileSize+tileSpacing)) + startHeight;
 
+        //right x
         bounds[2] = bounds[0] + tileSize;
+        //bottom y
         bounds[3] = bounds[1] + tileSize;
 
         return bounds;
@@ -249,10 +252,15 @@ public class SelectMode implements Screen, InputProcessor {
 
     private void setConstants(){
         tilesPerRow = Math.min(maxWTiles, numLevels);
+        System.out.println("tilesPerRow:" + tilesPerRow);
         startWidth = (canvas.getWidth()/2) - ((tilesPerRow*tileSize) + ((tilesPerRow-1)*tileSpacing))/2;
+        System.out.println("Canvas width: "+canvas.getWidth() + ", width/2: " + canvas.getWidth()/2);
+        System.out.println("startWidth: " + startWidth);
 
-        tilesPerCol = Math.min(maxHTiles, numLevels/tilesPerRow);
+        tilesPerCol = Math.min(maxHTiles, numLevels/tilesPerRow+1);
+        System.out.println("tilesPerCol:" + tilesPerCol);
         startHeight = (canvas.getHeight()/2) - ((tilesPerCol*tileSize) + ((tilesPerCol - 1)*tileSpacing))/2;
+        System.out.println("Start drawing at y=" + startHeight);
     }
 
 
