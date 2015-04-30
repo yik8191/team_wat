@@ -11,10 +11,12 @@ import edu.teamWat.rhythmKnights.alpha.models.Ticker;
 import jdk.nashorn.internal.ir.ReturnNode;
 
 import org.jfugue.theory.Note;
+import sun.security.util.Length;
 
 import javax.sound.midi.*;
 import javax.swing.*;
 
+import java.awt.event.KeyEvent;
 import java.beans.beancontext.BeanContext;
 import java.io.*;
 import java.nio.channels.AlreadyBoundException;
@@ -66,19 +68,15 @@ public class RhythmController {
 	/** Number of actions translated forward... Java input is very lagging, making this necessary */
 	public static int numTranslated;
 
+	private static ArrayList<Long> calibrationTimes = new ArrayList<Long>();
+
+
 	public static void PreloadContent(AssetManager manager) {
-//		manager.load(MUSIC_FILE, Music.class);
 		manager.load(HIT_FILE, Sound.class);
 		manager.load(DMG_FILE, Sound.class);
 	}
 
 	public static void LoadContent(AssetManager manager) {
-//		if (manager.isLoaded(MUSIC_FILE)) {
-//			music = manager.get(MUSIC_FILE, Music.class);
-//			music.setLooping(true);
-//		} else {
-//			music = null;  // Failed to load
-//		}
 
 		try {
 			sequencer = MidiSystem.getSequencer();
@@ -101,10 +99,6 @@ public class RhythmController {
 	}
 
 	public static void UnloadContent(AssetManager manager) {
-//		if (music != null) {
-//			music = null;
-//			manager.unload(MUSIC_FILE);
-//		}
 
 		if (hitSound != null) {
 			hitSound = null;
@@ -116,12 +110,6 @@ public class RhythmController {
 			manager.unload(DMG_FILE);
 		}
 	}
-//
-//	public static void init() {
-//
-//		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
-//		music.setLooping(true);
-//	}
 
 	public static void init(FileHandle audiohandle, Ticker ticker) throws Exception{
 		sequence = MidiSystem.getSequence(audiohandle.read());
@@ -173,8 +161,6 @@ public class RhythmController {
 		}
 
 		trackLength = sequence.getTickLength();
-//		trackLength = 128 * 32;
-
 		numActions = tempTickTimes.size();
 
 		long[] tempTempTickTimes = new long[numActions];
@@ -209,17 +195,11 @@ public class RhythmController {
 			playerActions[i + numTranslated] = PlayerController.CONTROL_NO_ACTION;
 		}
 
-//		for (int i = 0; i < tempTickTimes.size(); i++) {
-//			tickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
-//			completedTicks[i] = false;
-//			tickerActions[i] = tempTickerActions.get(i);
-//			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
-//		}
-
 		InputStream is = audiohandle.read();
 
 		sequencer.setSequence(is);
 		sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+		calibrationTimes.clear();
 	}
 
 
@@ -227,105 +207,6 @@ public class RhythmController {
 		sequencer.stop();
 		sequencer.start();
 	}
-
-//	public static void launch(float tempo, File midiFile, Ticker ticker) throws Exception {
-//
-//		sequence = MidiSystem.getSequence(new File("music/144beat.mid"));
-//
-//		Track track = sequence.getTracks()[0];
-//
-//		ArrayList<Long> tempTickTimes = new ArrayList<Long>();
-//
-//		for (int i = 0; i < track.size(); i++) {
-//			MidiEvent event = track.get(i);
-//			MidiMessage message = event.getMessage();
-//			if (message instanceof ShortMessage) {
-//				ShortMessage sm = (ShortMessage)message;
-//				if (sm.getCommand() == NOTE_ON) {
-//					tempTickTimes.add(event.getTick());
-//				}
-//			}
-//		}
-//
-//		long[] tickTimes = new long[tempTickTimes.size()];
-//		for (int i = 0; i < tempTickTimes.size(); i++) {
-//			tickTimes[i] = tempTickTimes.get(i);
-//		}
-//
-//		sequencer = MidiSystem.getSequencer();
-//		sequencer.open();
-//
-//		InputStream inputStream = new BufferedInputStream(new FileInputStream(new File("music/game2.midi")));
-//
-//		sequencer.setSequence(inputStream);
-//		sequencer.start();
-//		sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-
-//		System.out.println(sequencer.getTickPosition());
-//		System.out.println(sequencer.getTickLength());
-
-//		period = 60.0f / tempo;
-//		if (begun) {
-//			music.stop();
-//		}
-////		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
-//		begun = true;
-//		music.play();
-//		music.setVolume(0);
-//		startTime = TimeUtils.millis();
-//		totalOffset = -0.7f;
-//	}
-
-//	/**
-//	 * Takes in time and converts it to beat time, a float between 0 and 1. Then checks if this time is within action
-//	 * window for a valid beat.
-//	 */
-//	public static boolean isWithinActionWindow(float actionTime, float anchor, boolean out) {
-//		float beatTime = toBeatTime(actionTime) - anchor;
-////		if (out) System.out.println(totalOffset + " " + beatTime);
-//		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
-//	}
-
-//	/**
-//	 * Method for checking whether or not it's time to move on to the next beat. If we're past the final action point
-//	 * but the beat isn't complete, returns true and sets beat to complete. If we're within the action window, sets to
-//	 * beat to incomplete. Assumes that this method will be called at least once per action window. (If it's not,
-//	 * something else is wrong). This method should only be used to check whether or not it's time to take care of final
-//	 * actions. It should not be used to check if the player has moved within the beat. Use isWithinActionWindow() for
-//	 * that.
-//	 *
-//	 * @return returns whether or not it's time to take final actions.
-//	 */
-//	public static boolean updateBeat() {
-//		float beatTime = toBeatTime(music.getPosition());
-//		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
-//			beatComplete = false;
-//		} else if (beatTime > finalActionOffset && !beatComplete) {
-//			beatComplete = true;
-//			return true;
-//		}
-//		return false;
-//	}
-
-//	public static void sendCalibrationBeat(float time) {
-//		float beatTime = toBeatTime(time);
-//		if (beatTime > 0.5) beatTime--;
-//		totalOffset += 0.5 * (1 - beatTime) * beatTime;
-//		if (totalOffset > 0.5) totalOffset--;
-//	}
-
-//	public static float toBeatTime(float time) {
-//		return ((time - totalOffset * period) % period) / period;
-//	}
-
-//	public static float getCurrentTime() {
-//		return (music.getPosition()) / period;
-//	}
-
-//	public static float getPosition() {
-////		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
-//		return music.getPosition();
-//	}
 
 	public static long getSequencePosition() {
 		return sequencer.getTickPosition();
@@ -399,5 +280,45 @@ public class RhythmController {
 		}
 
 		return -1;
+	}
+
+	public static boolean calculateOffset() {
+		if (calibrationTimes.size() < 2) return false;
+		totalOffset = 0;
+		float dt;
+		float mean = 0;
+		float std = 0;
+		for (int i = 0; i < calibrationTimes.size(); i++) {
+			dt = calibrationTimes.get(i+1) - calibrationTimes.get(i);
+			mean += dt;
+		}
+		mean /= (calibrationTimes.size() - 1);
+
+		for (int i = 0; i < calibrationTimes.size(); i++) {
+			dt = calibrationTimes.get(i + 1) - calibrationTimes.get(i);
+			std += (mean - dt) * (mean - dt);
+		}
+
+		std /= (calibrationTimes.size() - 1);
+		std = (float)Math.sqrt(std);
+
+		if (std/mean > 0.3) return false;
+
+		int pointRecorded = 0;
+		for (int i = 0; i < calibrationTimes.size(); i++) {
+			dt = calibrationTimes.get(i + 1) - calibrationTimes.get(i);
+			if (dt > mean * 1.5 || dt < mean * 0.5) continue;
+			long minDist = Long.MAX_VALUE;
+			for (long tickTime : tickTimes) {
+				if (Math.abs(calibrationTimes.get(i) - tickTime) < minDist) minDist = calibrationTimes.get(i) - tickTime;
+			}
+			if (Math.abs(calibrationTimes.get(i) - (tickTimes[tickTimes.length - 1] + trackLength)) < minDist) minDist = calibrationTimes.get(i) - (tickTimes[tickTimes.length - 1] + trackLength);
+			if (Math.abs(minDist) > dt * 0.5) continue;
+			totalOffset += minDist;
+			pointRecorded++;
+		}
+
+		totalOffset /= pointRecorded;
+		return true;
 	}
 }

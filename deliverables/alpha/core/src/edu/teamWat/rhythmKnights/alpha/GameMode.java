@@ -22,13 +22,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import edu.teamWat.rhythmKnights.alpha.controllers.*;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
+import com.badlogic.gdx.scenes.scene2d.*;
 
 import javax.naming.ldap.ManageReferralControl;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 
@@ -48,9 +54,12 @@ public class GameMode implements Screen{
 		/** Before the game has started */
 		INTRO,
 		/** While we are playing the game */
+		CALIBRATE,
+
 		PLAY,
         /** Player has won the game */
         WIN,
+
 		LOSE
 	}
 
@@ -227,7 +236,7 @@ public class GameMode implements Screen{
 		// TODO: Properly create the controllers. InputController is now abstract.
 		gameplayController = new GameplayController();
 		playerController = new PlayerController();
-		gameplayController.playerController = playerController;
+		GameplayController.playerController = playerController;
 		Gdx.input.setInputProcessor(playerController);
 	}
 
@@ -258,6 +267,13 @@ public class GameMode implements Screen{
                 this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				//143.882f
+				break;
+			case CALIBRATE:
+				gameState = GameState.PLAY;
+				gameplayController.calibrate = true;
+				gameplayController.initialize(this.curLevel);
+				this.backNum = JSONReader.getBackground();
+				canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				break;
 			case PLAY:
 				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();

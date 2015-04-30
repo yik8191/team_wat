@@ -77,7 +77,7 @@ public class PlayerController implements InputController, InputProcessor {
 				didReset = true;
 				break;
 		}
-		//System.out.println(RhythmController.getSequencePosition() - inputOffset);
+		System.out.println(RhythmController.getSequencePosition() - inputOffset);
 		return true;
 	}
 
