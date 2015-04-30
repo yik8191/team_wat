@@ -271,6 +271,7 @@ public class GameMode implements Screen{
                 if (playerController.getEscape()){
                     this.gameState = GameState.PAUSE;
                     playerController.setListenForInput(false);
+                    playerController.setEscape(false);
                     break;
                 }else{
                     Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
@@ -289,7 +290,7 @@ public class GameMode implements Screen{
                     break;
                 }
             case WIN:
-                if (this.curLevel+1 % (this.numLevels+1) == 0){
+                if ((this.curLevel+1) % (this.numLevels+1) == 0){
                     gameState = GameState.COMPLETE;
                 }else {
                     Vector2 click = playerController.getClick();
@@ -317,6 +318,13 @@ public class GameMode implements Screen{
                 listener.exitScreen(this, 1);
                 RhythmController.stopMusic();
                 return false;
+            case PAUSE:
+                if (playerController.getEscape()){
+                    this.gameState = GameState.PLAY;
+                    playerController.setListenForInput(true);
+                    playerController.setEscape(false);
+                    break;
+                }
 			case LOSE:
 				// Print level failed message!
 				break;
@@ -369,12 +377,17 @@ public class GameMode implements Screen{
                 font.setScale(2);
                 canvas.drawText(menu[i], font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
             }
-        }else {
-            //draw the level
-            canvas.draw(backgrounds[this.backNum - 1], 0, 0);
-            gameplayController.board.draw(canvas);
-            gameplayController.ticker.draw(canvas);
-            gameplayController.gameObjects.draw(canvas);
+        }else if (gameState == GameState.PAUSE) {
+            canvas.draw(backgrounds[0],1,1);
+            BitmapFont font = new BitmapFont();
+            font.setScale(5);
+            canvas.drawText("GAME IS PAUSED", font, 100, 100);
+        }else{
+                //draw the level
+                canvas.draw(backgrounds[this.backNum - 1], 0, 0);
+                gameplayController.board.draw(canvas);
+                gameplayController.ticker.draw(canvas);
+                gameplayController.gameObjects.draw(canvas);
         }
         canvas.end();
 	}

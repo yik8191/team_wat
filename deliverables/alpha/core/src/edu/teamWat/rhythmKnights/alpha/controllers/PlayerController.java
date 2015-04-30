@@ -59,7 +59,7 @@ public class PlayerController implements InputController, InputProcessor {
         if (listenForInput) {
             switch (keycode) {
                 case Keys.ESCAPE:
-                    this.escapePressed = true;
+                    this.setEscape(true);
                     break;
                 case Keys.A:
                     addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getSequencePosition() - inputOffset));
@@ -89,6 +89,8 @@ public class PlayerController implements InputController, InputProcessor {
                     didReset = true;
                     break;
             }
+        }else if (keycode == Keys.ESCAPE){
+            this.setEscape(true);
         }
 		return true;
 	}
@@ -102,7 +104,7 @@ public class PlayerController implements InputController, InputProcessor {
         if (listenForInput) {
             switch (keycode) {
                 case Keys.ESCAPE:
-                    this.escapePressed = false;
+                    this.setEscape(false);
                     break;
                 case Keys.A:
                     addKeyEvent(CONTROL_MOVE_LEFT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
@@ -149,7 +151,8 @@ public class PlayerController implements InputController, InputProcessor {
         return new Vector2(clickX, clickY);
     }
     public boolean getEscape() { return this.escapePressed;}
-    public void setListenForInput(boolean b){this.listenForInput = b;}
+    public void    setEscape(boolean a){ this.escapePressed = a;}
+    public void    setListenForInput(boolean b){this.listenForInput = b;}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
