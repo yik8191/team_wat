@@ -73,12 +73,6 @@ public class RhythmController {
 	}
 
 	public static void LoadContent(AssetManager manager) {
-//		if (manager.isLoaded(MUSIC_FILE)) {
-//			music = manager.get(MUSIC_FILE, Music.class);
-//			music.setLooping(true);
-//		} else {
-//			music = null;  // Failed to load
-//		}
 
 		try {
 			sequencer = MidiSystem.getSequencer();
@@ -101,10 +95,6 @@ public class RhythmController {
 	}
 
 	public static void UnloadContent(AssetManager manager) {
-//		if (music != null) {
-//			music = null;
-//			manager.unload(MUSIC_FILE);
-//		}
 
 		if (hitSound != null) {
 			hitSound = null;
@@ -116,12 +106,6 @@ public class RhythmController {
 			manager.unload(DMG_FILE);
 		}
 	}
-//
-//	public static void init() {
-//
-//		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_FILE));
-//		music.setLooping(true);
-//	}
 
 	public static void init(FileHandle audiohandle, Ticker ticker) throws Exception{
 		sequence = MidiSystem.getSequence(audiohandle.read());
@@ -209,13 +193,6 @@ public class RhythmController {
 			playerActions[i + numTranslated] = PlayerController.CONTROL_NO_ACTION;
 		}
 
-//		for (int i = 0; i < tempTickTimes.size(); i++) {
-//			tickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
-//			completedTicks[i] = false;
-//			tickerActions[i] = tempTickerActions.get(i);
-//			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
-//		}
-
 		InputStream is = audiohandle.read();
 
 		sequencer.setSequence(is);
@@ -227,105 +204,6 @@ public class RhythmController {
 		sequencer.stop();
 		sequencer.start();
 	}
-
-//	public static void launch(float tempo, File midiFile, Ticker ticker) throws Exception {
-//
-//		sequence = MidiSystem.getSequence(new File("music/144beat.mid"));
-//
-//		Track track = sequence.getTracks()[0];
-//
-//		ArrayList<Long> tempTickTimes = new ArrayList<Long>();
-//
-//		for (int i = 0; i < track.size(); i++) {
-//			MidiEvent event = track.get(i);
-//			MidiMessage message = event.getMessage();
-//			if (message instanceof ShortMessage) {
-//				ShortMessage sm = (ShortMessage)message;
-//				if (sm.getCommand() == NOTE_ON) {
-//					tempTickTimes.add(event.getTick());
-//				}
-//			}
-//		}
-//
-//		long[] tickTimes = new long[tempTickTimes.size()];
-//		for (int i = 0; i < tempTickTimes.size(); i++) {
-//			tickTimes[i] = tempTickTimes.get(i);
-//		}
-//
-//		sequencer = MidiSystem.getSequencer();
-//		sequencer.open();
-//
-//		InputStream inputStream = new BufferedInputStream(new FileInputStream(new File("music/game2.midi")));
-//
-//		sequencer.setSequence(inputStream);
-//		sequencer.start();
-//		sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-
-//		System.out.println(sequencer.getTickPosition());
-//		System.out.println(sequencer.getTickLength());
-
-//		period = 60.0f / tempo;
-//		if (begun) {
-//			music.stop();
-//		}
-////		maxDriftRate = 60f / (tempo * tempo * actionWindowRadius * actionWindowRadius);
-//		begun = true;
-//		music.play();
-//		music.setVolume(0);
-//		startTime = TimeUtils.millis();
-//		totalOffset = -0.7f;
-//	}
-
-//	/**
-//	 * Takes in time and converts it to beat time, a float between 0 and 1. Then checks if this time is within action
-//	 * window for a valid beat.
-//	 */
-//	public static boolean isWithinActionWindow(float actionTime, float anchor, boolean out) {
-//		float beatTime = toBeatTime(actionTime) - anchor;
-////		if (out) System.out.println(totalOffset + " " + beatTime);
-//		return beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius;
-//	}
-
-//	/**
-//	 * Method for checking whether or not it's time to move on to the next beat. If we're past the final action point
-//	 * but the beat isn't complete, returns true and sets beat to complete. If we're within the action window, sets to
-//	 * beat to incomplete. Assumes that this method will be called at least once per action window. (If it's not,
-//	 * something else is wrong). This method should only be used to check whether or not it's time to take care of final
-//	 * actions. It should not be used to check if the player has moved within the beat. Use isWithinActionWindow() for
-//	 * that.
-//	 *
-//	 * @return returns whether or not it's time to take final actions.
-//	 */
-//	public static boolean updateBeat() {
-//		float beatTime = toBeatTime(music.getPosition());
-//		if ((beatTime < actionWindowRadius || (1.0f - beatTime) < actionWindowRadius)) {
-//			beatComplete = false;
-//		} else if (beatTime > finalActionOffset && !beatComplete) {
-//			beatComplete = true;
-//			return true;
-//		}
-//		return false;
-//	}
-
-//	public static void sendCalibrationBeat(float time) {
-//		float beatTime = toBeatTime(time);
-//		if (beatTime > 0.5) beatTime--;
-//		totalOffset += 0.5 * (1 - beatTime) * beatTime;
-//		if (totalOffset > 0.5) totalOffset--;
-//	}
-
-//	public static float toBeatTime(float time) {
-//		return ((time - totalOffset * period) % period) / period;
-//	}
-
-//	public static float getCurrentTime() {
-//		return (music.getPosition()) / period;
-//	}
-
-//	public static float getPosition() {
-////		System.out.println(music.getPosition() + " " + (float)TimeUtils.timeSinceMillis(startTime)/1000f);
-//		return music.getPosition();
-//	}
 
 	public static long getSequencePosition() {
 		return sequencer.getTickPosition();

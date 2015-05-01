@@ -278,161 +278,20 @@ public class GameplayController {
 				advanceGameState();
 			}
 		}
-
-
-//		if (RhythmController.updateBeat()) {
-//
-//			//Final actions
-//			if (!playerMoved) {
-//				damagePlayer();
-//				advanceGameState();
-//			}
-//
-//			// Cleanup
-//			gameStateAdvanced = false;
-//			playerMoved = false;
-//			calibrationBeatSent = false;
-//		} else {
-//			if (playerMoved) {
-//				if (playerController.numKeyEvents > 0) {
-//					damagePlayer();
-//				}
-//			} else {
-//				switch (ticker.getAction()) {
-//					case MOVE:
-//						if (playerController.numKeyEvents > 1) {
-//							damagePlayer();
-//							advanceGameState();
-//							playerMoved = true;
-//						} else if (playerController.numKeyEvents == 1) {
-//							PlayerController.KeyEvent event = playerController.keyEvents[0];
-//
-//							//DEBUGGING CODE
-//							RhythmController.isWithinActionWindow(event.time, 0, true);
-//
-//							// Send a calibration beat
-//							if (!calibrationBeatSent) {
-//								RhythmController.sendCalibrationBeat(event.time);
-//								calibrationBeatSent = true;
-//							}
-//
-//
-//							if (RhythmController.isWithinActionWindow(event.time, 0, false)) {
-//								Vector2 vel = new Vector2();
-//								switch (event.code) {
-//									case InputController.CONTROL_MOVE_RIGHT:
-//										vel.x = 1;
-//										knight.setDirection(Knight.KnightDirection.RIGHT);
-//										break;
-//									case InputController.CONTROL_MOVE_UP:
-//										vel.y = 1;
-//										knight.setDirection(Knight.KnightDirection.BACK);
-//										break;
-//									case InputController.CONTROL_MOVE_LEFT:
-//										vel.x = -1;
-//										knight.setDirection(Knight.KnightDirection.LEFT);
-//										break;
-//									case InputController.CONTROL_MOVE_DOWN:
-//										vel.y = -1;
-//										knight.setDirection(Knight.KnightDirection.FRONT);
-//										break;
-//								}
-//								playerMoved = true;
-//								knight.setVelocity(vel);
-//								advanceGameState();
-//
-//								// Display visual feedback to show success
-//								knight.showSuccess();
-//								// Set current tile type to SUCCESS
-//								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
-//								RhythmController.playSuccess();
-//							}
-//						}
-//						break;
-//					case DASH:
-//						if (playerController.numKeyEvents > 1) {
-//							damagePlayer();
-//							advanceGameState();
-//							playerMoved = true;
-//						} else if (playerController.numKeyEvents == 1) {
-//							PlayerController.KeyEvent event = playerController.keyEvents[0];
-//
-//							//DEBUGGING CODE
-//							RhythmController.isWithinActionWindow(event.time, 0, true);
-//
-//							// Send a calibration beat
-//							if (!calibrationBeatSent) {
-//								RhythmController.sendCalibrationBeat(event.time);
-//								calibrationBeatSent = true;
-//							}
-//
-//
-//							if (RhythmController.isWithinActionWindow(event.time, 0, false)) {
-//								Vector2 vel = new Vector2();
-//								switch (event.code) {
-//									case InputController.CONTROL_MOVE_RIGHT:
-//										vel.x = 2;
-//										knight.setDirection(Knight.KnightDirection.RIGHT);
-//										break;
-//									case InputController.CONTROL_MOVE_UP:
-//										vel.y = 2;
-//										knight.setDirection(Knight.KnightDirection.BACK);
-//										break;
-//									case InputController.CONTROL_MOVE_LEFT:
-//										vel.x = -2;
-//										knight.setDirection(Knight.KnightDirection.LEFT);
-//										break;
-//									case InputController.CONTROL_MOVE_DOWN:
-//										vel.y = -2;
-//										knight.setDirection(Knight.KnightDirection.FRONT);
-//										break;
-//								}
-//								playerMoved = true;
-//								knight.setVelocity(vel);
-//								advanceGameState();
-//
-//								// Display visual feedback to show success
-//								knight.showSuccess();
-//								// Set current tile type to SUCCESS
-//								board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
-//								RhythmController.playSuccess();
-//							}
-//						}
-//						break;
-//				}
-//			}
-//		}
 	}
 
 	private void advanceGameState() {
 		if (gameStateAdvanced) return;
 		gameStateAdvanced = true;
 		//ticker.advance();
-//		board.updateColors();
 		moveEnemies();
 		collisionController.update();
 		if (collisionController.hasPlayerMoved) knight.setInvulnerable(false);
 //		System.out.println(RhythmController.getSequencePosition());
-
-		// Configures the next beat to handle inputs properly
-//			switch (ticker.getAction()) {
-//				case MOVE:
-//					RhythmController.actionWindowRadius = 0.15f;
-//					RhythmController.finalActionOffset = 0.5f;
-//
-//					break;
-//				case DASH:
-//
-//
-//					break;
-//			}
 	}
 
 	public void damagePlayer() {
 		if (!knight.isInvulnerable()) {
-//			for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-//				System.out.println(ste);
-//			}
 			knight.takeDamage();
 			knight.setInvulnerable(true);
 		}
