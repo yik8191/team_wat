@@ -1,3 +1,6 @@
+import java.util.Map;
+import java.util.HashMap;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +25,7 @@ import org.staccato.StaccatoParserListener;
 public class GameTrack4 {
 
     public static void main(String[] args) {
-        GameTrack3 gt4 = new GameTrack4();
+        GameTrack4 gt4 = new GameTrack4();
         Pattern pattern = gt4.getPattern();
 	MidiFileManager mymanager = new MidiFileManager();
 	
@@ -48,22 +51,38 @@ public class GameTrack4 {
 
     public Pattern getPattern() {
 	Pattern pattern = new Pattern();
-	String voice1 = ""
+	String voice1 = "A3i Ri A3i Ri A3i Ri Ri B3s Rs " +
+	    "Ri B3s Rs Ri B3s Rs C4s Rs Ri B3s Rs Ri ";
+
+	Pattern cpattern = new Pattern(voice1)
+	    .repeat(4);
 	
+
+	Map<Character, String> MY_RHYTHM_KIT =
+	    new HashMap<Character, String>() {{
+		put('.', "Ri");
+		put('O', "[ACOUSTIC_BASS_DRUM]i");
+		put('S', "[ACOUSTIC_SNARE]i");
+		put('^', "[PEDAL_HI_HAT]i");
+		put('*', "[CRASH_CYMBAL_1]i");
+		put('X', "[HAND_CLAP]i");
+	    }};
+	    
 	Rhythm rhythm = new Rhythm()
-	    .addLayer("O..O..O..O..") // This is Layer 0
-	    .setLength(16); // Set the length of the rhythm to 16 measures
+	    .addLayer("O.O.O.O.") // This is Layer 0
+	    .setRhythmKit(MY_RHYTHM_KIT)
+	    .setLength(4); // Set the length of the rhythm to 16 measures
 
 	Pattern rpattern = rhythm.getPattern();
 
 	Pattern bpattern =
-	    new Pattern("Cq. Cq. Cq. Cq. ")
-	    .repeat(32);
+	    new Pattern("C1q C1q C1q C1q ")
+	    .repeat(4);
 	
-        pattern.add("T180 V0 I[Bass_Drum] " +
+        pattern.add("T180 V0 I[Acoustic_Bass_Drum] " +
 		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
-        pattern.add("V1 I[Violin] X[Volume_Coarse]=192 " +
-		    voice1a + voice1a + voice1b + voice1b);
+        pattern.add("V1 I[Distortion_Guitar] X[Volume_Coarse]=192 " +
+		    cpattern);
 	pattern.add(rpattern);
         return pattern;
     }
