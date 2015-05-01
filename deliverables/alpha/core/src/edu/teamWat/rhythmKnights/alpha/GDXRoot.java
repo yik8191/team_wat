@@ -50,7 +50,8 @@ public class GDXRoot extends Game implements ScreenListener {
     /** Player mode for the level select screen (CONTROLLER CLASS) */
     private SelectMode selecting;
 
-    private int numLevels = 3;
+
+    private int numLevels = 11;
 
 	public GDXRoot() {
 		// Start loading with the asset manager
@@ -125,7 +126,13 @@ public class GDXRoot extends Game implements ScreenListener {
             playing.setLevel(exitCode);
             playing.setScreenListener(this);
             setScreen(playing);
-        } else if (exitCode != 0) {
+        } else if (screen == playing && exitCode == 1){
+            selecting = new SelectMode(canvas, this.numLevels);
+            selecting.setScreenListener(this);
+            setScreen(selecting);
+            playing.dispose();
+            playing = null;
+        }else if (exitCode != 0) {
             Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
             Gdx.app.exit();
         } else if (screen == loading){

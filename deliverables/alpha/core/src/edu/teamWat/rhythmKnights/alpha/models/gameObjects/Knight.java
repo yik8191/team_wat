@@ -17,8 +17,8 @@ public class Knight extends GameObject {
     private KnightState state = KnightState.NORMAL;
     private KnightDirection facing = KnightDirection.FRONT;
     private int facingFact = 0;
-    public static final String KNIGHT_DASH_FILE = "images/knightDash.png";
-    public static final String KNIGHT_NORMAL_FILE = "images/knightsheet.png";
+    public static final String KNIGHT_DASH_FILE = "images/spriteSheets/knightDash.png";
+    public static final String KNIGHT_NORMAL_FILE = "images/spriteSheets/knightsheet.png";
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
@@ -130,7 +130,6 @@ public class Knight extends GameObject {
                 animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
             }
         }
-        //TODO: implement this
     }
 
     public void setState(KnightState ks) {

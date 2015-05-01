@@ -240,5 +240,14 @@ public class JSONReader {
         return Gdx.files.internal("music/" + audio);
     }
 
+    public static int getBackground(){
+        int n = ((Long)level.get("backNum")).intValue();
+        return n;
+    }
+
+    public static int getTileSprite(){
+        return  ((Long)level.get("tileNum")).intValue();
+    }
+
 
 }

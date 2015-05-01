@@ -30,8 +30,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 
-import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
-
 /**
  * Primary view class for the game, abstracting the basic graphics calls.
  * 
@@ -51,8 +49,22 @@ public class GameCanvas {
     public int INDICATOR_WIDTH = 420;
     public int HP_SIZE;
 
+    //constants for drawing menus
 
-	/** Drawing context to handle textures as sprites */
+    private int menuMaxWTiles = 5;
+    private int menuMaxHTiles = 5;
+    private int menuTileSpacing = 15;
+    public  int menuTileSize = 150;
+    private int menuTilesPerRow = 1;
+    private int menuTilesPerCol = 1;
+    private int menuXStart = 0;
+    private int menuYStart = 0;
+
+
+
+
+
+    /** Drawing context to handle textures as sprites */
 	private SpriteBatch spriteBatch;
 
 	/** Track whether or not we are active (for error checking) */
@@ -313,7 +325,6 @@ public class GameCanvas {
 			return;
 		}
 
-		// TODO: fill in correct background drawing code
 		float w = image.getWidth();
 		// Have to draw the background twice for continuous scrolling.
 		spriteBatch.draw(image, x, y);
@@ -560,4 +571,37 @@ public class GameCanvas {
 		/** Color values are draw on top of one another with no transparency support */
 		OPAQUE
 	}
+
+    public boolean pointInBox(int screenX, int screenY, int i){
+        int[] b = getButtonBounds(i);
+        return (screenX > b[0]) && (screenX < b[2]) &&
+                (screenY > b[1]) && (screenY < b[3]);
+    }
+
+    public int[] getButtonBounds(int i){
+        int x = i % menuMaxWTiles;
+        int y = i / menuMaxWTiles;
+
+        int[] bounds = new int[4];
+
+        //left x
+        bounds[0] = (x*(menuTileSize+menuTileSpacing) + menuXStart);
+        //top y
+        bounds[1] = (y*(menuTileSize+menuTileSpacing)) + menuYStart;
+
+        //right x
+        bounds[2] = bounds[0] + menuTileSize;
+        //bottom y
+        bounds[3] = bounds[1] + menuTileSize;
+
+        return bounds;
+    }
+
+    public void setMenuConstants(int numLevels){
+        menuTilesPerRow = Math.min(menuMaxWTiles, numLevels);
+        menuXStart = (getWidth()/2) - ((menuTilesPerRow*menuTileSize) + ((menuTilesPerRow-1)*menuTileSpacing))/2;
+
+        menuTilesPerCol = Math.min(menuMaxHTiles, numLevels/menuTilesPerRow+1);
+        menuYStart = (getHeight()/2) - ((menuTilesPerCol*menuTileSize) + ((menuTilesPerCol - 1)*menuTileSpacing))/2;
+    }
 }

@@ -9,8 +9,8 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class Enemy extends GameObject{
 
-    public static final String SKELETON_FILE = "images/skeletonsheet.png";
-    public static final String SLIME_FILE = "images/slimesheet.png";
+    public static final String SKELETON_FILE = "images/spriteSheets/skeletonsheet.png";
+    public static final String SLIME_FILE = "images/spriteSheets/slimesheet.png";
     public static Texture skeletonTexture;
     public static Texture slimeTexture;
     private FilmStrip sprite;
@@ -63,8 +63,6 @@ public class Enemy extends GameObject{
 			    animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
 		    }
 	    }
-        //TODO: implement this
-
     }
 
     public Texture getTexture(){

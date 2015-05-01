@@ -38,7 +38,7 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class LoadingMode implements Screen, InputProcessor {
 	// Textures necessary to support the loading screen
-	private static final String BACKGROUND_FILE = "images/splash_screen.png";
+	private static final String BACKGROUND_FILE = "images/backgrounds/splash_screen.png";
 	private static final String PROGRESS_FILE = "images/progressbar.png";
 	private static final String PLAY_BTN_FILE = "images/play.png";
 
@@ -392,7 +392,6 @@ public class LoadingMode implements Screen, InputProcessor {
 		// Flip to match graphics coordinates
 		screenY = heightY - screenY;
 
-		// TODO: Fix scaling
 		// Play button is a circle.
 		float radius = BUTTON_SCALE * scale * playButton.getWidth() / 2.0f;
 		float dist = (screenX - centerX) * (screenX - centerX) + (screenY - centerY) * (screenY - centerY);

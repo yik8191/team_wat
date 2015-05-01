@@ -11,24 +11,24 @@
  */
 
 package edu.teamWat.rhythmKnights.alpha;
-// TODO: Import the package that contains our gameObjects
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 
+import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.controllers.*;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
 import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
-import javax.naming.ldap.ManageReferralControl;
+import java.util.ArrayList;
 
 
 /**
@@ -48,24 +48,37 @@ public class GameMode implements Screen{
 		INTRO,
 		/** While we are playing the game */
 		PLAY,
-        /** Player has won the game */
+        /** Player has won the level */
         WIN,
+        /** Player has won the game */
+        COMPLETE,
+        /** Player has paused the game */
+        PAUSE,
 		LOSE
 	}
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
-	private static String BKGD_FILE = "images/game_background.png";
-//	private static String LVL1_FILE = "images/level1.png";
+    private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
+    private static int numBackgrounds = 7;
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
+    private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
-	private static Texture background;
+	private static Texture[] backgrounds = new Texture[numBackgrounds];
 	/** background image for level 1 */
 	// private static Texture level1;
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
+    //TODO: Replace this with an actual texture
+    private Texture tileTexture;
+    private static final String TILE_FILE = "images/tiles/tileFull1.png";
+
+    private String[] menu = {"Replay", "Next", "Select"};
+
+
+    private ArrayList<int[]> bounds = new ArrayList<int[]>();
 
     private int curLevel = -1;
     private int numLevels = 1;
@@ -82,8 +95,12 @@ public class GameMode implements Screen{
 	 * @param manager Reference to global asset manager
 	 */
 	public static void PreLoadContent(AssetManager manager){
-		// Load the background
-		manager.load(BKGD_FILE, Texture.class);
+        //Populate background list then load them
+        for (int i=0; i<numBackgrounds; i++){
+            BKGD_FILES.add("images/backgrounds/bg"+(i+1)+".png");
+            manager.load(BKGD_FILES.get(i), Texture.class);
+        }
+
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -92,7 +109,6 @@ public class GameMode implements Screen{
 		manager.load(FONT_FILE, BitmapFont.class, size2Params);
 
 		// Pre-load the other assets
-		// TODO: Fill in the other assets we'll be using in this style:
 		Board.PreLoadContent(manager);
 		Knight.PreLoadContent(manager);
 		Enemy.PreLoadContent(manager);
@@ -116,12 +132,14 @@ public class GameMode implements Screen{
 	 */
 	public static void LoadContent(AssetManager manager){
 		// Allocate the background
-		if (manager.isLoaded(BKGD_FILE)) {
-			background = manager.get(BKGD_FILE, Texture.class);
-			background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		} else {
-			displayFont = null;
-		}
+        for (int i=0; i<BKGD_FILES.size(); i++) {
+            if (manager.isLoaded(BKGD_FILES.get(i))) {
+                backgrounds[i] = manager.get(BKGD_FILES.get(i), Texture.class);
+                backgrounds[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            } else {
+                backgrounds[i] = null;
+            }
+        }
 
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
@@ -131,7 +149,6 @@ public class GameMode implements Screen{
 		}
 
 		// Load other assets
-		// TODO: Fill in the other assets we'll be using in this style:
 		Board.LoadContent(manager);
 		Knight.LoadContent(manager);
 		Enemy.LoadContent(manager);
@@ -149,17 +166,19 @@ public class GameMode implements Screen{
 	 * @param manager Reference to global asset manager.
 	 */
 	public static void UnloadContent(AssetManager manager) {
-		if (background != null) {
-			background = null;
-			manager.unload(BKGD_FILE);
-		}
-		if (displayFont != null) {
-			displayFont = null;
-			manager.unload(FONT_FILE);
-		}
+        for (int i=0; i<BKGD_FILES.size(); i++) {
+            if (backgrounds[i] != null) {
+                backgrounds[i] = null;
+                manager.unload(BKGD_FILES.get(i));
+            }
+        }
+
+        if (displayFont != null) {
+            displayFont = null;
+            manager.unload(FONT_FILE);
+        }
 
 		// Load the other assets
-		// TODO: Fill in the other assets we'll be using in this style:
 		Board.UnloadContent(manager);
 		Knight.UnloadContent(manager);
 		Enemy.UnloadContent(manager);
@@ -170,7 +189,6 @@ public class GameMode implements Screen{
 
 	// CONSTANTS
 
-	// TODO: Fill in UI related the constants we'll need
 	// Ex: offset floats for strings we might display to screen like this:
 	// /** Offset for the score counter message on the screen */
 	// private static final float SCORE_OFFSET = 55.0f;
@@ -182,7 +200,6 @@ public class GameMode implements Screen{
 	/** Constructs the game models and handle basic gameplay (CONTROLLER CLASS) */
 	private GameplayController gameplayController;
 
-	// TODO: Fill in game state related variables like the one below
 	/** Variable to track the game state (SIMPLE FIELDS) */
 	private GameState gameState;
 
@@ -200,13 +217,19 @@ public class GameMode implements Screen{
 	 * view has already been initialized by the root class.
 	 */
 	public GameMode(GameCanvas canvas) {
+        this.BKGD_FILES.clear();
+        for (int i=1; i<=this.numBackgrounds; i++){
+            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
+        }
+
 		this.canvas = canvas;
 		active = false;
 		// Null out all pointers, 0 out all ints, etc
 		gameState = GameState.INTRO;
 
-		// Create the controllers.
-		// TODO: Properly create the controllers. InputController is now abstract.
+        tileTexture = new Texture(TILE_FILE);
+
+        // Create the controllers.
 		gameplayController = new GameplayController();
 		playerController = new PlayerController();
 		gameplayController.playerController = playerController;
@@ -231,45 +254,80 @@ public class GameMode implements Screen{
 	 *
 	 * @param delta Number of seconds since last animation frame
 	 */
-	private void update(float delta) {
+	private boolean update(float delta) {
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-				// TODO: Fill in other initialization code
-				gameplayController.initialize(this.curLevel);
+
+                gameplayController.initialize(this.curLevel);
+                this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
 				//143.882f
+                playerController.setListenForInput(true);
 				break;
 			case PLAY:
-				Knight knight =(Knight)gameplayController.gameObjects.getPlayer();
-				if (gameplayController.isGameOver()) reset();
-                else if (!knight.isActive()) reset();
-                else if (gameplayController.board.isGoalTile((int)knight.getPosition().x, (int)knight.getPosition().y)) {
-					gameState = GameState.WIN;
-					play();
-				}
-				else play();
-				break;
-            case WIN:
-                this.curLevel++;
-                this.curLevel = this.curLevel % (this.numLevels+1);
-                if (this.curLevel == 0) {
-                    this.curLevel = 1;
+                if (playerController.getEscape()){
+                    this.gameState = GameState.PAUSE;
+                    playerController.setListenForInput(false);
+                    playerController.setEscape(false);
+                    break;
+                }else{
+                    Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
+                    if (gameplayController.isGameOver()) reset();
+                    else if (!knight.isActive()) reset();
+                    else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
+                        gameState = GameState.WIN;
+                        bounds.clear();
+                        canvas.setMenuConstants(3);
+                        for (int i = 0; i < 3; i++) {
+                            bounds.add(canvas.getButtonBounds(i));
+                        }
+                        playerController.setListenForInput(false);
+                        play();
+                    } else play();
+                    break;
                 }
-                //TODO: add some sort of 'good job you win!' message
-                gameState = GameState.INTRO;
-//				spriteBatch = new SpriteBatch();
-//				displayFont = new BitmapFont();
-//				spriteBatch.begin();
-//				displayFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-//				displayFont.draw(spriteBatch, "my-string", 30, 30);
-////				spriteBatch.end();
-                // Print level complete message!
+            case WIN:
+                if ((this.curLevel+1) % (this.numLevels+1) == 0){
+                    gameState = GameState.COMPLETE;
+                }else {
+                    Vector2 click = playerController.getClick();
+                    if (click.x != -1) {
+                        if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
+                            //Replay level
+                            gameState = GameState.INTRO;
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
+                            //next level
+                            this.curLevel++;
+                            gameState = GameState.INTRO;
+                            RhythmController.stopMusic();
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
+                            //level select
+                            listener.exitScreen(this, 1);
+                            RhythmController.stopMusic();
+                            return false;
+                        }
+                    }
+                }
                 break;
+            case COMPLETE:
+                //TODO: do something for winning the entire game
+                //for now just go back to level select
+                listener.exitScreen(this, 1);
+                RhythmController.stopMusic();
+                return false;
+            case PAUSE:
+                if (playerController.getEscape()){
+                    this.gameState = GameState.PLAY;
+                    playerController.setListenForInput(true);
+                    playerController.setEscape(false);
+                    break;
+                }
 			case LOSE:
 				// Print level failed message!
 				break;
 		}
+        return true;
 	}
 
     public void setNumLevels(int a){
@@ -280,7 +338,6 @@ public class GameMode implements Screen{
 	 * This method processes a single step in the game loop.
 	 */
 	protected void play() {
-		// TODO: this is the main game loop. Call update on everything, set values, garbage collect
 		// NO DRAWING CODE HERE
 		gameplayController.update();
 
@@ -289,7 +346,6 @@ public class GameMode implements Screen{
 	/** This method resets the game */
 	protected void reset() {
 		gameState = GameState.INTRO;
-		// TODO: take care of other resetting code. E.g. call reset on gameplayController
 		// NO INITIALIZATION CODE HERE. That's taken care of in update.
 	}
 
@@ -304,13 +360,34 @@ public class GameMode implements Screen{
 	 */
 	protected void draw(float delta) {
 		canvas.begin();
-		// TODO: this is the main drawing loop. Draw the background, draw objects, draw UI
-		// NO UPDATE CODE HERE
-        canvas.draw(background, 0, 0);
-		gameplayController.board.draw(canvas);
-		gameplayController.ticker.draw(canvas);
-		gameplayController.gameObjects.draw(canvas);
-		canvas.end();
+		if (this.gameState == GameState.WIN){
+            //draw level complete menu
+            //TODO: make sure this background is a good one
+            canvas.drawBackground(backgrounds[0], 1,1);
+
+            BitmapFont font = new BitmapFont();
+            float scale = (float)canvas.menuTileSize/(float)tileTexture.getHeight();
+            for (int i=0; i<3; i++){
+                Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
+                loc.y = canvas.getHeight() - loc.y - canvas.menuTileSize;
+                com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                font.setScale(2);
+                canvas.drawText(menu[i], font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
+            }
+        }else if (gameState == GameState.PAUSE) {
+            canvas.draw(backgrounds[0],1,1);
+            BitmapFont font = new BitmapFont();
+            font.setScale(5);
+            canvas.drawText("GAME IS PAUSED", font, 100, 100);
+        }else{
+                //draw the level
+                canvas.draw(backgrounds[this.backNum - 1], 0, 0);
+                gameplayController.board.draw(canvas);
+                gameplayController.ticker.draw(canvas);
+                gameplayController.gameObjects.draw(canvas);
+        }
+        canvas.end();
 	}
 
 	/**
@@ -323,6 +400,14 @@ public class GameMode implements Screen{
 	 */
 	public void resize(int width, int height) {
 		// IGNORE FOR NOW
+        if (gameState == GameState.WIN) {
+            canvas.setMenuConstants(3);
+
+            bounds.clear();
+            for (int i = 0; i < 3; i++) {
+                bounds.add(canvas.getButtonBounds(i));
+            }
+        }
 	}
 
 	/**
@@ -335,8 +420,9 @@ public class GameMode implements Screen{
 	 */
 	public void render(float delta) {
 		if (active) {
-			update(delta);
-			draw(delta);
+			if (update(delta)) {
+                draw(delta);
+            }
 		}
 	}
 
@@ -345,18 +431,14 @@ public class GameMode implements Screen{
 	 *
 	 * This is usually when it's not active or visible on screen. An Application is also paused before it is destroyed.
 	 */
-	public void pause() {
-		// TODO Auto-generated method stub
-	}
+	public void pause() {}
 
 	/**
 	 * Called when the Screen is resumed from a paused state.
 	 *
 	 * This is usually when it regains focus.
 	 */
-	public void resume() {
-		// TODO Auto-generated method stub
-	}
+	public void resume() {}
 
 	/**
 	 * Called when this screen becomes the current screen for a Game.

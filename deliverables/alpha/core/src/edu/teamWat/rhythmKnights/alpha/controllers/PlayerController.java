@@ -12,6 +12,7 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.sun.org.apache.bcel.internal.classfile.Code;
 
@@ -19,12 +20,19 @@ import java.awt.*;
 import java.awt.event.KeyListener;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerController implements InputController, InputProcessor {
 
 	public ArrayList<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
 	public boolean didReset = false;
+
+    //variables used by GameMode
+    private int clickX = -1;
+    private int clickY = -1;
+    private boolean escapePressed = false;
+    private boolean listenForInput = true;
 
 	public static long inputOffset = 0;
 
@@ -48,36 +56,42 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-			case Keys.A:
-				addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.D:
-				addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.W:
-				addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.S:
-				addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.LEFT:
-				addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.RIGHT:
-				addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.UP:
-				addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.DOWN:
-				addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.R:
-				didReset = true;
-				break;
-		}
-		//System.out.println(RhythmController.getSequencePosition() - inputOffset);
+        if (listenForInput) {
+            switch (keycode) {
+                case Keys.ESCAPE:
+                    this.setEscape(true);
+                    break;
+                case Keys.A:
+                    addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.D:
+                    addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.W:
+                    addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.S:
+                    addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.LEFT:
+                    addKeyEvent(CONTROL_MOVE_LEFT, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.RIGHT:
+                    addKeyEvent(CONTROL_MOVE_RIGHT, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.UP:
+                    addKeyEvent(CONTROL_MOVE_UP, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.DOWN:
+                    addKeyEvent(CONTROL_MOVE_DOWN, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.R:
+                    didReset = true;
+                    break;
+            }
+        }else if (keycode == Keys.ESCAPE){
+            this.setEscape(true);
+        }
 		return true;
 	}
 
@@ -87,32 +101,37 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		switch (keycode) {
-			case Keys.A:
-				addKeyEvent(CONTROL_MOVE_LEFT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.D:
-				addKeyEvent(CONTROL_MOVE_RIGHT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.W:
-				addKeyEvent(CONTROL_MOVE_UP | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.S:
-				addKeyEvent(CONTROL_MOVE_DOWN | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.LEFT:
-				addKeyEvent(CONTROL_MOVE_LEFT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.RIGHT:
-				addKeyEvent(CONTROL_MOVE_RIGHT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.UP:
-				addKeyEvent(CONTROL_MOVE_UP | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-			case Keys.DOWN:
-				addKeyEvent(CONTROL_MOVE_DOWN | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
-				break;
-		}
+        if (listenForInput) {
+            switch (keycode) {
+                case Keys.ESCAPE:
+                    this.setEscape(false);
+                    break;
+                case Keys.A:
+                    addKeyEvent(CONTROL_MOVE_LEFT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.D:
+                    addKeyEvent(CONTROL_MOVE_RIGHT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.W:
+                    addKeyEvent(CONTROL_MOVE_UP | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.S:
+                    addKeyEvent(CONTROL_MOVE_DOWN | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.LEFT:
+                    addKeyEvent(CONTROL_MOVE_LEFT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.RIGHT:
+                    addKeyEvent(CONTROL_MOVE_RIGHT | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.UP:
+                    addKeyEvent(CONTROL_MOVE_UP | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+                case Keys.DOWN:
+                    addKeyEvent(CONTROL_MOVE_DOWN | CONTROL_RELEASE, (RhythmController.getSequencePosition() - inputOffset));
+                    break;
+            }
+        }
 		return false;
 	}
 
@@ -123,12 +142,23 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
+		this.clickX = screenX;
+        this.clickY = screenY;
+        return false;
 	}
+
+    public Vector2 getClick(){
+        return new Vector2(clickX, clickY);
+    }
+    public boolean getEscape() { return this.escapePressed;}
+    public void    setEscape(boolean a){ this.escapePressed = a;}
+    public void    setListenForInput(boolean b){this.listenForInput = b;}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
+		this.clickX = -1;
+        this.clickY = -1;
+        return false;
 	}
 
 	@Override

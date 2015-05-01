@@ -9,7 +9,7 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class DynamicTile extends GameObject {
 
-	public static final String DYN_TILE_FILE = "images/dyn_tile.png";
+	public static final String DYN_TILE_FILE = "images/tiles/dyn_tile.png";
     public static Texture dynTileTexture;
 	
 	public DynamicTile(int id, float x, float y) {
@@ -38,8 +38,6 @@ public class DynamicTile extends GameObject {
 				animatedPosition.set(position).sub(oldPosition).scl((float)animAge / animFrames).add(oldPosition);
 			}
 		}
-        //TODO: implement this
-
     }
 
     public void draw(GameCanvas canvas) {
