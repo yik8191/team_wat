@@ -17,11 +17,11 @@ import java.sql.Time;
 /** Ticker */ // lol
 public class Ticker {
 
-    public static final String BLANK_FILE = "images/tickerBlankSheet.png";
-    public static final String DASH_FILE = "images/tickerDashSheet.png";
-    public static final String FREEZE_FILE = "images/tickerFreeze.png";
-    public static final String FIREBALL_FILE = "images/tickerFireball.png";
-    public static final String INDICATOR_FILE = "images/tickerCurrent.png";
+    public static final String BLANK_FILE = "images/ticker/tickerBlankSheet.png";
+    public static final String DASH_FILE = "images/ticker/tickerDashSheet.png";
+    public static final String FREEZE_FILE = "images/ticker/tickerFreeze.png";
+    public static final String FIREBALL_FILE = "images/ticker/tickerFireball.png";
+    public static final String INDICATOR_FILE = "images/ticker/tickerCurrent.png";
     public static Texture blankTexture;
     public static Texture dashTexture;
     public static Texture freezeTexture;

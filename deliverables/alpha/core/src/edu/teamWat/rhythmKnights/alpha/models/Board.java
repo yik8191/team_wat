@@ -20,7 +20,7 @@ public class Board {
 
     /* Variables for tile sprite */
 
-    public static final String GLOWING_FILE = "images/glowingtile.png";
+    public static final String GLOWING_FILE = "images/tiles/glowingtile.png";
     public static Texture tileTexture;
     public static Texture glowingTexture;
     private FilmStrip sprite;
@@ -151,7 +151,7 @@ public class Board {
     public static void PreLoadContent(AssetManager manager) {
         //Populate tile list then load them
         for (int i=0; i<numTileTextures; i++){
-            TILE_FILES.add("images/tileFull"+(i+1)+".png");
+            TILE_FILES.add("images/tiles/tileFull"+(i+1)+".png");
             manager.load(TILE_FILES.get(i), Texture.class);
         }
         manager.load(GLOWING_FILE, Texture.class);

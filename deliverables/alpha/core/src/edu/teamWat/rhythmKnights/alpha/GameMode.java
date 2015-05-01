@@ -73,7 +73,7 @@ public class GameMode implements Screen{
 	private static BitmapFont displayFont;
     //TODO: Replace this with an actual texture
     private Texture tileTexture;
-    private static final String TILE_FILE = "images/tileFull1.png";
+    private static final String TILE_FILE = "images/tiles/tileFull1.png";
 
     private String[] menu = {"Replay", "Next", "Select"};
 
@@ -97,7 +97,7 @@ public class GameMode implements Screen{
 	public static void PreLoadContent(AssetManager manager){
         //Populate background list then load them
         for (int i=0; i<numBackgrounds; i++){
-            BKGD_FILES.add("images/bg"+(i+1)+".png");
+            BKGD_FILES.add("images/backgrounds/bg"+(i+1)+".png");
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
 
@@ -219,7 +219,7 @@ public class GameMode implements Screen{
 	public GameMode(GameCanvas canvas) {
         this.BKGD_FILES.clear();
         for (int i=1; i<=this.numBackgrounds; i++){
-            this.BKGD_FILES.add("images/bg"+i+".png");
+            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
         }
 
 		this.canvas = canvas;

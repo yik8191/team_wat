@@ -9,7 +9,7 @@ import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 public class DynamicTile extends GameObject {
 
-	public static final String DYN_TILE_FILE = "images/dyn_tile.png";
+	public static final String DYN_TILE_FILE = "images/tiles/dyn_tile.png";
     public static Texture dynTileTexture;
 	
 	public DynamicTile(int id, float x, float y) {
