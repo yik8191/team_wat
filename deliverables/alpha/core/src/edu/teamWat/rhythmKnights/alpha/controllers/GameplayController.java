@@ -35,11 +35,8 @@ public class GameplayController {
 	private int timeHP = DOT_HP;
 	private boolean hasMoved = false;
 
-    private int backgroundNum = 0;
-
 	public GameplayController() {
 	}
-
 
 	public void initialize(int levelNum) {
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
@@ -51,6 +48,7 @@ public class GameplayController {
 		FileHandle levelhandle = Gdx.files.internal("levels/level" + levelNum + ".json");
 		FileHandle audiohandle;
 		board = JSONReader.parseFile(levelhandle.readString());
+        board.setTileSprite(JSONReader.getTileSprite());
 		audiohandle = JSONReader.getAudioHandle();
 		
 		

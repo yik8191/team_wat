@@ -9,6 +9,7 @@ import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import javax.xml.soap.Text;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
@@ -16,11 +17,9 @@ public class Board {
     private int width;
     /* Height of current board */
     private int height;
-	/*Which color tiles should be*/
-	private int colorInd = 0;
 
     /* Variables for tile sprite */
-    public static final String TILE_FILE = "images/tileFull.png";
+
     public static final String GLOWING_FILE = "images/glowingtile.png";
     public static Texture tileTexture;
     public static Texture glowingTexture;
@@ -40,6 +39,11 @@ public class Board {
 
     /* Holds the array of tiles that make up this board */
     private Tile[][] tiles;
+
+    private static ArrayList<String> TILE_FILES = new ArrayList<String>();
+
+    private static int numTileTextures = 1;
+    private static Texture[] textures = new Texture[numTileTextures];
 
     /** Initialize a board with dimensions w x h with empty tiles*/
     public Board(int w, int h){
@@ -73,6 +77,10 @@ public class Board {
 
     public void update(float delta) {
         // Might not need this method.
+    }
+
+    public void setTileSprite(int i){
+        tileTexture = textures[i-1];
     }
 
     /*Set a certain tile to have all listed variables*/
@@ -141,7 +149,11 @@ public class Board {
      * @param manager Reference to global asset manager.
      */
     public static void PreLoadContent(AssetManager manager) {
-        manager.load(TILE_FILE, Texture.class);
+        //Populate tile list then load them
+        for (int i=0; i<numTileTextures; i++){
+            TILE_FILES.add("images/tileFull"+(i+1)+".png");
+            manager.load(TILE_FILES.get(i), Texture.class);
+        }
         manager.load(GLOWING_FILE, Texture.class);
     }
 
@@ -158,18 +170,20 @@ public class Board {
      * @param manager Reference to global asset manager.
      */
     public static void LoadContent(AssetManager manager) {
-        if (manager.isLoaded(TILE_FILE)) {
-            tileTexture = manager.get(TILE_FILE,Texture.class);
-            tileTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        } else {
-            tileTexture = null;  // Failed to load
+        for (int i=0; i<TILE_FILES.size(); i++) {
+            if (manager.isLoaded(TILE_FILES.get(i))) {
+                textures[i] = manager.get(TILE_FILES.get(i), Texture.class);
+                textures[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            } else {
+                textures[i] = null;  // Failed to load
+            }
         }
 
         if (manager.isLoaded(GLOWING_FILE)) {
             glowingTexture = manager.get(GLOWING_FILE, Texture.class);
             glowingTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
-            tileTexture = null; // Failed to load
+            glowingTexture = null; // Failed to load
         }
     }
 
@@ -181,9 +195,11 @@ public class Board {
      * @param manager Reference to global asset manager.
      */
     public static void UnloadContent(AssetManager manager) {
-        if (tileTexture != null) {
-            tileTexture = null;
-            manager.unload(TILE_FILE);
+        for (int i=0; i<TILE_FILES.size(); i++) {
+            if (textures[i] != null) {
+                textures[i] = null;
+                manager.unload(TILE_FILES.get(i));
+            }
         }
         if (glowingTexture != null) {
             glowingTexture = null;
@@ -210,22 +226,6 @@ public class Board {
 
         Tile.randCol = reddish.add(bluish);
 
-//	    int rand = colorInd % 2;
-//	    // Intentionally removed red and yellow, too jarring
-//	    colorInd++;
-//	    if (rand == 2) {
-//		    //pinkish
-//		    Tile.randCol = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
-//	    } else if (rand == 1) {
-//		    //blueish
-//		    Tile.randCol = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-//	    } else if (rand == 0) {
-//		    //greenish
-//		    Tile.randCol = new Color(106f / 255f, 189f / 255f, 69f / 255f, 1);
-//	    } else if (rand == 3) {
-//		    //yellowish
-//		    Tile.randCol = new Color(233f / 255f, 230f / 255f, 18f / 255f, 1);
-//	    }
 	    for (int i = 0; i < width; i++) {
 		    for (int j = 0; j < height; j++) {
 			    tiles[i][j].setColor();

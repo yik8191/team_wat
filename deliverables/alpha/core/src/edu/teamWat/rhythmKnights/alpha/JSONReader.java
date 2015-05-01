@@ -245,5 +245,9 @@ public class JSONReader {
         return n;
     }
 
+    public static int getTileSprite(){
+        return  ((Long)level.get("tileNum")).intValue();
+    }
+
 
 }

@@ -278,6 +278,8 @@ public class Controller implements ActionListener, GUIInformation {
 
                 level.put("backNum", 1);
 
+                level.put("tileNum", 1);
+
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
 

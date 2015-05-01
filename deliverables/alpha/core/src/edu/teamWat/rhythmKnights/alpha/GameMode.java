@@ -73,7 +73,7 @@ public class GameMode implements Screen{
 	private static BitmapFont displayFont;
     //TODO: Replace this with an actual texture
     private Texture tileTexture;
-    private static final String TILE_FILE = "images/tileFull.png";
+    private static final String TILE_FILE = "images/tileFull1.png";
 
     private String[] menu = {"Replay", "Next", "Select"};
 
@@ -95,14 +95,12 @@ public class GameMode implements Screen{
 	 * @param manager Reference to global asset manager
 	 */
 	public static void PreLoadContent(AssetManager manager){
-        //Populate background list
+        //Populate background list then load them
         for (int i=0; i<numBackgrounds; i++){
             BKGD_FILES.add("images/bg"+(i+1)+".png");
-        }
-        // Load the background
-        for (int i=0; i<BKGD_FILES.size(); i++) {
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
+
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();

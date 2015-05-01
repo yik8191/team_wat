@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class SelectMode implements Screen, InputProcessor {
     // Textures necessary to support the loading screen
     private static final String BACKGROUND_FILE = "images/game_background.png";
-    private static final String TILE_FILE = "images/tileFull.png";
+    private static final String TILE_FILE = "images/tileFull1.png";
 
     /** Background texture for start-up */
     private Texture background;
