@@ -2,7 +2,6 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -50,15 +49,7 @@ public class GameplayController {
 		board = JSONReader.parseFile(levelhandle.readString());
         board.setTileSprite(JSONReader.getTileSprite());
 		audiohandle = JSONReader.getAudioHandle();
-		
-		
-//		if (path.equals("assets")) {
-//			board = JSONReader.parseFile("levels/level" + levelNum + ".json");
-//			audio = JSONReader.getAudio(false);
-//		} else {
-//			board = JSONReader.parseFile(System.getProperty("user.dir") + "/beta/levels/level" + levelNum + ".json");
-//			audio = JSONReader.getAudio(true);
-//		}
+
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
@@ -114,8 +105,15 @@ public class GameplayController {
 		} else if (RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.DASH2){
 			nextActionIndex++;
 		}
-		ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)  - RhythmController.totalOffset / 2)/((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
-		board.setDistanceToBeat(Math.abs(ticker.indicatorOffsetRatio - 0.5f));
+		if (RhythmController.getTick(nextActionIndex) < RhythmController.getTick(prevActionIndex) && currentTick < RhythmController.getTick(prevActionIndex)){
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength()) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength());
+		} else if (RhythmController.getTick(nextActionIndex) < RhythmController.getTick(prevActionIndex)) {
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength());
+		} else {
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
+		}
+		board.setDistanceToBeat(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
+//		System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 
 		int currentActionIndex;
 		// Keep clearing the action ahead of us! Simple! :D
@@ -148,13 +146,10 @@ public class GameplayController {
 //							double a = 0;
 //						}
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
-//						moved++;
-							if (knight.getPosition().y == 4) {
-								double a = 0;
-							}
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
 							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
+//							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							Vector2 vel = new Vector2(0, 0);
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
@@ -190,6 +185,7 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+//							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
 									knight.setDirection(Knight.KnightDirection.RIGHT);
@@ -258,10 +254,18 @@ public class GameplayController {
 		nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
 
 		if (nextActionIndex < prevActionIndex) {
-			if (RhythmController.getTrackLength() - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
-				currentActionIndex = prevActionIndex;
+			if (RhythmController.getTick(prevActionIndex) > currentTick) {
+				if (RhythmController.getTick(nextActionIndex) - currentTick > currentTick + RhythmController.getTrackLength() - RhythmController.getTick(prevActionIndex)) {
+					currentActionIndex = prevActionIndex;
+				} else {
+					currentActionIndex = nextActionIndex;
+				}
 			} else {
-				currentActionIndex = nextActionIndex;
+				if (RhythmController.getTrackLength() - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
+					currentActionIndex = prevActionIndex;
+				} else {
+					currentActionIndex = nextActionIndex;
+				}
 			}
 		} else {
 			if (RhythmController.getTick(nextActionIndex) - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
