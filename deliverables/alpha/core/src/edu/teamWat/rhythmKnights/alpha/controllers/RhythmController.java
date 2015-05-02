@@ -232,8 +232,8 @@ public class RhythmController {
 	}
 
 	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
-		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL) {
-			actionIndex = (actionIndex + 1) % numActions;
+		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH2 || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL2) {
+			actionIndex = (actionIndex - 1 + numActions) % numActions;
 		}
 
 		int countDown = (actionIndex + ticker.numExpandedActions) % ticker.numExpandedActions;
