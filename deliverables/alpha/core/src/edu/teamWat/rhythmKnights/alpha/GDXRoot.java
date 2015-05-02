@@ -74,6 +74,8 @@ public class GDXRoot extends Game implements ScreenListener {
 
 		loading.setScreenListener(this);
 		GameMode.PreLoadContent(manager); // Load game assets statically.
+        SelectMode.setNumLevels(this.numLevels);
+        SelectMode.PreLoadContent(manager);
 		setScreen(loading);
 	}
 
@@ -90,6 +92,7 @@ public class GDXRoot extends Game implements ScreenListener {
 
 		// Unload all of the resources
 		GameMode.UnloadContent(manager);
+        SelectMode.UnloadContent(manager);
 		manager.clear();
 		manager.dispose();
 		super.dispose();
@@ -136,6 +139,7 @@ public class GDXRoot extends Game implements ScreenListener {
             Gdx.app.exit();
         } else if (screen == loading){
             selecting = new SelectMode(canvas, this.numLevels);
+            SelectMode.LoadContent(manager);
             selecting.setScreenListener(this);
             setScreen(selecting);
             loading.dispose();
