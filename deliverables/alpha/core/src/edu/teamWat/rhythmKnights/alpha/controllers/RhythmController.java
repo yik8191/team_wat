@@ -232,20 +232,21 @@ public class RhythmController {
 	}
 
 	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
-		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL) {
-			actionIndex = (actionIndex + 1) % numActions;
+		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH2 || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL2) {
+			actionIndex = (actionIndex - 1/* + numActions*/) % numActions;
 		}
 
 		int countDown = (actionIndex + ticker.numExpandedActions) % ticker.numExpandedActions;
 
-		for (int i = 0; i < ticker.tickerActions.length; i++) {
+		for (int i = 0; i < ticker.tickerActions.length - 1; i++) {
 			if (countDown == 0) return i;
-			if (ticker.tickerActions[i+1] == Ticker.TickerAction.FIREBALL || ticker.tickerActions[i+1] == Ticker.TickerAction.DASH) {
+			if (ticker.tickerActions[i] == Ticker.TickerAction.FIREBALL || ticker.tickerActions[i] == Ticker.TickerAction.DASH) {
 				countDown -= 2;
 			} else {
 				countDown -= 1;
 			}
 		}
+		if (countDown == 0) return ticker.tickerActions.length - 1;
 
 		return -1;
 	}

@@ -63,7 +63,7 @@
   {  "x":10,  "y":0,  "type":"obstacle"},
   {  "x":11,  "y":0,  "type":"obstacle"},
   {  "x":12,  "y":0,  "type":"obstacle"}],
-"ticker":"MMMM",
+"ticker":"DD",
 "backNum":1,
 "objects":[],
 "width":13,
