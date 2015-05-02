@@ -13,15 +13,8 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.sun.org.apache.bcel.internal.classfile.Code;
 
-import java.awt.*;
-import java.awt.event.KeyListener;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 public class PlayerController implements InputController, InputProcessor {
 
@@ -89,10 +82,10 @@ public class PlayerController implements InputController, InputProcessor {
                     didReset = true;
                     break;
             }
-        }else if (keycode == Keys.ESCAPE){
+        } else if (keycode == Keys.ESCAPE){
             this.setEscape(true);
         }
-		return true;
+        return true;
 	}
 
 	public synchronized void addKeyEvent(int code, long time) {

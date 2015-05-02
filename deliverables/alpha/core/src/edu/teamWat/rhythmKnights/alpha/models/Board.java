@@ -8,9 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Board {
     /* Width of current board */
@@ -219,10 +217,11 @@ public class Board {
         Color reddish = new Color(202f / 255f, 75f / 255f, 155f / 255f, 1);
         Color bluish = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
-        distanceToBeat *= distanceToBeat;
+//        distanceToBeat *= distanceToBeat;
+        float ratio = (float)Math.pow(Math.cos(distanceToBeat * Math.PI), 8);
 
-        reddish.mul(distanceToBeat);
-        bluish.mul(1 - distanceToBeat);
+        reddish.mul(ratio);
+        bluish.mul(1 - ratio);
 
         Tile.randCol = reddish.add(bluish);
 

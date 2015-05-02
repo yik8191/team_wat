@@ -4,15 +4,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.Vector2;
 
-import com.badlogic.gdx.utils.TimeUtils;
-import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
-
-import javax.xml.transform.sax.SAXTransformerFactory;
-import java.awt.*;
-import java.sql.Time;
-
 
 /** Ticker */ // lol
 public class Ticker {

@@ -1,25 +1,16 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.sun.jndi.toolkit.ctx.StringHeadTail;
 
 import edu.teamWat.rhythmKnights.alpha.models.Ticker;
-import jdk.nashorn.internal.ir.ReturnNode;
-
-import org.jfugue.theory.Note;
 
 import javax.sound.midi.*;
-import javax.swing.*;
 
-import java.beans.beancontext.BeanContext;
 import java.io.*;
-import java.nio.channels.AlreadyBoundException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
 
 public class RhythmController {
 
@@ -28,7 +19,7 @@ public class RhythmController {
 	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
 	/** Offset to translate intervals in time */
-	static long totalOffset = 68;
+	private static long totalOffset = 70;
 	/** Offset from perceived beat in time in the music */
 //	static float finalActionOffset = 0.5f;
 
@@ -62,9 +53,6 @@ public class RhythmController {
 
 	/** Total number of actions */
 	public static int numActions;
-
-	/** Number of actions translated forward... Java input is very lagging, making this necessary */
-	public static int numTranslated;
 
 	public static void PreloadContent(AssetManager manager) {
 //		manager.load(MUSIC_FILE, Music.class);
@@ -161,36 +149,16 @@ public class RhythmController {
 
 		numActions = tempTickTimes.size();
 
-		long[] tempTempTickTimes = new long[numActions];
 		tickTimes = new long[numActions];
 		completedTicks = new boolean[numActions];
 		tickerActions = new Ticker.TickerAction[numActions];
 		playerActions = new int[numActions];
 
 		for (int i = 0; i < tempTickTimes.size(); i++) {
-			tempTempTickTimes[i] = (tempTickTimes.get(i) + totalOffset) % trackLength;
-		}
-
-		numTranslated = 0;
-		for (int i = 0; i < numActions - 1; i++) {
-			if (tempTempTickTimes[numActions - i - 1] < tempTempTickTimes[numActions - i - 2]) {
-				numTranslated = i + 1;
-				break;
-			}
-		}
-
-		for (int i = 0; i < numTranslated; i++) {
-			tickTimes[i] = tempTempTickTimes[numActions - numTranslated + i];
+			tickTimes[i] = tempTickTimes.get(i);
 			completedTicks[i] = false;
-			tickerActions[i] = tempTickerActions.get(numActions - numTranslated + i);
-			playerActions[i] = PlayerController.CONTROL_NO_ACTION;
-		}
-
-		for (int i = 0; i < numActions - numTranslated; i++) {
-			tickTimes[i + numTranslated] = tempTempTickTimes[i];
-			completedTicks[i + numTranslated] = false;
-			tickerActions[i + numTranslated] = tempTickerActions.get(i);
-			playerActions[i + numTranslated] = PlayerController.CONTROL_NO_ACTION;
+			tickerActions[i] = tempTickerActions.get(i);
+			playerActions[i] = InputController.CONTROL_NO_ACTION;
 		}
 
 		InputStream is = audiohandle.read();
@@ -206,7 +174,7 @@ public class RhythmController {
 	}
 
 	public static long getSequencePosition() {
-		return sequencer.getTickPosition();
+		return (sequencer.getTickPosition() - totalOffset + trackLength) % trackLength;
 	}
 
 	public static void playSuccess() {
@@ -258,6 +226,9 @@ public class RhythmController {
 		int j = (i+1) % numActions;
 		completedTicks[j] = false;
 		playerActions[j] = PlayerController.CONTROL_NO_ACTION;
+		if (tickerActions[j] == Ticker.TickerAction.FIREBALL || tickerActions[j] == Ticker.TickerAction.DASH) {
+			clearNextAction(j+1);
+		}
 	}
 
 	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
@@ -265,7 +236,7 @@ public class RhythmController {
 			actionIndex = (actionIndex + 1) % numActions;
 		}
 
-		int countDown = (actionIndex - numTranslated + ticker.numExpandedActions) % ticker.numExpandedActions;
+		int countDown = (actionIndex + ticker.numExpandedActions) % ticker.numExpandedActions;
 
 		for (int i = 0; i < ticker.tickerActions.length; i++) {
 			if (countDown == 0) return i;
@@ -281,6 +252,5 @@ public class RhythmController {
 
     public static void stopMusic(){
         sequencer.stop();
-        return;
     }
 }
