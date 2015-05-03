@@ -94,4 +94,6 @@
 "audio":"track2.mid",
 "height":9,
 "player":{"x":6,
-"y":4}}
+"y":4},
+"HPDecrease":1,
+"FramesPerHPLoss":3}

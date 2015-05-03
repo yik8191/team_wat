@@ -249,5 +249,12 @@ public class JSONReader {
         return  ((Long)level.get("tileNum")).intValue();
     }
 
+    public static int getHP(){
+        return ((Long)level.get("HPDecrease")).intValue();
+    }
+
+    public static int getFrames(){
+        return ((Long)level.get("FramesPerHPLoss")).intValue();
+    }
 
 }

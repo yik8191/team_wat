@@ -89,4 +89,6 @@
 "player":{"x":1,
 "y":4}
 "backNum": 1,
-"tileNum":1}
+"tileNum":1,
+"HPDecrease":1,
+"FramesPerHPLoss":3}
