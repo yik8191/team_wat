@@ -204,7 +204,7 @@ public class CollisionController {
 					bounceBackGameObject(g1);
 					hasPlayerMoved = true;
 					// Uncomment once the attacking sprites have been put in!
-					// ((Knight) g1).setState(Knight.KnightState.ATTACKING);
+					((Knight) g1).showAttacking();
 				}
 			} else if (g2 instanceof Knight && g1 instanceof Enemy){
 				// damage the player if enemy ran into player

@@ -54,6 +54,7 @@ public class GameMode implements Screen{
         COMPLETE,
         /** Player has paused the game */
         PAUSE,
+        /** Player is dee-ee-dee dead */
 		LOSE
 	}
 
@@ -96,6 +97,7 @@ public class GameMode implements Screen{
 	 */
 	public static void PreLoadContent(AssetManager manager){
         //Populate background list then load them
+        BKGD_FILES.clear();
         for (int i=0; i<numBackgrounds; i++){
             BKGD_FILES.add("images/backgrounds/bg"+(i+1)+".png");
             manager.load(BKGD_FILES.get(i), Texture.class);
@@ -217,10 +219,10 @@ public class GameMode implements Screen{
 	 * view has already been initialized by the root class.
 	 */
 	public GameMode(GameCanvas canvas) {
-        this.BKGD_FILES.clear();
-        for (int i=1; i<=this.numBackgrounds; i++){
-            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
-        }
+//        this.BKGD_FILES.clear();
+//        for (int i=1; i<=this.numBackgrounds; i++){
+//            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
+//        }
 
 		this.canvas = canvas;
 		active = false;
@@ -366,14 +368,14 @@ public class GameMode implements Screen{
             canvas.drawBackground(backgrounds[0], 1,1);
 
             BitmapFont font = new BitmapFont();
-            float scale = (float)canvas.menuTileSize/(float)tileTexture.getHeight();
+            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             for (int i=0; i<3; i++){
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-                loc.y = canvas.getHeight() - loc.y - canvas.menuTileSize;
+                loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
-                canvas.drawText(menu[i], font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
+                canvas.drawText(menu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
         }else if (gameState == GameState.PAUSE) {
             canvas.draw(backgrounds[0],1,1);
