@@ -218,7 +218,7 @@ public class Board {
         Color bluish = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
 
 //        distanceToBeat *= distanceToBeat;
-        float ratio = (float)Math.pow(Math.cos(distanceToBeat * Math.PI), 8);
+        float ratio = (float)Math.pow(Math.cos(distanceToBeat * Math.PI), 16);
 
         reddish.mul(ratio);
         bluish.mul(1 - ratio);

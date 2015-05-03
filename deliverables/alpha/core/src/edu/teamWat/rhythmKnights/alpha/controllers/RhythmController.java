@@ -161,6 +161,8 @@ public class RhythmController {
 			playerActions[i] = InputController.CONTROL_NO_ACTION;
 		}
 
+		ticker.period = tickTimes[ticker.numExpandedActions];
+
 		InputStream is = audiohandle.read();
 
 		sequencer.setSequence(is);
