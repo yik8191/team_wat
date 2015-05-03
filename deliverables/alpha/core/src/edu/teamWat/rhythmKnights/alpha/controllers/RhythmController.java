@@ -39,7 +39,7 @@ public class RhythmController {
 	protected static Sound hitSound;
 	protected static Sound dmgSound;
 
-	/** Marker that corresponds to a beat starting in midi*/
+	/** Marker that corresponds to a beat starting in midi */
 	public static final int NOTE_ON = 0x90;
 
 	/** Keeps track of the beats in the music */
@@ -72,13 +72,13 @@ public class RhythmController {
 		if (manager.isLoaded(HIT_FILE)) {
 			hitSound = manager.get(HIT_FILE, Sound.class);
 		} else {
-			hitSound = null;	// Failed to load
+			hitSound = null;    // Failed to load
 		}
 
 		if (manager.isLoaded(DMG_FILE)) {
 			dmgSound = manager.get(DMG_FILE, Sound.class);
 		} else {
-			dmgSound = null;	// Failed to load
+			dmgSound = null;    // Failed to load
 		}
 	}
 
@@ -95,7 +95,16 @@ public class RhythmController {
 		}
 	}
 
-	public static void init(FileHandle audiohandle, Ticker ticker) throws Exception{
+
+	/**
+	 * Reads in a midi file and a ticker. Creates an array of actions that the player may take. The array of actions is
+	 * looped once the end of the song is reached.
+	 *
+	 * @param audiohandle handle of the midi file loaded with libgdx
+	 * @param ticker      ticker object to be used with this level
+	 * @throws Exception
+	 */
+	public static void init(FileHandle audiohandle, Ticker ticker) throws Exception {
 		sequence = MidiSystem.getSequence(audiohandle.read());
 		Track track = sequence.getTracks()[0];
 		ArrayList<Long> tempTickTimes = new ArrayList<Long>();
@@ -161,18 +170,27 @@ public class RhythmController {
 			playerActions[i] = InputController.CONTROL_NO_ACTION;
 		}
 
+		ticker.period = tickTimes[ticker.numExpandedActions];
+
 		InputStream is = audiohandle.read();
 
 		sequencer.setSequence(is);
 		sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
 	}
 
-
+	/**
+	 * Start or restart the music playback.
+	 */
 	public static void launch() {
 		sequencer.stop();
 		sequencer.start();
 	}
 
+	/**
+	 * Returns the current position in the midi track, offset by the stupid java midi playback offset
+	 *
+	 * @return the current position in the midi track
+	 */
 	public static long getSequencePosition() {
 		return (sequencer.getTickPosition() - totalOffset + trackLength) % trackLength;
 	}
@@ -185,23 +203,28 @@ public class RhythmController {
 		dmgSound.play();
 	}
 
+	/** Returns whether or not the player completed the ith action. */
 	public static boolean getCompleted(int i) {
 		return completedTicks[i];
 	}
 
+	/** Sets the ith action complete or incomplete */
 	public static void setCompleted(int i, boolean complete) {
 		completedTicks[i] = complete;
 	}
 
+	/** Gets the ith action the player must take */
 	public static Ticker.TickerAction getTickerAction(int i) {
 		return tickerActions[i];
 	}
 
+	/** Gets the time in midi ticks of the ith action the player must take */
 	public static long getTick(int i) {
 		i = (i + numActions) % numActions;
 		return tickTimes[i];
 	}
 
+	/** Returns the closest action to the specified midi tick time that happens BEFORE the spceificified time */
 	public static int getClosestEarlierActionIndex(long tick) {
 		for (int i = numActions - 1; i > -1; i--) {
 			if (tickTimes[i] < tick) return i;
@@ -209,28 +232,42 @@ public class RhythmController {
 		return 0;
 	}
 
+	/**
+	 * Returns what action the player took during when they were supposed to do the ith action, specified by the code in
+	 * InputController
+	 */
 	public static int getPlayerAction(int i) {
 		i = (i + numActions) % numActions;
 		return playerActions[i];
 	}
 
+	/** Sets the ith action the player took, specified by the rhythm controller */
 	public static void setPlayerAction(int i, int code) {
 		playerActions[i] = code;
 	}
 
+	/** Gets the length of the midi track in midi ticks */
 	public static long getTrackLength() {
 		return trackLength;
 	}
 
+	/**
+	 * Clears the next action after the specified action. This ensures that we don't accidentally loop around to
+	 * completed actions. Clears both actions of a dash.
+	 *
+	 * @param i the action whose FOLLOWING action should be cleared.
+	 */
 	public static void clearNextAction(int i) {
-		int j = (i+1) % numActions;
+		int j = (i + 1) % numActions;
 		completedTicks[j] = false;
 		playerActions[j] = PlayerController.CONTROL_NO_ACTION;
 		if (tickerActions[j] == Ticker.TickerAction.FIREBALL || tickerActions[j] == Ticker.TickerAction.DASH) {
-			clearNextAction(j+1);
+			clearNextAction(j + 1);
 		}
 	}
 
+
+	/** Takes in the ith action that a player must take and determines which action in the ticker it corresponds to. */
 	public static int convertToTickerBeatNumber(int actionIndex, Ticker ticker) {
 		if (tickerActions[actionIndex] == Ticker.TickerAction.DASH2 || tickerActions[actionIndex] == Ticker.TickerAction.FIREBALL2) {
 			actionIndex = (actionIndex - 1/* + numActions*/) % numActions;
@@ -251,7 +288,8 @@ public class RhythmController {
 		return -1;
 	}
 
-    public static void stopMusic(){
-        sequencer.stop();
-    }
+	/** Stops the music! :O */
+	public static void stopMusic() {
+		sequencer.stop();
+	}
 }
