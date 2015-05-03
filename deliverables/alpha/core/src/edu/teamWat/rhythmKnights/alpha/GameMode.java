@@ -84,6 +84,9 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
+    private int DEFAULT_FRAMES = 300;
+    private int framesRemaining = DEFAULT_FRAMES;
+
 	/**
 	 * Preloads the assets for this game.
 	 *
@@ -284,6 +287,7 @@ public class GameMode implements Screen{
                     else if (!knight.isActive()) reset();
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
                         gameState = GameState.WIN;
+                        framesRemaining = DEFAULT_FRAMES;
                         bounds.clear();
                         canvas.setMenuConstants(3);
                         for (int i = 0; i < 3; i++) {
@@ -298,6 +302,11 @@ public class GameMode implements Screen{
                 if ((this.curLevel+1) % (this.numLevels+1) == 0){
                     gameState = GameState.COMPLETE;
                 }else {
+                    framesRemaining -= 1;
+                    if (framesRemaining <= 0){
+                        this.curLevel ++;
+                        gameState = GameState.INTRO;
+                    }
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
@@ -385,6 +394,7 @@ public class GameMode implements Screen{
             canvas.drawBackground(backgrounds[0], 1,1);
 
             BitmapFont font = new BitmapFont();
+            canvas.drawText("TIME REMAINING:" + framesRemaining/60, font, 300, 300);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             for (int i=0; i<3; i++){
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
