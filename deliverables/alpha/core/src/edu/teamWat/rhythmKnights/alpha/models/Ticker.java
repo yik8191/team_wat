@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
+import com.sun.corba.se.impl.oa.toa.TOA;
 import com.sun.deploy.panel.ITreeNode;
 import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
@@ -121,6 +122,7 @@ public class Ticker {
 
         float indicatorX = totalWidth * (float)currentTimeinMeasure / (float)period;
 
+
         for (int i = 0; i < tickerActions.length; i++) {
             if (tickerActions[i] == TickerAction.MOVE) {
                 sprite = moveSprite;
@@ -136,7 +138,15 @@ public class Ticker {
             float xPos = rat * totalWidth;
             canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
         }
-        canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+        if (indicatorX > (totalWidth - totalWidth / (float)tickerActions.length / 2.0f)) {
+            Color tint = new Color(Color.WHITE);
+            tint.a = (totalWidth - indicatorX) / (totalWidth / (float)tickerActions.length / 2.0f);
+            canvas.draw(indicatorSprite, tint,0,0,startX + indicatorX, loc.y, 0, .74f, .74f);
+//            canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+            canvas.draw(indicatorSprite, startX + indicatorX - totalWidth, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+        } else {
+            canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+        }
 
 
 //        for (int i = 0; i < tickerActions.length; i++) {

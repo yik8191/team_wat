@@ -9,6 +9,7 @@ import com.badlogic.gdx.files.FileHandle;
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import javafx.scene.effect.Light;
 
 public class GameplayController {
 	/** Reference to the game board */
@@ -136,6 +137,19 @@ public class GameplayController {
 						currentActionIndex = nextActionIndex;
 					}
 				}
+
+				long nextTick = RhythmController.getTick(nextActionIndex);
+				long prevTick = RhythmController.getTick(prevActionIndex);
+
+				float distToClosestBeat = 0;
+				if (prevTick < currentTick && currentTick < nextTick) { // prevTick < currentTick < nextTick
+					distToClosestBeat = (float)(currentTick - prevTick) / (float)(nextTick - prevTick);
+				} else if (prevTick < currentTick && nextTick < currentTick) { // nextTick < prevTick < currentTick
+					distToClosestBeat = (float) (currentTick - prevTick) / (float)(nextTick + RhythmController.getTrackLength() - prevTick);
+				} else { // currentTick < nextTick < prevTick
+					distToClosestBeat = (float) (currentTick + RhythmController.getTrackLength() - prevTick) / (nextTick + RhythmController.getTrackLength() - prevTick);
+				}
+				if (distToClosestBeat > 0.5f) distToClosestBeat = 1 - distToClosestBeat;
 
 				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
 					if (knight.isAlive()) damagePlayer();
