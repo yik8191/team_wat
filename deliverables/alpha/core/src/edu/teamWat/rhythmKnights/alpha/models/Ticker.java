@@ -142,8 +142,10 @@ public class Ticker {
             Color tint = new Color(Color.WHITE);
             tint.a = (totalWidth - indicatorX) / (totalWidth / (float)tickerActions.length / 2.0f);
             canvas.draw(indicatorSprite, tint,0,0,startX + indicatorX, loc.y, 0, .74f, .74f);
+            tint.a = 1.0f - tint.a;
+            canvas.draw(indicatorSprite, tint, 0, 0, startX + indicatorX - totalWidth, loc.y, 0, .74f, .74f);
 //            canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
-            canvas.draw(indicatorSprite, startX + indicatorX - totalWidth, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+//            canvas.draw(indicatorSprite, startX + indicatorX - totalWidth, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
         } else {
             canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
         }
