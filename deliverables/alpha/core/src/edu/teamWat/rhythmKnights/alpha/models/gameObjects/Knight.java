@@ -499,8 +499,8 @@ public class Knight extends GameObject {
         RhythmController.playDamage();
     }
 
-    public void decrementHP() {
-        this.knightHP--;
+    public void decrementHP(int amount) {
+        this.knightHP -= amount;
         if (this.knightHP < 0) {
             this.knightHP = 0;
         }

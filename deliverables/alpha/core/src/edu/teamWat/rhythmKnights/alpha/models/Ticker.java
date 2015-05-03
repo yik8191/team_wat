@@ -30,6 +30,7 @@ public class Ticker {
 	public TickerAction[] tickerActions;
     private int[] glowFrame;
 	private int beat;
+    public int period;
     public int numExpandedActions;
     public float indicatorOffsetRatio;
 

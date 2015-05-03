@@ -12,7 +12,6 @@
 
 package edu.teamWat.rhythmKnights.alpha;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -76,7 +75,8 @@ public class GameMode implements Screen{
     private Texture tileTexture;
     private static final String TILE_FILE = "images/tiles/tileFull1.png";
 
-    private String[] menu = {"Replay", "Next", "Select"};
+    private String[] completeMenu = {"Replay", "Next", "Select"};
+    private String[] pauseMenu = {"Restart", "Select"};
 
 
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
@@ -270,6 +270,11 @@ public class GameMode implements Screen{
 			case PLAY:
                 if (playerController.getEscape()){
                     this.gameState = GameState.PAUSE;
+                    bounds.clear();
+                    canvas.setMenuConstants(2);
+                    for (int i = 0; i < 2; i++) {
+                        bounds.add(canvas.getButtonBounds(i));
+                    }
                     playerController.setListenForInput(false);
                     playerController.setEscape(false);
                     break;
@@ -325,6 +330,18 @@ public class GameMode implements Screen{
                     playerController.setEscape(false);
                     break;
                 }
+                Vector2 click = playerController.getClick();
+                if (click.x != -1) {
+                    if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
+                        //Replay level
+                        gameState = GameState.INTRO;
+                    } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
+                        //level select
+                        listener.exitScreen(this, 1);
+                        RhythmController.stopMusic();
+                        return false;
+                    }
+                }
 			case LOSE:
 				// Print level failed message!
 				break;
@@ -375,13 +392,23 @@ public class GameMode implements Screen{
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
-                canvas.drawText(menu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
+                canvas.drawText(completeMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
         }else if (gameState == GameState.PAUSE) {
+            //TODO: Make sure this is a good background (again)
             canvas.draw(backgrounds[0],1,1);
             BitmapFont font = new BitmapFont();
             font.setScale(5);
-            canvas.drawText("GAME IS PAUSED", font, 100, 100);
+            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            for (int i=0; i<=1; i++){
+                Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
+                loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
+                com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                font.setScale(2);
+                canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
+            }
+            //canvas.drawText("GAME IS PAUSED", font, 100, 100);
         }else{
                 //draw the level
                 canvas.draw(backgrounds[this.backNum - 1], 0, 0);
@@ -407,6 +434,13 @@ public class GameMode implements Screen{
 
             bounds.clear();
             for (int i = 0; i < 3; i++) {
+                bounds.add(canvas.getButtonBounds(i));
+            }
+        }else if (gameState == GameState.PAUSE){
+            canvas.setMenuConstants(2);
+
+            bounds.clear();
+            for (int i = 0; i < 2; i++) {
                 bounds.add(canvas.getButtonBounds(i));
             }
         }

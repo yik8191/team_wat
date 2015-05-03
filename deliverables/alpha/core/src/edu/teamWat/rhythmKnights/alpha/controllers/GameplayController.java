@@ -30,25 +30,26 @@ public class GameplayController {
 
 	public boolean gameStateAdvanced;
 
-	private final int DOT_HP = 3;
-	private int timeHP = DOT_HP;
+    //HP stat numbers
+	private static int framesPerDrain = 3;
+    private static int HPPerDrain = 1;
+	private int timeHP = framesPerDrain;
 	private boolean hasMoved = false;
 
 	public GameplayController() {
 	}
 
 	public void initialize(int levelNum) {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
-		String path = (System.getProperty("user.dir"));
-		path = path.substring(path.length() - 6);
-		System.out.println(path);
 
 		FileHandle levelhandle = Gdx.files.internal("levels/level" + levelNum + ".json");
 		FileHandle audiohandle;
 		board = JSONReader.parseFile(levelhandle.readString());
         board.setTileSprite(JSONReader.getTileSprite());
 		audiohandle = JSONReader.getAudioHandle();
+
+        int hp = JSONReader.getHP();
+        int fr = JSONReader.getFrames();
+        setHPConstants(hp, fr);
 
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
@@ -78,8 +79,8 @@ public class GameplayController {
 		if (hasMoved) {
 			timeHP--;
 			if (timeHP == 0) {
-				knight.decrementHP();
-				timeHP = DOT_HP;
+				knight.decrementHP(HPPerDrain);
+				timeHP = framesPerDrain;
 			}
 		}
 		gameStateAdvanced = false;
@@ -327,6 +328,23 @@ public class GameplayController {
 			gameObjects.get(i).setVelocity(vel);
 		}
 	}
+
+    /* Sets HPPerDrain and framesPerDrain for curent level */
+    public static void setHPConstants(int hp, int frames){
+        if (hp <= 0 ){
+            System.out.println("Can't have a negative HP drain. Setting to default of 1");
+            HPPerDrain = 1;
+        }else{
+            HPPerDrain = hp;
+        }
+        if (frames <=0){
+            System.out.println("Can't have a negative number of frames. Setting to default of 3");
+            framesPerDrain = 3;
+        }else{
+            framesPerDrain = frames;
+        }
+    }
+
 
 	public boolean isGameOver() {
 		return gameOver;
