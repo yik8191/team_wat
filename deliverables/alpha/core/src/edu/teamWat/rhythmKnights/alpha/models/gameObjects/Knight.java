@@ -32,6 +32,8 @@ public class Knight extends GameObject {
     private static int HP_SIZE;
     protected int knightHP;
     protected int INITIAL_HP = 160;
+    protected int HP_KILL_BOOST = 50;
+    protected int HP_DAMAGE_AMOUNT = 5;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -39,6 +41,7 @@ public class Knight extends GameObject {
     private FilmStrip spriteDash;
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
+    private int animDelayShort = 2;
     private int curTime = 5;
     private int curFrame = 0;
 
@@ -86,10 +89,15 @@ public class Knight extends GameObject {
     private int FALL_LEFT_START = 90;
     private int FALL_RIGHT_START = 95;
 
+    private int SWORD_START = 100;
+    private int SWORD_UP_START = 105;
+    private int SWORD_LEFT_START = 110;
+    private int SWORD_RIGHT_START = 115;
+
     // Sheet constants
-    private int SPRITE_ROWS = 20;
+    private int SPRITE_ROWS = 24;
     private int SPRITE_COLS = 5;
-    private int SPRITE_TOT = 100;
+    private int SPRITE_TOT = 120;
 
     private boolean isInvulnerable;
     private boolean isDashing = false;
@@ -168,7 +176,7 @@ public class Knight extends GameObject {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
-                if (curFrame >= (this.facingFact * 5 + 4)) {
+                if (curFrame >= ((this.facingFact * 5) + 4)) {
                     curFrame = this.facingFact * 5;
                 }
                 curTime = animDelay;
@@ -193,7 +201,7 @@ public class Knight extends GameObject {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
-                // Finished animating the success frames
+                // Finished animating the success frame
                 if (curFrame >= (this.facingFact * 5 + 4)) {
                     curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
@@ -207,11 +215,11 @@ public class Knight extends GameObject {
             if (curTime == 0) {
                 curFrame++;
                 // Finished animating the attack frames
-                if (curFrame >= (this.facingFact * 5 + 44)) {
+                if (curFrame >= (this.facingFact / 2 * 5 + 104)) {
                     curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
                 }
-                curTime = animDelay;
+                curTime = animDelayShort;
             } else {
                 sprite.setFrame(curFrame);
             }
@@ -272,7 +280,25 @@ public class Knight extends GameObject {
 //            canvas.draw(spriteDash, oldLoc.x, oldLoc.y, canvas.tileSize, canvas.tileSize);
 //        }
         // Draw main knight
-        canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+        // Position offsets for moving "halfway" when attacking an enemy
+        if (this.getState() == KnightState.ATTACKING) {
+            switch(this.facing) {
+                case FRONT:
+                    canvas.draw(sprite, loc.x, loc.y - canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+                    break;
+                case BACK:
+                    canvas.draw(sprite, loc.x, loc.y + canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+                    break;
+                case LEFT:
+                    canvas.draw(sprite, loc.x - canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+                    break;
+                case RIGHT:
+                    canvas.draw(sprite, loc.x + canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+                    break;
+            }
+        }
+        else canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+
 
         // Drawing code for the Knight HP
         HP_SIZE = (int)((float)canvas.HP_SIZE / 1.5f);
@@ -427,7 +453,7 @@ public class Knight extends GameObject {
      * GameplayController will handle invulnerability
      */
     public void takeDamage() {
-        this.knightHP -= 1;
+        this.knightHP -= HP_DAMAGE_AMOUNT;
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
@@ -514,7 +540,33 @@ public class Knight extends GameObject {
                 curFrame = IDLE_RIGHT_START;
                 break;
         }
+        curTime = animDelay;
         this.state = KnightState.MOVING;
+    }
+
+    public void showAttacking() {
+        if (this.knightHP < INITIAL_HP) {
+            this.knightHP += HP_KILL_BOOST;
+            if (this.knightHP > INITIAL_HP) {
+                this.knightHP = INITIAL_HP;
+            }
+        }
+        curTime = animDelayShort;
+        switch (this.facing) {
+            case FRONT:
+                curFrame = SWORD_START;
+                break;
+            case BACK:
+                curFrame = SWORD_UP_START;
+                break;
+            case LEFT:
+                curFrame = SWORD_LEFT_START;
+                break;
+            case RIGHT:
+                curFrame = SWORD_RIGHT_START;
+                break;
+        }
+        this.state = KnightState.ATTACKING;
     }
 
     public void setDashing() {
