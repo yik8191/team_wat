@@ -19,12 +19,14 @@ public class Knight extends GameObject {
     private int facingFact = 0;
     public static final String KNIGHT_DASH_FILE = "images/spriteSheets/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/spriteSheets/knightsheet.png";
-    public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
+    public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFullSheet.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
+    public static Texture knightHpRedTexture;
+    public static Texture knightHpYellowTexture;
     public static Texture knightHpEmptyTexture;
     public static Texture knightHpIconTexture;
 
@@ -311,8 +313,14 @@ public class Knight extends GameObject {
             }
         }
 
-        spriteHP = new FilmStrip(knightHpFullTexture, 1, 1);
+        spriteHP = new FilmStrip(knightHpFullTexture, 3, 1, 3);
         for (int i = 0; i < this.knightHP; i++) {
+
+            // For drawing different colored segments
+            if (((float) i)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
+            else if ((float) i/INITIAL_HP < 0.5 && ((float) i)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
+            else spriteHP.setFrame(2);
+
             canvas.draw(spriteHP, (i + 1) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
