@@ -6,6 +6,7 @@ package edu.teamWat.rhythmKnights.alpha;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 public class SelectMode implements Screen, InputProcessor {
     // Textures necessary to support the loading screen
     private static final String BACKGROUND_FILE = "images/backgrounds/game_background.png";
-    private static final String TILE_FILE = "images/tiles/tileFull1.png";
 
     /** Background texture for start-up */
     private Texture background;
-    /** Play button to display when done */
-    private Texture tileTexture;
+
+    private static ArrayList<String> LEVEL_FILES = new ArrayList<String>();
+    private static Texture[] levelButtons;
 
     /** Reference to GameCanvas created by the root */
     private GameCanvas canvas;
@@ -32,7 +33,7 @@ public class SelectMode implements Screen, InputProcessor {
     private ScreenListener listener;
 
     /** Number of levels, how many buttons to create */
-    private int numLevels;
+    private static int numLevels;
 
     private boolean active;
 
@@ -56,7 +57,6 @@ public class SelectMode implements Screen, InputProcessor {
         resize(canvas.getWidth(), canvas.getHeight());
 
         // Load the next two images immediately.
-        tileTexture = new Texture(TILE_FILE);
         background = new Texture(BACKGROUND_FILE);
 
         canvas.setMenuConstants(this.numLevels);
@@ -68,12 +68,45 @@ public class SelectMode implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
     }
 
+    public static void PreLoadContent(AssetManager manager){
+        //populate buttons
+        LEVEL_FILES.clear();
+        for (int i=1; i<=Math.min(numLevels, 9); i++){
+            LEVEL_FILES.add("images/menus/level0" + i + ".png");
+            manager.load(LEVEL_FILES.get(i-1), Texture.class);
+        }
+        for (int i=10; i<=numLevels; i++){
+            LEVEL_FILES.add("images/menus/level"+i+".png");
+            manager.load(LEVEL_FILES.get(i-1), Texture.class);
+        }
+        levelButtons = new Texture[numLevels];
+    }
+
+    public static void LoadContent(AssetManager manager){
+        // Allocate the menu pics
+        for (int i=0; i<LEVEL_FILES.size(); i++) {
+            if (manager.isLoaded(LEVEL_FILES.get(i))) {
+                levelButtons[i] = manager.get(LEVEL_FILES.get(i), Texture.class);
+                levelButtons[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            } else {
+                levelButtons[i] = null;
+            }
+        }
+    }
+
+    public static void UnloadContent(AssetManager manager){
+        for (int i=0; i<LEVEL_FILES.size(); i++) {
+            if (levelButtons[i] != null) {
+                levelButtons[i] = null;
+                manager.unload(LEVEL_FILES.get(i));
+            }
+        }
+    }
+
     /** Called when this screen should release all resources. */
     public void dispose() {
-        background.dispose();
-        tileTexture.dispose();
-        background = null;
-        tileTexture = null;
+        //do nothing because we don't want to get rid of the assets we loaded
+        //in case you go back to the pause menu
     }
 
     /**
@@ -88,6 +121,8 @@ public class SelectMode implements Screen, InputProcessor {
         //do nothing
     }
 
+    public static void setNumLevels(int l){numLevels = l;}
+
     /**
      * Draw the status of this player mode.
      *
@@ -98,14 +133,14 @@ public class SelectMode implements Screen, InputProcessor {
         canvas.begin();
         canvas.draw(background, 0, 0);
         BitmapFont font = new BitmapFont();
-        float scale = (float)canvas.menuTileSize/(float)tileTexture.getHeight();
+        float scale = (float)canvas.menuTileHeight/(float)levelButtons[0].getHeight();
         for (int i=0; i<numLevels; i++){
             Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-            loc.y = canvas.getHeight() - loc.y - canvas.menuTileSize;
+            loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
             Color c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-            canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+            canvas.draw(levelButtons[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             font.setScale(2);
-            canvas.drawText("Level \n" + (i + 1), font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
+            //canvas.drawText("Level \n" + (i + 1), font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
         }
         canvas.end();
     }
