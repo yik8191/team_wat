@@ -60,6 +60,8 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
+    private static String[] MENU_FILES = {"images/menus/next.png",
+            "images/menus/select.png", "images/menus/replay.png"};
     private static int numBackgrounds = 7;
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
@@ -67,8 +69,9 @@ public class GameMode implements Screen{
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture[] backgrounds = new Texture[numBackgrounds];
-	/** background image for level 1 */
-	// private static Texture level1;
+	private static Texture[] menus = new Texture[3];
+
+
 	/** The font for giving messages to the player*/
 	private static BitmapFont displayFont;
     //TODO: Replace this with an actual texture
@@ -106,6 +109,9 @@ public class GameMode implements Screen{
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
 
+        for (int i=0; i<3; i++){
+            manager.load(MENU_FILES[i], Texture.class);
+        }
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -146,6 +152,15 @@ public class GameMode implements Screen{
             }
         }
 
+        for (int i=0; i<3; i++){
+            if (manager.isLoaded(MENU_FILES[i])){
+                menus[i] = manager.get(MENU_FILES[i], Texture.class);
+                menus[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            }else{
+                menus[i] = null;
+            }
+        }
+
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
 			displayFont = manager.get(FONT_FILE, BitmapFont.class);
@@ -175,6 +190,13 @@ public class GameMode implements Screen{
             if (backgrounds[i] != null) {
                 backgrounds[i] = null;
                 manager.unload(BKGD_FILES.get(i));
+            }
+        }
+
+        for (int i=0; i<3; i++){
+            if (menus[i] != null){
+                menus[i] = null;
+                manager.unload(MENU_FILES[i]);
             }
         }
 
@@ -400,9 +422,10 @@ public class GameMode implements Screen{
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
-                canvas.drawText(completeMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
+                //canvas.drawText(completeMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
         }else if (gameState == GameState.PAUSE) {
             //TODO: Make sure this is a good background (again)
@@ -414,9 +437,10 @@ public class GameMode implements Screen{
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
-                canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
+                //canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
             //canvas.drawText("GAME IS PAUSED", font, 100, 100);
         }else{
