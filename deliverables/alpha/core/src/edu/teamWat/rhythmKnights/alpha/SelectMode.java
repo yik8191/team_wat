@@ -254,7 +254,6 @@ public class SelectMode implements Screen, InputProcessor {
 
 
 
-
     /**
      * Called when a finger was lifted or a mouse button was released.
      *
