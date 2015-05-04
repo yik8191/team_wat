@@ -151,6 +151,7 @@ public class GameplayController {
 					distToClosestBeat = (float) (currentTick + RhythmController.getTrackLength() - prevTick) / (nextTick + RhythmController.getTrackLength() - prevTick);
 				}
 				if (distToClosestBeat > 0.5f) distToClosestBeat = 1 - distToClosestBeat;
+//				System.out.println(distToClosestBeat);
 
 				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
 					if (knight.isAlive()) damagePlayer();
@@ -163,7 +164,7 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
 //							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							Vector2 vel = new Vector2(0, 0);
 							switch (keyEvent.code) {
@@ -202,6 +203,7 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
 //							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
@@ -222,7 +224,7 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
 							if (RhythmController.getPlayerAction(currentActionIndex) != RhythmController.getPlayerAction(currentActionIndex - 1)) {
 								if (knight.isAlive()) damagePlayer();
 							} else {
