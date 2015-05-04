@@ -69,7 +69,7 @@
   {  "x":11,  "y":0,  "type":"obstacle"},
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMM",
-"backNum":1,
+"backNum":2,
 "objects":[  {  "path":"DDUU",  "x":4,  "y":4,  "type":"slime"},
   {  "path":"UUDD",  "x":8,  "y":2,  "type":"slime"}],
 "width":13,
