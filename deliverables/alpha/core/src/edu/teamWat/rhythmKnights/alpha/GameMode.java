@@ -421,10 +421,15 @@ public class GameMode implements Screen{
             //canvas.drawText("GAME IS PAUSED", font, 100, 100);
         }else{
                 //draw the level
-                canvas.draw(backgrounds[this.backNum - 1], 0, 0);
-                gameplayController.board.draw(canvas);
-                gameplayController.ticker.draw(canvas);
-                gameplayController.gameObjects.draw(canvas);
+            canvas.draw(backgrounds[this.backNum - 1], 0, 0);
+            gameplayController.board.draw(canvas);
+            gameplayController.ticker.draw(canvas);
+            gameplayController.gameObjects.draw(canvas);
+            if (this.curLevel == 1){
+                BitmapFont font = new BitmapFont();
+                font.setScale(3);
+                canvas.drawText("Press a key to tap", font, canvas.getWidth() - 400, canvas.getHeight());
+            }
         }
         canvas.end();
 	}

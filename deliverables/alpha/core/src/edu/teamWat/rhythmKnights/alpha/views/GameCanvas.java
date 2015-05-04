@@ -55,7 +55,7 @@ public class GameCanvas {
     private int menuMaxHTiles = 5;
     public int pauseMenuSize = 150;
 
-    private int menuTileSpacing = 15;
+    private int menuTileSpacing = 30;
     public  int menuTileHeight = 100;
     private float menuTileRatio = 250/110; //width/height
     private int menuTilesPerRow = 1;
