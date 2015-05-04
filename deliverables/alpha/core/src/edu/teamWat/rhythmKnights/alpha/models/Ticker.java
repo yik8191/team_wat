@@ -151,13 +151,15 @@ public class Ticker {
                 else sprite.setFrame(0);
                 canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos2, loc.y + TICK_SQUARE_SIZE / 4.0f, 0, tickerScaling, tickerScaling);
 //                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
-//                if (indicatorX > xPos && indicatorX < ((i + 1) / (float)tickerActions.length) * totalWidth) {
-//                    if (indicatorX < xPos2) {
-//                        indicatorY += (indicatorX - xPos)/ (xPos2 - xPos) * TICK_SQUARE_SIZE * 100;
-//                    } else {
-//                        indicatorY += (1 - (indicatorX - xPos2) / (xPos2 - xPos)) * TICK_SQUARE_SIZE;
-//                    }
-//                }
+                if (indicatorX > xPos && indicatorX < ((i + 1) / (float)tickerActions.length) * totalWidth) {
+                    if (indicatorX < xPos2) {
+                        indicatorY += (indicatorX - xPos) / (xPos2 - xPos) * INDICATOR_HEIGHT / 4.0f;
+//                        System.out.println("Less: " + (indicatorX - xPos) / (xPos2 - xPos));
+                    } else {
+                        indicatorY += (1 - (indicatorX - xPos2) / (xPos2 - xPos)) * INDICATOR_HEIGHT / 4.0f;
+//                        System.out.println("Greater: " +  (1-(indicatorX - xPos2) / (xPos2 - xPos)));
+                    }
+                }
             } else {
                 float rat = ((float)i / (float)tickerActions.length);
                 float xPos = rat * totalWidth;
@@ -173,9 +175,9 @@ public class Ticker {
             tint.a = (totalWidth - indicatorX) / (totalWidth / (float)tickerActions.length / 2.0f);
             canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, indicatorY, 0, indicatorScaling, indicatorScaling);
             tint.a = 1.0f - tint.a;
-            canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX - totalWidth, indicatorY, 0, indicatorScaling, indicatorScaling);
+            canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX - totalWidth, loc.y, 0, indicatorScaling, indicatorScaling);
         } else {
-            canvas.draw(indicatorSprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, loc.y, 0, indicatorScaling, indicatorScaling);
+            canvas.draw(indicatorSprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, indicatorY, 0, indicatorScaling, indicatorScaling);
         }
     }
 
