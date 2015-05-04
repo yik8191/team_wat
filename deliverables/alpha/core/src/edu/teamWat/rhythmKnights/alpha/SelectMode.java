@@ -71,11 +71,11 @@ public class SelectMode implements Screen, InputProcessor {
     public static void PreLoadContent(AssetManager manager){
         //populate buttons
         LEVEL_FILES.clear();
-        for (int i=1; i<=Math.min(numLevels, 9); i++){
-            LEVEL_FILES.add("images/menus/level0" + i + ".png");
-            manager.load(LEVEL_FILES.get(i-1), Texture.class);
-        }
-        for (int i=10; i<=numLevels; i++){
+//        for (int i=1; i<=Math.min(numLevels, 9); i++){
+//            LEVEL_FILES.add("images/menus/level0" + i + ".png");
+//            manager.load(LEVEL_FILES.get(i-1), Texture.class);
+//        }
+        for (int i=1; i<=numLevels; i++){
             LEVEL_FILES.add("images/menus/level"+i+".png");
             manager.load(LEVEL_FILES.get(i-1), Texture.class);
         }
