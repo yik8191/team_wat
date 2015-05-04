@@ -317,8 +317,13 @@ public class Knight extends GameObject {
         for (int i = 0; i < this.knightHP; i++) {
 
             // For drawing different colored segments
-            if (((float) i)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
-            else if ((float) i/INITIAL_HP < 0.5 && ((float) i)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
+//            if (((float) i)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
+//            else if ((float) i/INITIAL_HP < 0.5 && ((float) i)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
+//            else spriteHP.setFrame(2);
+
+            // For changing color as HP decreases
+            if (((float) knightHP)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
+            else if ((float) knightHP/INITIAL_HP < 0.5 && ((float) knightHP)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
             else spriteHP.setFrame(2);
 
             canvas.draw(spriteHP, (i + 1) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
