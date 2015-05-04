@@ -57,7 +57,6 @@ public class Ticker {
 
 	public Ticker(TickerAction[] actions) {
 		tickerActions = actions;
-        glowFrame = new int[actions.length];
 		beat = 0;
         numExpandedActions = 0;
         for (TickerAction action : tickerActions) {
@@ -99,6 +98,7 @@ public class Ticker {
                     break;
             }
         }
+        glowFrame = new int[numExpandedActions];
 	}
 
 	public void reset(TickerAction[] actions) {
@@ -144,12 +144,24 @@ public class Ticker {
                 if (Math.abs(indicatorX - xPos) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
                 else sprite.setFrame(0);
                 canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos, loc.y, 0, tickerScaling, tickerScaling);
+                if (glowFrame[expandedIndex[i]] > 0) {
+                    Color tint = new Color(Color.WHITE);
+                    tint.a = (float)glowFrame[expandedIndex[i]] / 10.0f;
+                    canvas.draw(sprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos, loc.y, 0, tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i]]) / 10.0f + 1.0f), tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i]]) / 10.0f + 1.0f));
+                    glowFrame[expandedIndex[i]]--;
+                }
 //                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
                 rat = ((i + 0.5f) / (float)tickerActions.length);
                 float xPos2 = rat * totalWidth;
                 if (Math.abs(indicatorX - xPos2) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos2 - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
                 else sprite.setFrame(0);
                 canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos2, loc.y + TICK_SQUARE_SIZE / 4.0f, 0, tickerScaling, tickerScaling);
+                if (glowFrame[expandedIndex[i]+1] > 0) {
+                    Color tint = new Color(Color.WHITE);
+                    tint.a = (float)glowFrame[expandedIndex[i] + 1] / 10.0f;
+                    canvas.draw(sprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos2, loc.y + TICK_SQUARE_SIZE / 4.0f, 0, tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i] + 1]) / 10.0f + 1.0f), tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i]+1]) / 10.0f + 1.0f));
+                    glowFrame[expandedIndex[i] + 1]--;
+                }
 //                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
                 if (indicatorX > xPos && indicatorX < ((i + 1) / (float)tickerActions.length) * totalWidth) {
                     if (indicatorX < xPos2) {
@@ -166,6 +178,12 @@ public class Ticker {
                 if (Math.abs(indicatorX - xPos) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
                 else sprite.setFrame(0);
                 canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, xPos + startX, loc.y, 0, tickerScaling, tickerScaling);
+                if (glowFrame[expandedIndex[i]] > 0) {
+                    Color tint = new Color(Color.WHITE);
+                    tint.a = (float)glowFrame[expandedIndex[i]] / 10.0f;
+                    canvas.draw(sprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos, loc.y, 0, tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i]]) / 10.0f + 1.0f), tickerScaling * ((10.0f - (float)glowFrame[expandedIndex[i]]) / 10.0f + 1.0f));
+                    glowFrame[expandedIndex[i]]--;
+                }
 //                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
             }
         }

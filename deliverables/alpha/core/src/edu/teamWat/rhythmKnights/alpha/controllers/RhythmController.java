@@ -171,7 +171,7 @@ public class RhythmController {
 
 		ticker.period = tickTimes[ticker.numExpandedActions];
 
-		totalOffset =(long)(250 * ((float)sequence.getTickLength() / (float)(sequence.getMicrosecondLength() / 1000.0f)));
+		totalOffset =(long)(200 * ((float)sequence.getTickLength() / (float)(sequence.getMicrosecondLength() / 1000.0f)));
 
 		InputStream is = audiohandle.read();
 
