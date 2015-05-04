@@ -19,7 +19,7 @@ public class RhythmController {
 	/** Length of period in which player can make a valid move */
 	static float actionWindowRadius = 0.15f;
 	/** Offset to translate intervals in time */
-	private static long totalOffset = 70;
+	private static long totalOffset;
 	/** Offset from perceived beat in time in the music */
 //	static float finalActionOffset = 0.5f;
 
@@ -170,6 +170,8 @@ public class RhythmController {
 		}
 
 		ticker.period = tickTimes[ticker.numExpandedActions];
+
+		totalOffset =(long)(250 * ((float)sequence.getTickLength() / (float)(sequence.getMicrosecondLength() / 1000.0f)));
 
 		InputStream is = audiohandle.read();
 
