@@ -91,7 +91,7 @@
   {  "x":12,  "y":0,  "type":"obstacle"},
   {  "x":13,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMD",
-"backNum":5,
+"backNum":2,
 "objects":[],
 "width":15,
 "audio":"w-1_MMMD_120.mid",
