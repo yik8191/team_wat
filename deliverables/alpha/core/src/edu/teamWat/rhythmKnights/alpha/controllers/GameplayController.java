@@ -339,6 +339,18 @@ public class GameplayController {
 					break;
 			}
 			((EnemyController)controls[i]).nextAction();
+
+			// For animation of enemy
+			if (vel.x > 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.RIGHT);
+			} else if(vel.x < 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.LEFT);
+			} else if(vel.y > 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.BACK);
+			} else{
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.FRONT);
+			}
+
 			gameObjects.get(i).setVelocity(vel);
 		}
 	}

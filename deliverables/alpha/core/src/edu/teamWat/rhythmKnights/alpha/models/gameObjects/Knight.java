@@ -22,13 +22,13 @@ public class Knight extends GameObject {
     public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFullSheet.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
+    public static final String LIGHT_SPLASH_FILE = "images/tiles/lightSplashSheet.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
-    public static Texture knightHpRedTexture;
-    public static Texture knightHpYellowTexture;
     public static Texture knightHpEmptyTexture;
     public static Texture knightHpIconTexture;
+    public static Texture lightSplashTexture;
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
@@ -41,6 +41,7 @@ public class Knight extends GameObject {
     private FilmStrip sprite;
     private FilmStrip spriteHP;
     private FilmStrip spriteDash;
+    private FilmStrip spriteLight;
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
     private int animDelayShort = 2;
@@ -101,6 +102,13 @@ public class Knight extends GameObject {
     private int SPRITE_COLS = 5;
     private int SPRITE_TOT = 120;
 
+    // Light Splash Sheet
+    private int L_ROWS = 1;
+    private int L_COLS = 12;
+    private int L_TOT = 12;
+    private int curFrameL = 0;
+    private int curTimeL = animDelayShort;
+
     private boolean isInvulnerable;
     private boolean isDashing = false;
 
@@ -121,6 +129,10 @@ public class Knight extends GameObject {
 
         // Used for animating the knight's dash afterimages
         spriteDash = new FilmStrip(knightTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
+
+        // Used for animating the visual feedback light splash
+        spriteLight = new FilmStrip(lightSplashTexture, L_ROWS, L_COLS, L_TOT);
+        spriteLight.setFrame(11);
     }
 
     public void update() {
@@ -281,6 +293,13 @@ public class Knight extends GameObject {
 //            }
 //            canvas.draw(spriteDash, oldLoc.x, oldLoc.y, canvas.tileSize, canvas.tileSize);
 //        }
+
+        // Draw light splash visual feedback
+        if (this.state == KnightState.MOVING) {
+            animateSplash();
+            canvas.draw(spriteLight, loc.x - canvas.tileSize, loc.y - canvas.tileSize, canvas.tileSize*3, canvas.tileSize*3);
+        }
+
         // Draw main knight
         // Position offsets for moving "halfway" when attacking an enemy
         if (this.getState() == KnightState.ATTACKING) {
@@ -341,6 +360,20 @@ public class Knight extends GameObject {
         canvas.draw(spriteHpIcon, 0, 0, HP_SIZE, HP_SIZE);
     }
 
+    public void animateSplash() {
+        curTimeL --;
+        if (curTimeL == 0) {
+            curFrameL ++;
+            // the animation loop is finished
+            if (curFrameL > 11) {
+                curFrameL = 0;
+            }
+            curTimeL = animDelayShort;
+        } else {
+            spriteLight.setFrame(curFrameL);
+        }
+    }
+
     /**
      * Preloads the assets for the Knight.
      *
@@ -355,6 +388,7 @@ public class Knight extends GameObject {
         manager.load(KNIGHT_HP_FULL_FILE, Texture.class);
         manager.load(KNIGHT_HP_EMPTY_FILE, Texture.class);
         manager.load(KNIGHT_HP_ICON, Texture.class);
+        manager.load(LIGHT_SPLASH_FILE, Texture.class);
     }
 
     /**
@@ -407,6 +441,14 @@ public class Knight extends GameObject {
         } else {
             knightHpIconTexture = null; //Failed to load
         }
+
+        // load light splash icon
+        if (manager.isLoaded(LIGHT_SPLASH_FILE)) {
+            lightSplashTexture = manager.get(LIGHT_SPLASH_FILE, Texture.class);
+            lightSplashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            lightSplashTexture = null; //Failed to load
+        }
     }
 
     /**
@@ -436,6 +478,10 @@ public class Knight extends GameObject {
         if (knightHpIconTexture != null) {
             knightHpIconTexture = null;
             manager.unload(KNIGHT_HP_ICON);
+        }
+        if (lightSplashTexture != null) {
+            lightSplashTexture = null;
+            manager.unload(LIGHT_SPLASH_FILE);
         }
     }
 
@@ -557,7 +603,7 @@ public class Knight extends GameObject {
         this.state = KnightState.MOVING;
     }
 
-    public void showAttacking() {
+    public void setAttacking() {
         if (this.knightHP < INITIAL_HP) {
             this.knightHP += HP_KILL_BOOST;
             if (this.knightHP > INITIAL_HP) {

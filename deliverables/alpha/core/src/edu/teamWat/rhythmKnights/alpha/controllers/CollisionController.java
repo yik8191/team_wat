@@ -199,12 +199,15 @@ public class CollisionController {
 			if (g1 instanceof Knight){
 				// damage the enemy if it is not a dynamictile
 				if (!(g2 instanceof DynamicTile)){
-					g2.setAlive(false);
+					// This is now done in Enemy
+					// g2.setAlive(false);
+					// Used to set the model to animate death
+					((Enemy) g2).setDead();
 					// bounce back the player
 					bounceBackGameObject(g1);
 					hasPlayerMoved = true;
-					// Uncomment once the attacking sprites have been put in!
-					((Knight) g1).showAttacking();
+					// Used to set the model to animate attack
+					((Knight) g1).setAttacking();
 				}
 			} else if (g2 instanceof Knight && g1 instanceof Enemy){
 				// damage the player if enemy ran into player
