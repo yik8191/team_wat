@@ -10,6 +10,7 @@ import com.sun.deploy.panel.ITreeNode;
 import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.FilmStrip;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
+import sun.util.resources.cldr.lag.LocaleNames_lag;
 
 import javax.swing.plaf.basic.BasicTreeUI;
 import java.awt.*;
@@ -114,14 +115,17 @@ public class Ticker {
         float startX = canvas.getWidth() / 2 - (TICK_SQUARE_SIZE * tickerActions.length + SPACING * (tickerActions.length - 1)) / 2;
         FilmStrip sprite;
         FilmStrip spriteIndicator;
-        Vector2 loc = new Vector2(0, canvas.getHeight() - (TICK_SQUARE_SIZE + 70));
+        Vector2 loc = new Vector2(0, canvas.getHeight() - (TICK_SQUARE_SIZE * 0.5f + 70));
 
         long currentTimeinMeasure = RhythmController.getSequencePosition() % period;
 
         float totalWidth = (TICK_SQUARE_SIZE + SPACING) * tickerActions.length;
 
         float indicatorX = totalWidth * (float)currentTimeinMeasure / (float)period;
+        float indicatorY = loc.y;
 
+        float tickerScaling = (float)TICK_SQUARE_SIZE / (float)moveSprite.getRegionWidth();
+        float indicatorScaling = (float)INDICATOR_WIDTH / (float)indicatorSprite.getRegionWidth();
 
         for (int i = 0; i < tickerActions.length; i++) {
             if (tickerActions[i] == TickerAction.MOVE) {
@@ -134,114 +138,45 @@ public class Ticker {
                 sprite = fireballSprite;
             }
 
-            float rat = (((float)i / (float)tickerActions.length));
-            float xPos = rat * totalWidth;
-            canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+            if (tickerActions[i] == TickerAction.DASH || tickerActions[i] == TickerAction.FIREBALL) {
+                float rat = ((float)i / (float)tickerActions.length);
+                float xPos = rat * totalWidth;
+                if (Math.abs(indicatorX - xPos) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
+                else sprite.setFrame(0);
+                canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos, loc.y, 0, tickerScaling, tickerScaling);
+//                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+                rat = ((i + 0.5f) / (float)tickerActions.length);
+                float xPos2 = rat * totalWidth;
+                if (Math.abs(indicatorX - xPos2) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos2 - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
+                else sprite.setFrame(0);
+                canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + xPos2, loc.y + TICK_SQUARE_SIZE / 4.0f, 0, tickerScaling, tickerScaling);
+//                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+//                if (indicatorX > xPos && indicatorX < ((i + 1) / (float)tickerActions.length) * totalWidth) {
+//                    if (indicatorX < xPos2) {
+//                        indicatorY += (indicatorX - xPos)/ (xPos2 - xPos) * TICK_SQUARE_SIZE * 100;
+//                    } else {
+//                        indicatorY += (1 - (indicatorX - xPos2) / (xPos2 - xPos)) * TICK_SQUARE_SIZE;
+//                    }
+//                }
+            } else {
+                float rat = ((float)i / (float)tickerActions.length);
+                float xPos = rat * totalWidth;
+                if (Math.abs(indicatorX - xPos) < TICK_SQUARE_SIZE / 2 || Math.abs(indicatorX - xPos - totalWidth) < TICK_SQUARE_SIZE / 2) sprite.setFrame(1);
+                else sprite.setFrame(0);
+                canvas.draw(sprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, xPos + startX, loc.y, 0, tickerScaling, tickerScaling);
+//                canvas.draw(sprite, xPos + startX, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
+            }
         }
+
         if (indicatorX > (totalWidth - totalWidth / (float)tickerActions.length / 2.0f)) {
             Color tint = new Color(Color.WHITE);
             tint.a = (totalWidth - indicatorX) / (totalWidth / (float)tickerActions.length / 2.0f);
-            canvas.draw(indicatorSprite, tint,0,0,startX + indicatorX, loc.y, 0, .74f, .74f);
+            canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, indicatorY, 0, indicatorScaling, indicatorScaling);
             tint.a = 1.0f - tint.a;
-            canvas.draw(indicatorSprite, tint, 0, 0, startX + indicatorX - totalWidth, loc.y, 0, .74f, .74f);
-//            canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
-//            canvas.draw(indicatorSprite, startX + indicatorX - totalWidth, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+            canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX - totalWidth, indicatorY, 0, indicatorScaling, indicatorScaling);
         } else {
-            canvas.draw(indicatorSprite, startX + indicatorX, loc.y, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+            canvas.draw(indicatorSprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, loc.y, 0, indicatorScaling, indicatorScaling);
         }
-
-
-//        for (int i = 0; i < tickerActions.length; i++) {
-//
-//            if (tickerActions[i] == TickerAction.MOVE) {
-//                sprite = moveSprite;
-//            } else if (tickerActions[i] == TickerAction.DASH) {
-//                sprite = dashSprite;
-//            } else if (tickerActions[i] == TickerAction.FREEZE) {
-//                sprite = freezeSprite;
-//            } else { //fireball
-//                sprite = fireballSprite;
-//            }
-//
-//            loc.x = startX + (width * i);
-//            float oldx = loc.x;
-//
-//            sprite.setFrame(0);
-//            canvas.draw(sprite, loc.x, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
-//            if (glowFrame[i] > 0) glowFrame[i]--;
-//            if (beat == i) {
-//
-//                float beatTime = 0;// RhythmController.toBeatTime(TimeUtils.millis());
-//                loc.x += indicatorOffsetRatio * width;
-//
-//                if (loc.x >= oldx) {
-//                    // System.out.println("hi");
-//                    sprite.setFrame(1);
-//                    canvas.draw(sprite, oldx, loc.y + glowFrame[i], TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
-//                }
-//
-//                // draw the indicator for current action
-//                canvas.draw(indicatorSprite, loc.x, loc.y - 5, INDICATOR_WIDTH, INDICATOR_HEIGHT);
-//            }
-//        }
-
-
-//        for (int i = 0; i < tickerActions.length; i++) {
-//
-//            if (tickerActions[i] == TickerAction.MOVE) {
-//                sprite = moveSprite;
-//            } else if (tickerActions[i] == TickerAction.DASH) {
-//                sprite = dashSprite;
-//            } else if (tickerActions[i] == TickerAction.FREEZE) {
-//                sprite = freezeSprite;
-//            } else { //fireball
-//                sprite = fireballSprite;
-//            }
-//
-//            loc.x = startX + (width * i);
-//
-////            canvas.draw(sprite, loc.x, loc.y, TICK_SQUARE_SIZE, TICK_SQUARE_SIZE);
-//            canvas.draw(sprite, com.badlogic.gdx.graphics.Color.WHITE, 0, 0, loc.x, loc.y, 0, 1f, 1f);
-//        }
-
-//        for (int i = 0; i < tickerActions.length; i++) {
-//            if (tickerActions[i] == TickerAction.MOVE) {
-//                sprite = moveSprite;
-//            } else if (tickerActions[i] == TickerAction.DASH) {
-//                sprite = dashSprite;
-//            } else if (tickerActions[i] == TickerAction.FREEZE) {
-//                sprite = freezeSprite;
-//            } else { //fireball
-//                sprite = fireballSprite;
-//            }
-//
-//
-//
-//        }
-
-
-//        for (int i = 0; i < tickerActions.length; i++) {
-//            switch (tickerActions[i]) {
-//                case MOVE:
-//                    sprite = moveSprite;
-//                    break;
-//                case DASH:
-//                    sprite = dashSprite;
-//                    break;
-//                case FIREBALL:
-//                    sprite = fireballSprite;
-//                    break;
-//                case FREEZE:
-//                    sprite = freezeSprite;
-//                    break;
-//            }
-//
-//            loc.x = startX + (width * i);
-//            // DETERMINE INDICATOR LOCATION AND SET THE APPROPRIATE BEAT SPRITE
-//
-//
-//        }
-
     }
 
 	public TickerAction getAction() {
