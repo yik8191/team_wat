@@ -83,7 +83,7 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
-    private int DEFAULT_FRAMES = 300;
+    private int DEFAULT_FRAMES = 180;
     private int framesRemaining = DEFAULT_FRAMES;
 
 	/**
@@ -454,7 +454,7 @@ public class GameMode implements Screen{
             if (this.curLevel == 1){
                 BitmapFont font = new BitmapFont();
                 font.setScale(3);
-                canvas.drawText("Press a key to tap", font, canvas.getWidth() - 400, canvas.getHeight());
+                canvas.drawText("Press a key to move", font, canvas.getWidth() - 400, canvas.getHeight());
             }
         }
         canvas.end();

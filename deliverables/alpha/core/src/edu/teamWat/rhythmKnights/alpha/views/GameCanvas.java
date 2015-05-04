@@ -576,6 +576,7 @@ public class GameCanvas {
 	}
 
     public boolean pointInBox(int screenX, int screenY, int i){
+        //System.out.println("Checking for click at ("+screenX+", "+screenY+")");
         int[] b = getButtonBounds(i);
         return (screenX > b[0]) && (screenX < b[2]) &&
                 (screenY > b[1]) && (screenY < b[3]);
@@ -596,6 +597,11 @@ public class GameCanvas {
         bounds[2] = bounds[0] + (int)(menuTileHeight*menuTileRatio);
         //bottom y
         bounds[3] = bounds[1] + menuTileHeight;
+
+//        System.out.println("Left: " + bounds[0]);
+//        System.out.println("Right: " + bounds[2]);
+//        System.out.println("Top: " + bounds[1]);
+//        System.out.println("Bottom: " + bounds[3]);
 
         return bounds;
     }
