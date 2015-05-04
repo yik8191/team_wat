@@ -87,7 +87,7 @@
   {  "x":10,  "y":0,  "type":"obstacle"},
   {  "x":11,  "y":0,  "type":"obstacle"}],
 "ticker":"MDMD",
-"backNum":1,
+"backNum":4,
 "objects":[],
 "width":12,
 "tileNum":1,

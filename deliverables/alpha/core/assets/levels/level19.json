@@ -69,7 +69,7 @@
   {  "x":11,  "y":0,  "type":"obstacle"},
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MDMD",
-"backNum":1,
+"backNum":4,
 "objects":[  {  "path":"DU",  "x":3,  "y":3,  "type":"slime"},
   {  "path":"DU",  "x":5,  "y":3,  "type":"slime"},
   {  "path":"DU",  "x":7,  "y":3,  "type":"slime"},

@@ -68,7 +68,7 @@
   {  "x":11,  "y":0,  "type":"obstacle"},
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMD",
-"backNum":3,
+"backNum":5,
 "objects":[],
 "width":13,
 "audio":"w-2_MMMD_120.mid",
