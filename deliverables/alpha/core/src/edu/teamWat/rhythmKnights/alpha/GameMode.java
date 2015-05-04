@@ -60,8 +60,8 @@ public class GameMode implements Screen{
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
-    private static String[] MENU_FILES = {"images/menus/next.png",
-            "images/menus/select.png", "images/menus/replay.png"};
+    private static String[] MENU_FILES = {"images/menus/replay.png",
+            "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
     private static int numBackgrounds = 7;
 	private static String FONT_FILE = "fonts/TimesRoman.ttf";
 	private static int FONT_SIZE = 24;
@@ -69,7 +69,7 @@ public class GameMode implements Screen{
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture[] backgrounds = new Texture[numBackgrounds];
-	private static Texture[] menus = new Texture[3];
+	private static Texture[] menus = new Texture[4];
 
 
 	/** The font for giving messages to the player*/
@@ -77,10 +77,6 @@ public class GameMode implements Screen{
     //TODO: Replace this with an actual texture
     private Texture tileTexture;
     private static final String TILE_FILE = "images/tiles/tileFull1.png";
-
-    private String[] completeMenu = {"Replay", "Next", "Select"};
-    private String[] pauseMenu = {"Restart", "Select"};
-
 
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
 
@@ -109,7 +105,7 @@ public class GameMode implements Screen{
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
 
-        for (int i=0; i<3; i++){
+        for (int i=0; i<4; i++){
             manager.load(MENU_FILES[i], Texture.class);
         }
 
@@ -152,7 +148,7 @@ public class GameMode implements Screen{
             }
         }
 
-        for (int i=0; i<3; i++){
+        for (int i=0; i<4; i++){
             if (manager.isLoaded(MENU_FILES[i])){
                 menus[i] = manager.get(MENU_FILES[i], Texture.class);
                 menus[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -193,7 +189,7 @@ public class GameMode implements Screen{
             }
         }
 
-        for (int i=0; i<3; i++){
+        for (int i=0; i<4; i++){
             if (menus[i] != null){
                 menus[i] = null;
                 manager.unload(MENU_FILES[i]);
@@ -334,12 +330,12 @@ public class GameMode implements Screen{
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
                             //Replay level
                             gameState = GameState.INTRO;
-                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
                             //next level
                             this.curLevel++;
                             gameState = GameState.INTRO;
                             RhythmController.stopMusic();
-                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
                             //level select
                             listener.exitScreen(this, 1);
                             RhythmController.stopMusic();
@@ -418,12 +414,15 @@ public class GameMode implements Screen{
             BitmapFont font = new BitmapFont();
             canvas.drawText("TIME REMAINING:" + framesRemaining/60, font, 300, 300);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
+            //for (int i : new int[]{0,1,2}){
+                //draw replay, select, then next
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-                loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
+                loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
-                canvas.draw(menus[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
                 //canvas.drawText(completeMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
@@ -433,12 +432,15 @@ public class GameMode implements Screen{
             BitmapFont font = new BitmapFont();
             font.setScale(5);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            int[] text = new int[]{3,1};
             for (int i=0; i<=1; i++){
+            //for (int i : new int[]{3, 1}){
+                //draw restart then select
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-                loc.y = canvas.getHeight() - loc.y - canvas.pauseMenuSize;
+                loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
-                canvas.draw(menus[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 font.setScale(2);
                 //canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
