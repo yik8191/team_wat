@@ -35,7 +35,7 @@ public class Knight extends GameObject {
     protected int knightHP;
     protected int INITIAL_HP = 160;
     protected int HP_KILL_BOOST = 50;
-    private int  hpDamageAmount = 5;
+    private static int  hpDamageAmount = 5;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -577,7 +577,7 @@ public class Knight extends GameObject {
         }
     }
 
-    public void setHPLossPerMiss(int h){
+    public static void setHPLossPerMiss(int h){
         hpDamageAmount = h;
     }
 

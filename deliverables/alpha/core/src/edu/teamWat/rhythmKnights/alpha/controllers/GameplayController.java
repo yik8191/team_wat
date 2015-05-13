@@ -374,7 +374,9 @@ public class GameplayController {
         }
         if (lossPerMiss < 0){
             System.out.println("Can't have negative lossPerMiss. Setting to default");
-
+            Knight.setHPLossPerMiss(10);
+        }else{
+            Knight.setHPLossPerMiss(lossPerMiss);
         }
     }
 
