@@ -50,7 +50,6 @@ public class GDXRoot extends Game implements ScreenListener {
     /** Player mode for the level select screen (CONTROLLER CLASS) */
     private SelectMode selecting;
 
-
     private int numLevels = 11;
 
 	public GDXRoot() {
