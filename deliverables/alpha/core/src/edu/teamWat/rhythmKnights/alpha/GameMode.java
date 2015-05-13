@@ -411,8 +411,9 @@ public class GameMode implements Screen{
             //TODO: make sure this background is a good one
             canvas.drawBackground(backgrounds[0], 1,1);
 
-            String message = "TIME REMAINING:" + framesRemaining/60;
-            canvas.drawText(message, displayFont, 300, 300);
+            String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
+
+            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()/2-displayFont.getBounds(message).height/2);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
@@ -437,11 +438,7 @@ public class GameMode implements Screen{
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
-//                font.setScale(2);
-                //canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
-            String message = "GAME IS PAUSED";
-            canvas.drawText(message, displayFont, 300, 300);
         }else{
                 //draw the level
             canvas.draw(backgrounds[this.backNum - 1], 0, 0);
@@ -452,7 +449,7 @@ public class GameMode implements Screen{
                 BitmapFont font = new BitmapFont();
                 font.setScale(3);
                 String message = "Press a key to move";
-                canvas.drawText(message, displayFont, canvas.getWidth()/2 - 250, canvas.getHeight()-225);
+                canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
         }
         canvas.end();
