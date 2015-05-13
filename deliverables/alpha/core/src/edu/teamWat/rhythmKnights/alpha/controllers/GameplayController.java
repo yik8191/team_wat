@@ -50,7 +50,8 @@ public class GameplayController {
 
         int hp = JSONReader.getHP();
         int fr = JSONReader.getFrames();
-        setHPConstants(hp, fr);
+        int lossPerMiss = JSONReader.getLossPerMiss();
+        setHPConstants(hp, fr, lossPerMiss);
 
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
@@ -358,7 +359,7 @@ public class GameplayController {
 	}
 
     /* Sets HPPerDrain and framesPerDrain for curent level */
-    public static void setHPConstants(int hp, int frames){
+    public static void setHPConstants(int hp, int frames, int lossPerMiss){
         if (hp <= 0 ){
             System.out.println("Can't have a negative HP drain. Setting to default of 1");
             HPPerDrain = 1;
@@ -370,6 +371,10 @@ public class GameplayController {
             framesPerDrain = 3;
         }else{
             framesPerDrain = frames;
+        }
+        if (lossPerMiss < 0){
+            System.out.println("Can't have negative lossPerMiss. Setting to default");
+
         }
     }
 

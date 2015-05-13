@@ -113,4 +113,5 @@
 "player":{"x":1,
 "y":2},
 "HPDecrease":2,
-"FramesPerHPLoss":3}
+"FramesPerHPLoss":3,
+"HPLossPerMiss":5}

@@ -35,7 +35,7 @@ public class Knight extends GameObject {
     protected int knightHP;
     protected int INITIAL_HP = 160;
     protected int HP_KILL_BOOST = 50;
-    protected int HP_DAMAGE_AMOUNT = 5;
+    private int  hpDamageAmount = 5;
 
     // Used for animating the knight
     private FilmStrip sprite;
@@ -512,7 +512,7 @@ public class Knight extends GameObject {
      * GameplayController will handle invulnerability
      */
     public void takeDamage() {
-        this.knightHP -= HP_DAMAGE_AMOUNT;
+        this.knightHP -= hpDamageAmount;
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
@@ -575,6 +575,10 @@ public class Knight extends GameObject {
                 }
             }
         }
+    }
+
+    public void setHPLossPerMiss(int h){
+        hpDamageAmount = h;
     }
 
     /** Called whenever the player successfully inputs a move on the beat */
