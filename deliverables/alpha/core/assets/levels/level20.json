@@ -108,7 +108,7 @@
   {  "path":"DU",  "x":13,  "y":2,  "type":"slime"}],
 "width":17,
 "tileNum":1,
-"audio":"w-4_MDMD_120.mid",
+"audio":"20_MDMD_96.mid",
 "height":7,
 "player":{"x":1,
 "y":2},
