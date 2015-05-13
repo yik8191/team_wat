@@ -63,17 +63,12 @@ public class GameMode implements Screen{
     private static String[] MENU_FILES = {"images/menus/replay.png",
             "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
     private static int numBackgrounds = 7;
-	private static String FONT_FILE = "fonts/TimesRoman.ttf";
-	private static int FONT_SIZE = 24;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture[] backgrounds = new Texture[numBackgrounds];
 	private static Texture[] menus = new Texture[4];
 
-
-	/** The font for giving messages to the player*/
-	private static BitmapFont displayFont;
     //TODO: Replace this with an actual texture
     private Texture tileTexture;
     private static final String TILE_FILE = "images/tiles/tileFull1.png";
@@ -86,7 +81,12 @@ public class GameMode implements Screen{
     private int DEFAULT_FRAMES = 180;
     private int framesRemaining = DEFAULT_FRAMES;
 
-	/**
+    private static BitmapFont displayFont;
+    private static String FONT_FILE = "fonts/TimesRoman.ttf";
+    private static int TUTORIAL_FONT_SIZE = 50;
+    private static int FONT_SIZE = 50;
+
+    /**
 	 * Preloads the assets for this game.
 	 *
 	 * All instances of the game use the same assets, so this is a static method.
@@ -411,8 +411,8 @@ public class GameMode implements Screen{
             //TODO: make sure this background is a good one
             canvas.drawBackground(backgrounds[0], 1,1);
 
-            BitmapFont font = new BitmapFont();
-            canvas.drawText("TIME REMAINING:" + framesRemaining/60, font, 300, 300);
+            String message = "TIME REMAINING:" + framesRemaining/60;
+            canvas.drawText(message, displayFont, 300, 300);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
@@ -423,14 +423,10 @@ public class GameMode implements Screen{
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
-                font.setScale(2);
-                //canvas.drawText(completeMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
         }else if (gameState == GameState.PAUSE) {
             //TODO: Make sure this is a good background (again)
             canvas.draw(backgrounds[0],1,1);
-            BitmapFont font = new BitmapFont();
-            font.setScale(5);
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             int[] text = new int[]{3,1};
             for (int i=0; i<=1; i++){
@@ -441,10 +437,11 @@ public class GameMode implements Screen{
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
-                font.setScale(2);
+//                font.setScale(2);
                 //canvas.drawText(pauseMenu[i], font, loc.x + canvas.pauseMenuSize / 5, loc.y + canvas.pauseMenuSize * 3 /5);
             }
-            //canvas.drawText("GAME IS PAUSED", font, 100, 100);
+            String message = "GAME IS PAUSED";
+            canvas.drawText(message, displayFont, 300, 300);
         }else{
                 //draw the level
             canvas.draw(backgrounds[this.backNum - 1], 0, 0);
@@ -454,7 +451,8 @@ public class GameMode implements Screen{
             if (this.curLevel == 1){
                 BitmapFont font = new BitmapFont();
                 font.setScale(3);
-                canvas.drawText("Press a key to move", font, canvas.getWidth() - 400, canvas.getHeight());
+                String message = "Press a key to move";
+                canvas.drawText(message, displayFont, canvas.getWidth()/2 - 250, canvas.getHeight()-225);
             }
         }
         canvas.end();
