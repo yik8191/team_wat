@@ -130,7 +130,7 @@
   {  "path":"RL",  "x":9,  "y":1,  "type":"slime"}],
 "width":17,
 "tileNum":1,
-"HPLossPerMiss":30,
+"HPLossPerMiss":100,
 "audio":"w-4_MDMD_120.mid",
 "FramesPerHPLoss":3,
 "height":9,
