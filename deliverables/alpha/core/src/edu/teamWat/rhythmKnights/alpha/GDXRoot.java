@@ -50,7 +50,7 @@ public class GDXRoot extends Game implements ScreenListener {
     /** Player mode for the level select screen (CONTROLLER CLASS) */
     private SelectMode selecting;
 
-    private int numLevels = 29;
+    private int numLevels = 30;
 
 	public GDXRoot() {
 		// Start loading with the asset manager
