@@ -516,6 +516,7 @@ public class Knight extends GameObject {
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
+            RhythmController.playDamage();
             switch (this.facing) {
                 case FRONT:
                     curFrame = DEAD_START;
@@ -530,24 +531,25 @@ public class Knight extends GameObject {
                     curFrame = DEAD_RIGHT_START;
                     break;
             }
+        }else {
+            curTime = animDelay;
+            switch (this.facing) {
+                case FRONT:
+                    curFrame = HURT_START;
+                    break;
+                case BACK:
+                    curFrame = HURT_UP_START;
+                    break;
+                case LEFT:
+                    curFrame = HURT_LEFT_START;
+                    break;
+                case RIGHT:
+                    curFrame = HURT_RIGHT_START;
+                    break;
+            }
+            this.state = KnightState.TAKINGDMG;
+            RhythmController.playDamage();
         }
-        curTime = animDelay;
-        switch (this.facing) {
-            case FRONT:
-                curFrame = HURT_START;
-                break;
-            case BACK:
-                curFrame = HURT_UP_START;
-                break;
-            case LEFT:
-                curFrame = HURT_LEFT_START;
-                break;
-            case RIGHT:
-                curFrame = HURT_RIGHT_START;
-                break;
-        }
-        this.state = KnightState.TAKINGDMG;
-        RhythmController.playDamage();
     }
 
     public void decrementHP(int amount) {

@@ -51,8 +51,8 @@ public class GameCanvas {
 
     //constants for drawing menus
 
-    private int menuMaxWTiles = 5;
-    private int menuMaxHTiles = 5;
+    public int menuMaxWTiles = 5;
+    public int menuMaxHTiles = 5;
     public int pauseMenuSize = 150;
 
     private int menuTileSpacing = 30;

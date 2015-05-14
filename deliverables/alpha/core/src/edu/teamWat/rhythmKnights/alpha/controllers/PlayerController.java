@@ -26,6 +26,7 @@ public class PlayerController implements InputController, InputProcessor {
     private int clickY = -1;
     private boolean escapePressed = false;
     private boolean listenForInput = true;
+    private static int curKey = -1;
 
 	public static long inputOffset = 0;
 
@@ -49,6 +50,7 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
+        System.out.println("keyDown");
         if (listenForInput) {
             switch (keycode) {
                 case Keys.ESCAPE:
@@ -84,9 +86,50 @@ public class PlayerController implements InputController, InputProcessor {
             }
         } else if (keycode == Keys.ESCAPE){
             this.setEscape(true);
+        }else{
+            setKeyPush(keycode);
         }
         return true;
 	}
+
+    private void setKeyPush(int keycode){
+        curKey = keycode;
+    }
+
+    public static char getKeyPush(){
+        char c = 'N';
+        switch (curKey) {
+            case Keys.A:
+                c = 'L';
+                break;
+            case Keys.LEFT:
+                c = 'L';
+                break;
+            case Keys.S:
+                c = 'D';
+                break;
+            case Keys.DOWN:
+                c = 'D';
+                break;
+            case Keys.D:
+                c = 'R';
+                break;
+            case Keys.RIGHT:
+                c = 'R';
+                break;
+            case Keys.W:
+                c = 'U';
+                break;
+            case Keys.UP:
+                c = 'U';
+                break;
+            case Keys.SPACE:
+                c = 'S';
+                break;
+        }
+        curKey = -1;
+        return c;
+    }
 
 	public synchronized void addKeyEvent(int code, long time) {
 		keyEvents.add(new KeyEvent(code, time));
