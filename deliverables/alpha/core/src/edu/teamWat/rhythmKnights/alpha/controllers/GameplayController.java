@@ -58,10 +58,7 @@ public class GameplayController {
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
-		// Preallocate memory
-		ProjectilePool projs = new ProjectilePool();
-
-		collisionController = new CollisionController(board, gameObjects, projs);
+        collisionController = new CollisionController(board, gameObjects);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
@@ -85,12 +82,12 @@ public class GameplayController {
 				timeHP = framesPerDrain;
 			}
 		} else {
-			// Animate hp filling
-			if (knight.knightHP < knight.INITIAL_HP) {
-				knight.knightHP+=3;
-			} else {
-				knight.knightHP = knight.INITIAL_HP;
-			}
+//			// Animate hp filling
+//			if (knight.knightHP < knight.INITIAL_HP) {
+//				knight.knightHP+=3;
+//			} else {
+//				knight.knightHP = knight.INITIAL_HP;
+//			}
 		}
 
 		gameStateAdvanced = false;
@@ -366,6 +363,15 @@ public class GameplayController {
         }else{
             Knight.setHPLossPerMiss(lossPerMiss);
         }
+    }
+
+    public void reset(){
+        JSONReader.getObjects();
+        collisionController = new CollisionController(board, gameObjects);
+        knight = (Knight)gameObjects.getPlayer();
+        knight.setInvulnerable(true);
+        hasMoved = false;
+        gameOver = false;
     }
 
 

@@ -30,9 +30,7 @@ public class CollisionController {
 	public Board board; 
 	/** Reference to all the game objects in the game */	
 	public GameObjectList gameobjs; 
-	/** Reference to all active projectiles */
-	public ProjectilePool projs;
-	
+
 	/** Cache attribute for calculations */
 	private Vector2 tmp;
 	/** Whether the player has moved */
@@ -46,10 +44,9 @@ public class CollisionController {
 	 * @param b The game board
 	 * TODO: @param p The active projectiles -- eventually
 	 */
-	public CollisionController(Board b, GameObjectList g, ProjectilePool p) {
+	public CollisionController(Board b, GameObjectList g) {
 		board = b;
 		gameobjs = g;
-		projs = p;
 		tmp = new Vector2();
 	}
 

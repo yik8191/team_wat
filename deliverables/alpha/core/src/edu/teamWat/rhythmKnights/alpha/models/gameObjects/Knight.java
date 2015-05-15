@@ -142,6 +142,11 @@ public class Knight extends GameObject {
         spriteLight.setFrame(11);
     }
 
+    public void updateHP(Vector2 times){
+        //used to initialize HP
+        this.knightHP = (int)(this.INITIAL_HP*(1-times.x/times.y));
+    }
+
     public void update() {
         // If we are dead do nothing.
         if (!isActive) {
