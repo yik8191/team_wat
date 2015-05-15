@@ -179,7 +179,7 @@ public class GameplayController {
 								knight.showSuccess();
 							}
 							// Set current tile type to SUCCESS
-							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
+							board.setSuccess((int) knight.getPosition().x, (int) knight.getPosition().y);
 							RhythmController.playSuccess();
 
 							break;
@@ -360,12 +360,21 @@ public class GameplayController {
     }
 
     public void reset(){
+        FileHandle audiohandle;
+        audiohandle = JSONReader.getAudioHandle();
         JSONReader.getObjects();
         collisionController = new CollisionController(board, gameObjects);
         knight = (Knight)gameObjects.getPlayer();
         knight.setInvulnerable(true);
         hasMoved = false;
         gameOver = false;
+        RhythmController.stopMusic();
+        try {
+            RhythmController.init(audiohandle, ticker);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RhythmController.launch();
     }
 
 

@@ -142,18 +142,28 @@ public class SelectMode implements Screen, InputProcessor {
     private void update(float delta) {
         //check for arrow key presses
         if (Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-            selection -= 1;
-            selection += numLevels;
+            if (selection % canvas.menuMaxWTiles == 0){
+                //we are on far left, go to far right
+                selection += canvas.menuMaxWTiles-1;
+            }else{
+                selection -=1;
+                selection += numLevels;
+            }
             selection %= numLevels;
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
             //TODO: make this better
             selection += canvas.menuMaxWTiles;
             selection %= numLevels;
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-            selection += 1;
+            if (selection % canvas.menuMaxWTiles == (canvas.menuMaxWTiles-1)){
+                //we are on far right, go to far left
+                selection -= (canvas.menuMaxWTiles-1);
+                selection += numLevels;
+            }else{
+                selection +=1;
+            }
             selection %= numLevels;
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-            //TODO: Add this
             selection -= canvas.menuMaxWTiles;
             selection += numLevels;
             selection %= numLevels;
