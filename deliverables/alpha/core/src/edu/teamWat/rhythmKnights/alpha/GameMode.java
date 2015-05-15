@@ -312,6 +312,7 @@ public class GameMode implements Screen{
                         gameplayController.hasMoved = false;
                         if (knight.notDancing) {
                             knight.setDancing();
+                            knight.setInvulnerable(true);
                         }
                         play();
                         if (knight.doneDancing) {
