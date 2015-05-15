@@ -188,7 +188,10 @@ public class PlayerController implements InputController, InputProcessor {
 	}
 
     public Vector2 getClick(){
-        return new Vector2(clickX, clickY);
+        Vector2 v = new Vector2(clickX, clickY);
+        clickX = -1;
+        clickY = -1;
+        return v;
     }
 
     public Vector2 getMove(){
