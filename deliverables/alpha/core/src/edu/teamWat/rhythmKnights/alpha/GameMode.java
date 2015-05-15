@@ -83,7 +83,7 @@ public class GameMode implements Screen{
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
-    private static String FONT_FILE = "fonts/TimesRoman.ttf";
+    private static String FONT_FILE = "fonts/RobotoSlab-Regular.ttf";
     private static int TUTORIAL_FONT_SIZE = 50;
     private static int FONT_SIZE = 50;
 
@@ -359,7 +359,6 @@ public class GameMode implements Screen{
                     char c = PlayerController.getKeyPush();
                     switch (c){
                         case 'L':
-                            //since there are only two buttons, just switch between the two
                             selection -= 1;
                             selection += 3;
                             selection %= 3;
@@ -394,6 +393,8 @@ public class GameMode implements Screen{
                             selection = 0;
                         } else if (canvas.pointInBox((int) move.x, (int) move.y, 1)) {
                             selection = 1;
+                        } else if (canvas.pointInBox((int) move.x, (int) move.y, 2)) {
+                            selection = 2;
                         }
                     }
                 }
@@ -511,7 +512,6 @@ public class GameMode implements Screen{
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
-            //for (int i : new int[]{0,1,2}){
                 //draw replay, select, then next
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
@@ -521,7 +521,6 @@ public class GameMode implements Screen{
                 }else{
                     c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1f);
                 }
-                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }else if (gameState == GameState.PAUSE) {
@@ -530,7 +529,6 @@ public class GameMode implements Screen{
             float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
             int[] text = new int[]{3,1};
             for (int i=0; i<=1; i++){
-            //for (int i : new int[]{3, 1}){
                 //draw restart then select
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
@@ -549,7 +547,10 @@ public class GameMode implements Screen{
             gameplayController.ticker.draw(canvas);
             gameplayController.gameObjects.draw(canvas);
             if (this.curLevel == 1){
-                String message = "Press a key to move";
+                String message = "Tap an arrow key (or WASD) to move!";
+                canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
+            }else if (this.curLevel == 7){
+                String message = "Move into an enemy tile to attack!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
         }
