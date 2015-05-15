@@ -38,6 +38,10 @@ public class Board {
     /* Holds the array of tiles that make up this board */
     private Tile[][] tiles;
 
+    private int setupFrame = 0;
+    private int diagonal = 0;
+    public  boolean doneDrawing = false;
+
     private static ArrayList<String> TILE_FILES = new ArrayList<String>();
 
     private static int numTileTextures = 1;
@@ -92,31 +96,50 @@ public class Board {
         this.tiles[x][y].isSuccess = true;
     }
 
+    public Vector2 getTimes(){
+        return new Vector2(Math.max((this.width+this.height+5)-diagonal, 0), this.width+this.height+5);
+    }
+
     public void draw(GameCanvas canvas){
+        setupFrame++;
+        setupFrame %= 1;
+        diagonal++;
+        if (diagonal > this.width+this.height+5){
+            doneDrawing = true;
+        }
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
+                Tile curTile = tiles[i][j];
                 Vector2 loc = canvas.boardToScreen(i,j);
-                Color c = tiles[i][j].col;
+                Color c = curTile.col;
                 float scale = (float)canvas.tileSize/(float)tileTexture.getHeight();
-
+                float offset = 0.5f * (sprite.getRegionWidth()*scale);
+                if (setupFrame==0 && (curTile.scale <1) && (i+j <= diagonal)){
+                    curTile.scale+=0.1;
+                }
+                scale = scale*curTile.scale;
+                float middle = 0.5f * sprite.getRegionWidth();
                 // Check for success tiles
-                if (tiles[i][j].isSuccess) {
+                if (curTile.isSuccess) {
                     curTime --;
                     if (curTime == 0) {
                         curFrame ++;
                         // Finished animating the flashing frames
                         if (curFrame >= FLASH_END) {
                             curFrame = FLASH_START;
-                            tiles[i][j].isSuccess = false;
+                            curTile.isSuccess = false;
                         }
                         curTime = animDelay;
                     } else {
                         sprite.setFrame(curFrame);
                     }
-                    canvas.draw(sprite, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                    //canvas.draw(sprite, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+
+                    canvas.draw(sprite, c, middle, middle, loc.x+offset, loc.y+offset, 0, scale, scale);
                 } else {
                     //texture, color, sprite origin x/y, x/y offset, angle, scale x/y
-                    canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                    //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                    canvas.draw(tileTexture, c, middle, middle, loc.x+offset, loc.y+offset, 0, scale, scale);
                 }
             }
         }
@@ -236,7 +259,7 @@ public class Board {
      * Each tile on the board has a set of attributes associated with it.
      */
     public static class Tile {
-        /** Is this a goal tile?*/
+        /** Type of this tile*/
         public tileType type = tileType.NORMAL;
         /** Color of this tile */
         public Color col;
@@ -246,6 +269,8 @@ public class Board {
 
         /** Is this a tile that the player successfully moved onto? */
         public boolean isSuccess = false;
+
+        public float scale = 0;
 
         public enum tileType {
             GOAL,

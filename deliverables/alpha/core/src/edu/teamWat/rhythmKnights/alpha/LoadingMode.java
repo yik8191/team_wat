@@ -73,7 +73,7 @@ public class LoadingMode implements Screen, InputProcessor {
 	/** Ratio of the bar width to the screen */
 	private static float BAR_WIDTH_RATIO = 0.66f;
 	/** Ration of the bar height to the screen */
-	private static float BAR_HEIGHT_RATIO = 0.25f;
+	private static float BAR_HEIGHT_RATIO = 0.15f;
 	/** Height of the progress bar */
 	private static int PROGRESS_HEIGHT = 30;
 	/** Width of the rounded cap on left or right */

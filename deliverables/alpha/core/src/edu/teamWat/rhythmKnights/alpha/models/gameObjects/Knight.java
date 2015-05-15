@@ -184,13 +184,14 @@ public class Knight extends GameObject {
                 this.facingFact = 6;
                 break;
         }
+        this.curFrame = facingFact*5;
     }
 
     public KnightDirection getDirection() {
         return this.facing;
     }
 
-    public void draw(GameCanvas canvas) {
+    public void draw(GameCanvas canvas, Vector2 times) {
         // Animation code for knight
         if (this.state == KnightState.NORMAL) {
             curTime--;
@@ -297,7 +298,7 @@ public class Knight extends GameObject {
                 }
                 if (doneFirstHalf) {
                     reverse = false;
-                    if (curFrame > 129) {
+                    if (curFrame >= 129) {
                         this.doneDancing = true;
                         this.setState(KnightState.NORMAL);
                         this.doneFirstHalf = false;
@@ -314,19 +315,7 @@ public class Knight extends GameObject {
         }
 
         Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
-//        Vector2 loc = canvas.boardToScreen(position.x, position.y);
-//        // Animate afterimages for dashing
-//        if (this.isDashing) {
-//            oldLoc = loc;
-//            curTime--;
-//            if (curTime == 0) {
-//                curFrameDash++;
-//                curTime = animDelay;
-//            } else {
-//
-//            }
-//            canvas.draw(spriteDash, oldLoc.x, oldLoc.y, canvas.tileSize, canvas.tileSize);
-//        }
+        loc.y = loc.y + (times.x/times.y)*(canvas.getHeight()-loc.y);
 
         // Draw light splash visual feedback
         if (this.state == KnightState.MOVING) {

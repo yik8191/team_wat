@@ -50,7 +50,7 @@ public class GDXRoot extends Game implements ScreenListener {
     /** Player mode for the level select screen (CONTROLLER CLASS) */
     private SelectMode selecting;
 
-    private int numLevels = 30;
+    private int numLevels = 26;
 
 	public GDXRoot() {
 		// Start loading with the asset manager
@@ -64,7 +64,7 @@ public class GDXRoot extends Game implements ScreenListener {
 
 	/**
 	 * Called when the Application is first created.  This is method immediately loads assets for the loading
-	 * screen, and prepares the asynchronous loader for all other assets.
+	 * screen, and prepares the asynchronous loader for all  other assets.
 	 */
 	public void create() {
 		canvas = new GameCanvas();

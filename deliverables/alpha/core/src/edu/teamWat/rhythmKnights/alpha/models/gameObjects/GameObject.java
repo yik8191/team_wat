@@ -19,7 +19,7 @@ public abstract class GameObject {
 	protected boolean moved;
 
     /* Draw the sprite on the board*/
-    public abstract void draw(GameCanvas canvas);
+    public abstract void draw(GameCanvas canvas, Vector2 times);
 
     /* Returns boolean stating if this object is alive*/
     public boolean isAlive(){

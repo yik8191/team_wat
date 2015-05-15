@@ -80,7 +80,11 @@ public class SelectMode implements Screen, InputProcessor {
 //            manager.load(LEVEL_FILES.get(i-1), Texture.class);
 //        }
         for (int i=1; i<=numLevels; i++){
-            LEVEL_FILES.add("images/menus/level"+i+".png");
+            if (i == numLevels) {
+                LEVEL_FILES.add("images/menus/bonus.png");
+            } else {
+                LEVEL_FILES.add("images/menus/level"+i+".png");
+            }
             manager.load(LEVEL_FILES.get(i-1), Texture.class);
         }
         levelButtons = new Texture[numLevels];
