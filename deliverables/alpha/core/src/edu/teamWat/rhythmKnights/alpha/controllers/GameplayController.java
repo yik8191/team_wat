@@ -375,6 +375,7 @@ public class GameplayController {
         knight.setInvulnerable(true);
         hasMoved = false;
         gameOver = false;
+        playerController.setListenForInput(true);
         RhythmController.stopMusic();
         try {
             RhythmController.init(audiohandle, ticker);
