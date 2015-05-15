@@ -284,7 +284,6 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-
                 gameplayController.initialize(this.curLevel);
                 this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
@@ -344,8 +343,7 @@ public class GameMode implements Screen{
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
-                            //Replay level
-                            gameState = GameState.INTRO;
+                            reset();
                         } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
                             //next level
                             this.curLevel++;
@@ -373,7 +371,7 @@ public class GameMode implements Screen{
                             //pressed the space bar so process whichever button this is
                             if (selection == 0){
                                 //Replay level
-                                gameState = GameState.INTRO;
+                                reset();
                             }else if (selection == 1) {
                                 //level select
                                 listener.exitScreen(this, 1);
@@ -488,8 +486,8 @@ public class GameMode implements Screen{
 
 	/** This method resets the game */
 	protected void reset() {
-		gameState = GameState.INTRO;
-		// NO INITIALIZATION CODE HERE. That's taken care of in update.
+        gameState = GameState.PLAY;
+        gameplayController.reset();
 	}
 
 	/**
@@ -543,7 +541,7 @@ public class GameMode implements Screen{
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }else{
-                //draw the level
+            //draw the level
             canvas.draw(backgrounds[this.backNum - 1], 0, 0);
             gameplayController.board.draw(canvas);
             gameplayController.ticker.draw(canvas);

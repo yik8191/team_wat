@@ -56,12 +56,7 @@ public class GameplayController {
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
-
-
-		// Preallocate memory
-		ProjectilePool projs = new ProjectilePool();
-
-		collisionController = new CollisionController(board, gameObjects, projs);
+        collisionController = new CollisionController(board, gameObjects);
 
 		knight = (Knight)gameObjects.getPlayer();
 		knight.setInvulnerable(true);
@@ -378,6 +373,15 @@ public class GameplayController {
         }else{
             Knight.setHPLossPerMiss(lossPerMiss);
         }
+    }
+
+    public void reset(){
+        JSONReader.getObjects();
+        collisionController = new CollisionController(board, gameObjects);
+        knight = (Knight)gameObjects.getPlayer();
+        knight.setInvulnerable(true);
+        hasMoved = false;
+        gameOver = false;
     }
 
 
