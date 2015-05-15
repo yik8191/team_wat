@@ -559,22 +559,21 @@ public class GameMode implements Screen{
             }else if (this.curLevel == 2){
                 String message = "HP drains once you start moving to the beat!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
-            }
-            else if (this.curLevel == 5){
+            }else if (this.curLevel == 5){
                 String message = "Move into an enemy tile to attack!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }else if (this.curLevel == 8){
                 String message = "Tap on a DASH to move two tiles!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
-            }
-            else if (this.curLevel == 11){
+            }else if (this.curLevel == 11){
                 String message = "The DJ is getting tricky with his beat patterns!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
-            }
-            else if (this.curLevel == 14){
+            }else if (this.curLevel == 14){
                 String message = "Try backtracking to conquer this dance floor!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
+            String message = "Level "+this.curLevel;
+            canvas.drawText(message, displayFont, 30, canvas.getHeight()-displayFont.getBounds(message).height);
         }
         canvas.end();
 	}
