@@ -31,11 +31,11 @@ import java.util.ArrayList;
 
 
 /**
- * The primary controller class for the game. While GDXRoot is the root class, 
+ * The primary controller class for the game. While GDXRoot is the root class,
  * it delegates all of the work to the
- * player mode classes. This is the player mode class for running the game. 
+ * player mode classes. This is the player mode class for running the game.
  * In initializes all of the other classes in
- * the game and hooks them together.  
+ * the game and hooks them together.
  * It also provides the basic game loop (update-draw).
  */
 public class GameMode implements Screen{
@@ -78,7 +78,8 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
-    private int DEFAULT_FRAMES = 179;
+    //private int DEFAULT_FRAMES = 179;
+    private int DEFAULT_FRAMES = 5000;
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
@@ -308,8 +309,10 @@ public class GameMode implements Screen{
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
                         // Animate victory dance
                         playerController.setListenForInput(false);
+                        gameplayController.hasMoved = false;
                         if (knight.notDancing) {
                             knight.setDancing();
+                            knight.setInvulnerable(true);
                         }
                         play();
                         if (knight.doneDancing) {
@@ -317,6 +320,7 @@ public class GameMode implements Screen{
                             framesRemaining = DEFAULT_FRAMES;
                             bounds.clear();
                             canvas.setMenuConstants(3);
+                            selection = 2;
                             for (int i = 0; i < 3; i++) {
                                 bounds.add(canvas.getButtonBounds(i));
                             }
@@ -350,6 +354,46 @@ public class GameMode implements Screen{
                             listener.exitScreen(this, 1);
                             RhythmController.stopMusic();
                             return false;
+                        }
+                    }
+                    char c = PlayerController.getKeyPush();
+                    switch (c){
+                        case 'L':
+                            //since there are only two buttons, just switch between the two
+                            selection -= 1;
+                            selection += 3;
+                            selection %= 3;
+                            break;
+                        case 'R':
+                            selection += 1;
+                            selection %= 3;
+                            break;
+                        case 'S':
+                            //pressed the space bar so process whichever button this is
+                            if (selection == 0){
+                                //Replay level
+                                gameState = GameState.INTRO;
+                            }else if (selection == 1) {
+                                //level select
+                                listener.exitScreen(this, 1);
+                                RhythmController.stopMusic();
+                                return false;
+                            }else{
+                                //selection ==2
+                                this.curLevel++;
+                                gameState = GameState.INTRO;
+                                RhythmController.stopMusic();
+                            }
+                            break;
+                    }
+                    Vector2 move = playerController.getMove();
+                    if (move.x != -1){
+                        //mouse was moved, process selection
+                        if (canvas.pointInBox((int) move.x, (int) move.y, 0)) {
+                            //Replay level
+                            selection = 0;
+                        } else if (canvas.pointInBox((int) move.x, (int) move.y, 1)) {
+                            selection = 1;
                         }
                     }
                 }
@@ -388,29 +432,34 @@ public class GameMode implements Screen{
                             //since there are only two buttons, just switch between the two
                             selection += 1;
                             selection %= 2;
-                            System.out.println("Found left press, selection is now "+selection);
                             break;
                         case 'R':
                             selection += 1;
                             selection %= 2;
-                            System.out.println("Found right press, selection is now "+selection);
                             break;
                         case 'S':
-                            System.out.println("Found space press");
                             //pressed the space bar so process whichever button this is
                             if (selection == 0){
                                 //first box aka restart level
-                                System.out.println("Selection = "+selection+", restarting");
                                 gameState = GameState.INTRO;
                             }else{
                                 //selection == 1
                                 //second box aka go to level select
-                                System.out.println("Selection = "+selection+", level select");
                                 listener.exitScreen(this, 1);
                                 RhythmController.stopMusic();
                                 return false;
                             }
                             break;
+                    }
+                    Vector2 move = playerController.getMove();
+                    if (move.x != -1){
+                        //mouse was moved, process selection
+                        if (canvas.pointInBox((int) move.x, (int) move.y, 0)) {
+                            //Replay level
+                            selection = 0;
+                        } else if (canvas.pointInBox((int) move.x, (int) move.y, 1)) {
+                            selection = 1;
+                        }
                     }
 
                 }
@@ -466,7 +515,12 @@ public class GameMode implements Screen{
                 //draw replay, select, then next
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
-                com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+                Color c;
+                if (selection == i) {
+                    c = new Color(.8f,.3f,.4f,1f);
+                }else{
+                    c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1f);
+                }
                 //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
@@ -495,14 +549,9 @@ public class GameMode implements Screen{
             gameplayController.ticker.draw(canvas);
             gameplayController.gameObjects.draw(canvas);
             if (this.curLevel == 1){
-                BitmapFont font = new BitmapFont();
-                font.setScale(2);
                 String message = "Tap an arrow key (or WASD) to move!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
-            }
-            if (this.curLevel == 7){
-                BitmapFont font = new BitmapFont();
-                font.setScale(2);
+            }else if (this.curLevel == 7){
                 String message = "Move into an enemy tile to attack!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
