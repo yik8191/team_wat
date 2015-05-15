@@ -10,17 +10,48 @@ test:
 playtest:
 	$(JRE) -cp $(CLASSPATH) TestTrack
 
-tuttrack1:
-	$(JC) -cp $(CLASSPATH) TutorialTrack1.java
+miditest:
+	$(JC) -cp $(CLASSPATH) MidiTest.java
 
-playtut1:
-	$(JRE) -cp $(CLASSPATH) TutorialTrack1
+playmiditest:
+	$(JRE) -cp $(CLASSPATH) MidiTest
 
-tuttrack2:
-	$(JC) -cp $(CLASSPATH) TutorialTrack2.java
+tuttracks:
+	$(JC) -cp $(CLASSPATH) TutorialTrack.java
 
-playtut2:
-	$(JRE) -cp $(CLASSPATH) TutorialTrack2
+savetuts:
+	$(JRE) -cp $(CLASSPATH) TutorialTrack
+
+etuttracks:
+	$(JC) -cp $(CLASSPATH) ETutorialTrack.java
+
+saveetuts:
+	$(JRE) -cp $(CLASSPATH) ETutorialTrack
+
+dtuttracks:
+	$(JC) -cp $(CLASSPATH) DTutorialTrack.java
+
+savedtuts:
+	$(JRE) -cp $(CLASSPATH) DTutorialTrack
+
+w1tracks:
+	$(JC) -cp $(CLASSPATH) World1Track.java
+
+savew1s:
+	$(JRE) -cp $(CLASSPATH) World1Track
+
+w2tracks:
+	$(JC) -cp $(CLASSPATH) World2Track.java
+
+savew2s:
+	$(JRE) -cp $(CLASSPATH) World2Track
+
+w3tracks:
+	$(JC) -cp $(CLASSPATH) World3Track.java
+
+savew3s:
+	$(JRE) -cp $(CLASSPATH) World3Track
+
 
 track1:
 	$(JC) -cp $(CLASSPATH) GameTrack1.java
@@ -39,6 +70,12 @@ track3:
 
 play3:
 	$(JRE) -cp $(CLASSPATH) GameTrack3
+
+track4:
+	$(JC) -cp $(CLASSPATH) GameTrack4.java
+
+play4:
+	$(JRE) -cp $(CLASSPATH) GameTrack4
 
 reader:
 	$(JC) -cp $(CLASSPATH) MusicReader.java

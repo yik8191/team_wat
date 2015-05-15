@@ -108,10 +108,10 @@
   {  "path":"DU",  "x":13,  "y":2,  "type":"slime"}],
 "width":17,
 "tileNum":1,
-"audio":"20_MDMD_96.mid",
+"audio":"20_MDMD_120.mid",
 "height":7,
 "player":{"x":1,
 "y":2},
 "HPDecrease":2,
 "FramesPerHPLoss":3,
-"HPLossPerMiss":5}
+"HPLossPerMiss":40}

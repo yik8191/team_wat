@@ -281,7 +281,7 @@
   {  "path":"DU",  "x":15,  "y":2,  "type":"slime"}],
 "width":25,
 "tileNum":1,
-"HPLossPerMiss":5,
+"HPLossPerMiss":25,
 "audio":"22_MDMD_108.mid",
 "FramesPerHPLoss":3,
 "height":13,

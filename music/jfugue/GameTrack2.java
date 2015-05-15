@@ -94,10 +94,10 @@ public class GameTrack2 {
 	Pattern rpattern = rhythm.getPattern();
 
 	Pattern bpattern =
-	    new Pattern("Cq Cq Cq Cq")
+	    new Pattern("C1q C1q C1q C1q")
 	    .repeat(16);
 	
-        pattern.add("T144 V0 I[Bass_Drum] " +
+        pattern.add("T144 V0 I[Contrabass] " +
 		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
         pattern.add("V1 I[Piano] " + voice1);
 	pattern.add("V2 I[Piano] " + voice2);

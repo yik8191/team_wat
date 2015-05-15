@@ -43,7 +43,7 @@ public class GameTrack1 {
         // System.out.println(staccatoPattern);
 
         // player.play(staccatoPattern);
-	player.play(pattern);
+	// player.play(pattern);
     }
 
     public Pattern getPattern() {
@@ -94,14 +94,18 @@ public class GameTrack1 {
 	Pattern rpattern = rhythm.getPattern()
 	    .repeat(16);
 
-	Pattern bpattern = new Pattern("Ch. Ch. ")
+	Pattern bpattern = new Pattern("B1h. B1h. ")
+	    .repeat(16);
+
+	Pattern xpattern = new Pattern("B3i Ri B3i Ri B3i B3i " +
+				       "B3i Ri B3i Ri B3i B3i ")
 	    .repeat(16);
 	
-        pattern.add("T180 V0 I[Bass_Drum] " +
+        pattern.add("T180 V0 I[Contrabass] " +
 		    "X[Volume_Coarse]=0 X[Volume_Fine]=0 " + bpattern);
-        // pattern.add("V1 I[Guitar] X[Volume_Coarse]=192 " + voice1);
-	// pattern.add("V2 I[Cello] X[Volume_Coarse]=192 " + voice2);
-	// pattern.add("V3 I[Cowbell] X[Volume_Coarse]=192 " + voice3);
+	pattern.add("V1 I[Guitar] X[Volume_Coarse]=192 " + voice1);
+	pattern.add("V2 I[Cello] X[Volume_Coarse]=192 " + voice2);
+	pattern.add("V3 I[Xylophone] X[Volume_Coarse]=192 " + xpattern);
 	pattern.add("V9 X[Volume_Coarse]=255 " + rpattern);
         return pattern;
     }
