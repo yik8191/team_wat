@@ -78,8 +78,7 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
-    //private int DEFAULT_FRAMES = 179;
-    private int DEFAULT_FRAMES = 5000;
+    private int DEFAULT_FRAMES = 179;
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
@@ -511,8 +510,9 @@ public class GameMode implements Screen{
 
             String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
 
-            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()/2-displayFont.getBounds(message).height/2);
-            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2,
+                    canvas.getHeight()/2-displayFont.getBounds(message).height/2-(canvas.pauseMenuHeight/2+15));
+            float scale = (float)canvas.pauseMenuHeight/(float)menus[0].getHeight();
             int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
                 //draw replay, select, then next
@@ -529,7 +529,7 @@ public class GameMode implements Screen{
         }else if (gameState == GameState.PAUSE) {
             //TODO: Make sure this is a good background (again)
             canvas.draw(backgrounds[0],1,1);
-            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            float scale = (float)canvas.pauseMenuHeight/(float)menus[0].getHeight();
             int[] text = new int[]{3,1};
             for (int i=0; i<=1; i++){
                 //draw restart then select
