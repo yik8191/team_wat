@@ -9,6 +9,8 @@ import edu.teamWat.rhythmKnights.alpha.models.Board;
 import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
+import java.util.Random;
+
 /**
  * Knight class! Fill in description here!
  */
@@ -23,12 +25,14 @@ public class Knight extends GameObject {
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
     public static final String LIGHT_SPLASH_FILE = "images/tiles/lightSplashSheet.png";
+    public static final String LIGHT_SPLASH_FILE2 = "images/tiles/lightSplashSheet2.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
     public static Texture knightHpEmptyTexture;
     public static Texture knightHpIconTexture;
     public static Texture lightSplashTexture;
+    public static Texture lightSplashTexture2;
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
@@ -42,6 +46,7 @@ public class Knight extends GameObject {
     private FilmStrip spriteHP;
     private FilmStrip spriteDash;
     private FilmStrip spriteLight;
+    private FilmStrip spriteLight2;
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
     private int animDelayShort = 2;
@@ -139,6 +144,10 @@ public class Knight extends GameObject {
         // Used for animating the visual feedback light splash
         spriteLight = new FilmStrip(lightSplashTexture, L_ROWS, L_COLS, L_TOT);
         spriteLight.setFrame(11);
+
+        // Used for animating the visual feedback light splash
+        spriteLight2 = new FilmStrip(lightSplashTexture2, L_ROWS, L_COLS, L_TOT);
+        spriteLight2.setFrame(11);
     }
 
     public void update() {
@@ -319,8 +328,14 @@ public class Knight extends GameObject {
 
         // Draw light splash visual feedback
         if (this.state == KnightState.MOVING) {
-            animateSplash();
-            canvas.draw(spriteLight, loc.x - canvas.tileSize, loc.y - canvas.tileSize, canvas.tileSize*3, canvas.tileSize*3);
+            Random rand = new Random();
+            if (rand.nextBoolean()) {
+                animateSplash(spriteLight);
+                canvas.draw(spriteLight, loc.x - canvas.tileSize, loc.y - canvas.tileSize, canvas.tileSize*3, canvas.tileSize*3);
+            } else {
+                animateSplash(spriteLight2);
+                canvas.draw(spriteLight2, loc.x - canvas.tileSize, loc.y - canvas.tileSize, canvas.tileSize*3, canvas.tileSize*3);
+            }
         }
 
         // Draw main knight
@@ -342,7 +357,6 @@ public class Knight extends GameObject {
             }
         }
         else canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
-
 
         // Drawing code for the Knight HP
         HP_SIZE = (int)((float)canvas.HP_SIZE / 1.5f);
@@ -383,7 +397,7 @@ public class Knight extends GameObject {
         canvas.draw(spriteHpIcon, 0, 0, HP_SIZE, HP_SIZE);
     }
 
-    public void animateSplash() {
+    public void animateSplash(FilmStrip sp) {
         curTimeL--;
         if (curTimeL == 0) {
             curFrameL++;
@@ -393,7 +407,7 @@ public class Knight extends GameObject {
             }
             curTimeL = animDelayShort;
         } else {
-            spriteLight.setFrame(curFrameL);
+            sp.setFrame(curFrameL);
 
         }
     }
@@ -412,6 +426,7 @@ public class Knight extends GameObject {
         manager.load(KNIGHT_HP_EMPTY_FILE, Texture.class);
         manager.load(KNIGHT_HP_ICON, Texture.class);
         manager.load(LIGHT_SPLASH_FILE, Texture.class);
+        manager.load(LIGHT_SPLASH_FILE2, Texture.class);
     }
 
     /**
@@ -472,6 +487,14 @@ public class Knight extends GameObject {
         } else {
             lightSplashTexture = null; //Failed to load
         }
+
+        // load light splash2 icon
+        if (manager.isLoaded(LIGHT_SPLASH_FILE2)) {
+            lightSplashTexture2 = manager.get(LIGHT_SPLASH_FILE2, Texture.class);
+            lightSplashTexture2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            lightSplashTexture2 = null; //Failed to load
+        }
     }
 
     /**
@@ -505,6 +528,10 @@ public class Knight extends GameObject {
         if (lightSplashTexture != null) {
             lightSplashTexture = null;
             manager.unload(LIGHT_SPLASH_FILE);
+        }
+        if (lightSplashTexture2 != null) {
+            lightSplashTexture2 = null;
+            manager.unload(LIGHT_SPLASH_FILE2);
         }
     }
 

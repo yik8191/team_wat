@@ -89,7 +89,7 @@ public class GameplayController {
 		} else {
 			// Animate hp filling
 			if (knight.knightHP < knight.INITIAL_HP) {
-				knight.knightHP+=3;
+				knight.knightHP+=4;
 			} else {
 				knight.knightHP = knight.INITIAL_HP;
 			}
