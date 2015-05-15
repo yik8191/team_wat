@@ -93,49 +93,13 @@ public class Enemy extends GameObject{
     	return enemyTexture;
     }
     
-    public void draw(GameCanvas canvas) {
-
-
-        // Moved to GameObject
-//        if (this.velocity.x > 0){
-//            this.setFacing(EnemyDirection.RIGHT);
-////            sprite.setFrame(3);
-//        } else if(this.velocity.x < 0){
-//            this.setFacing(EnemyDirection.LEFT);
-////            sprite.setFrame(2);
-//        } else if(this.velocity.y > 0){
-//            this.setFacing(EnemyDirection.BACK);
-////            sprite.setFrame(1);
-//        } else{
-//            this.setFacing(EnemyDirection.FRONT);
-////            sprite.setFrame(0);
-//        }
+    public void draw(GameCanvas canvas, Vector2 times) {
 
         setAnimate();
         Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
 
-//        if (this.state == EnemyState.ATTACKING) {
-//            switch(this.facingFact) {
-//                // Front
-//                case 1:
-//                    canvas.draw(sprite, loc.x, loc.y + canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
-//                    break;
-//                // Back
-//                case 2:
-//                    canvas.draw(sprite, loc.x, loc.y - canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
-//                    break;
-//                // Left
-//                case 3:
-//                    canvas.draw(sprite, loc.x + canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
-//                    break;
-//                // Right
-//                case 4:
-//                    canvas.draw(sprite, loc.x - canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
-//                    break;
-//            }
-//        } else {
-            canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
-//        }
+        loc.y = loc.y + (times.x/times.y)*(canvas.getHeight()-loc.y);
+        canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
 
     }
 

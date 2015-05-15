@@ -40,7 +40,7 @@ public class DynamicTile extends GameObject {
 		}
     }
 
-    public void draw(GameCanvas canvas) {
+    public void draw(GameCanvas canvas, Vector2 times) {
         FilmStrip sprite = new FilmStrip(dynTileTexture, 1, 1);
 	    Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
