@@ -138,7 +138,7 @@ public class Enemy extends GameObject{
             if (curFrame > endFrame) {
                 curFrame = facingFact*SPRITE_COLS;
                 if (this.state == EnemyState.DEAD) {
-                    this.setAlive(false);
+                    this.setActive(false);
                 } else if (this.state == EnemyState.ATTACKING) {
                     this.state = EnemyState.IDLE;
                 }
@@ -181,6 +181,11 @@ public class Enemy extends GameObject{
         this.state = EnemyState.ATTACKING;
         this.curTime = animDelayShort;
         this.curFrame = facingFact*SPRITE_COLS + ATTACK_START;
+    }
+
+    // BEGIN HACKY CODE
+    public boolean isKindaDead() {
+        return this.state == EnemyState.DEAD;
     }
 
     //	/**
