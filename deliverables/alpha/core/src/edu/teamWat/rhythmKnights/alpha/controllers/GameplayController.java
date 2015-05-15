@@ -35,7 +35,7 @@ public class GameplayController {
 	private static int framesPerDrain = 3;
     private static int HPPerDrain = 1;
 	private int timeHP = framesPerDrain;
-	private boolean hasMoved = false;
+	public boolean hasMoved = false;
 
 	public GameplayController() {
 	}

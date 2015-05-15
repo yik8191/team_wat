@@ -31,11 +31,11 @@ import java.util.ArrayList;
 
 
 /**
- * The primary controller class for the game. While GDXRoot is the root class, 
+ * The primary controller class for the game. While GDXRoot is the root class,
  * it delegates all of the work to the
- * player mode classes. This is the player mode class for running the game. 
+ * player mode classes. This is the player mode class for running the game.
  * In initializes all of the other classes in
- * the game and hooks them together.  
+ * the game and hooks them together.
  * It also provides the basic game loop (update-draw).
  */
 public class GameMode implements Screen{
@@ -308,6 +308,7 @@ public class GameMode implements Screen{
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
                         // Animate victory dance
                         playerController.setListenForInput(false);
+                        gameplayController.hasMoved = false;
                         if (knight.notDancing) {
                             knight.setDancing();
                         }
