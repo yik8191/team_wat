@@ -20,21 +20,30 @@ public class Enemy extends GameObject{
     }
     
     public EnemyType type;
+    public boolean isEnemy = true;
 
     // The number of frames before a sprite refreshes
-    private int animDelay = 5;
+    protected final int animDelay = 5;
+    protected final int animDelayShort = 1;
     private int curTime = 5;
     private int curFrame = 0;
 
     // Constants for reference to the spritesheet
-    private int IDLE_START = 0;
-    private int IDLE_END = 5;
-    private int HURT_START = 6;
-    private int HURT_END = 11;
-    private int SPRITE_ROWS = 2;
-    private int SPRITE_COLS = 6;
-    private int SPRITE_TOT = 12;
+    protected final int IDLE_START = 0;
+    protected final int IDLE_END = IDLE_START+2;
+    protected final int DEAD_START = IDLE_END+1;
+    protected final int DEAD_END = DEAD_START+3;
 
+    protected final int SPRITE_ROWS = 4;
+    protected final int SPRITE_COLS = 8;
+    protected final int SPRITE_TOT = 32;
+
+    // Used for enemy's currently facing direction
+    // front = 0, back = 1, left = 2, right = 3
+    private int facingFact = 0;
+
+    // Used for animation
+    private EnemyState state = EnemyState.IDLE;
 
     public Enemy(int id, float x, float y, EnemyType e){
         this.id = id;
@@ -45,11 +54,15 @@ public class Enemy extends GameObject{
         isAlive = true;
         isActive = true;
         isCharacter = true;
+
+        Texture enemyTexture = this.getTexture();
+        sprite = new FilmStrip(enemyTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
+        sprite.setFrame(0);
     }
 
     public void update() {
         // If we are dead do nothing.
-        if (!isAlive) {
+        if (!isAlive || (this.state == EnemyState.DEAD)) {
             return;
         }
 	    if (moved) {
@@ -80,32 +93,92 @@ public class Enemy extends GameObject{
     }
     
     public void draw(GameCanvas canvas) {
-//        curTime --;
-//        if (curTime == 0) {
-//            curFrame ++;
-//            if (curFrame >= IDLE_END) {
-//                curFrame = IDLE_START;
-//            }
-//            curTime = animDelay;
-//        } else {
-//            sprite.setFrame(curFrame);
+
+
+        // Moved to GameObject
+//        if (this.velocity.x > 0){
+//            this.setFacing(EnemyDirection.RIGHT);
+////            sprite.setFrame(3);
+//        } else if(this.velocity.x < 0){
+//            this.setFacing(EnemyDirection.LEFT);
+////            sprite.setFrame(2);
+//        } else if(this.velocity.y > 0){
+//            this.setFacing(EnemyDirection.BACK);
+////            sprite.setFrame(1);
+//        } else{
+//            this.setFacing(EnemyDirection.FRONT);
+////            sprite.setFrame(0);
 //        }
 
-        Texture enemyTexture = this.getTexture();
-        sprite = new FilmStrip(enemyTexture, 1, 4);
-
-        if (this.velocity.x > 0){
-            sprite.setFrame(3);
-        }else if(this.velocity.x < 0){
-            sprite.setFrame(2);
-        }else if(this.velocity.y > 0){
-            sprite.setFrame(1);
-        }else{
-            sprite.setFrame(0);
-        }
-
+        setAnimate();
         Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
         canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+    }
+
+
+    /** Used for animating different states and directions */
+    public void setAnimate() {
+        int numFrames;
+        int startFrame = 0;
+        int endFrame = 0;
+        switch(this.state) {
+            case IDLE:
+                numFrames = 2;
+                startFrame = this.facingFact*SPRITE_COLS;
+                endFrame = startFrame + numFrames;
+                break;
+            case DEAD:
+                numFrames = 4;
+                startFrame = this.facingFact*SPRITE_COLS + DEAD_START;
+                endFrame = startFrame + numFrames;
+                break;
+            case ATTACKING:
+                // To be filled when we have attacking sprites!
+                numFrames = 0;
+                startFrame = 0;
+                startFrame = 0;
+                break;
+        }
+
+        curTime --;
+        if (curTime == 0) {
+            curFrame ++;
+            // the animation loop is finished
+            if (curFrame > endFrame) {
+                curFrame = facingFact*SPRITE_COLS;
+                if (this.state == EnemyState.DEAD) {
+                    this.setAlive(false);
+                }
+            }
+            curTime = animDelay;
+        } else {
+            sprite.setFrame(curFrame);
+        }
+    }
+
+    public void setFacing(EnemyDirection dir) {
+        switch(dir) {
+            case FRONT:
+                this.facingFact = 0;
+                break;
+            case BACK:
+                this.facingFact = 1;
+                break;
+            case LEFT:
+                this.facingFact = 2;
+                break;
+            case RIGHT:
+                this.facingFact = 3;
+                break;
+        }
+        curFrame = this.facingFact*SPRITE_COLS;
+    }
+
+    /** Used for setting the enemy to display the death animation */
+    public void setDead() {
+        this.state = EnemyState.DEAD;
+        this.curTime = animDelayShort;
+        this.curFrame = facingFact*SPRITE_COLS + DEAD_START;
     }
 
 
@@ -171,6 +244,19 @@ public class Enemy extends GameObject{
             slimeTexture = null;
             manager.unload(SLIME_FILE);
         }
+    }
+
+    public enum EnemyDirection {
+        FRONT,
+        BACK,
+        LEFT,
+        RIGHT
+    }
+
+    public enum EnemyState {
+        IDLE,
+        DEAD,
+        ATTACKING
     }
 }
 

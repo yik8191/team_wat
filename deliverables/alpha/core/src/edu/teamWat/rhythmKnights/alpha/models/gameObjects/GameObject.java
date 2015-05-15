@@ -9,7 +9,7 @@ public abstract class GameObject {
 	protected int id;
     public boolean isAlive = false;
     protected boolean isActive = false;
-    public boolean isCharacter = true; 
+    public boolean isCharacter = true;
     protected Vector2 position = new Vector2();
     protected Vector2 velocity = new Vector2();
 	protected Vector2 oldPosition = new Vector2();

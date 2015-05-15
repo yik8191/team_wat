@@ -76,9 +76,12 @@
 "backNum":1,
 "objects":[],
 "width":12,
-"audio":"5_ttrack5_MMMM_96.mid",
+"audio":"t-5_MMMM_108.mid",
 "height":9,
 "player":{"x":1,
 "y":2}
 "backNum":1,
-"tileNum":1}
+"tileNum":1,
+"HPDecrease":1,
+"FramesPerHPLoss":3,
+"HPLossPerMiss":5}

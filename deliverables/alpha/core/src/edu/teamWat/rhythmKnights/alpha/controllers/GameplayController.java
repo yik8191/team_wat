@@ -2,7 +2,6 @@ package edu.teamWat.rhythmKnights.alpha.controllers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -10,6 +9,7 @@ import com.badlogic.gdx.files.FileHandle;
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import javafx.scene.effect.Light;
 
 public class GameplayController {
 	/** Reference to the game board */
@@ -31,34 +31,28 @@ public class GameplayController {
 
 	public boolean gameStateAdvanced;
 
-	private final int DOT_HP = 3;
-	private int timeHP = DOT_HP;
+    //HP stat numbers
+	private static int framesPerDrain = 3;
+    private static int HPPerDrain = 1;
+	private int timeHP = framesPerDrain;
 	private boolean hasMoved = false;
 
 	public GameplayController() {
 	}
 
 	public void initialize(int levelNum) {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
-		String path = (System.getProperty("user.dir"));
-		path = path.substring(path.length() - 6);
-		System.out.println(path);
 
 		FileHandle levelhandle = Gdx.files.internal("levels/level" + levelNum + ".json");
 		FileHandle audiohandle;
 		board = JSONReader.parseFile(levelhandle.readString());
         board.setTileSprite(JSONReader.getTileSprite());
 		audiohandle = JSONReader.getAudioHandle();
-		
-		
-//		if (path.equals("assets")) {
-//			board = JSONReader.parseFile("levels/level" + levelNum + ".json");
-//			audio = JSONReader.getAudio(false);
-//		} else {
-//			board = JSONReader.parseFile(System.getProperty("user.dir") + "/beta/levels/level" + levelNum + ".json");
-//			audio = JSONReader.getAudio(true);
-//		}
+
+        int hp = JSONReader.getHP();
+        int fr = JSONReader.getFrames();
+        int lossPerMiss = JSONReader.getLossPerMiss();
+        setHPConstants(hp, fr, lossPerMiss);
+
 		JSONReader.getObjects();
 		ticker = JSONReader.initializeTicker();
 
@@ -87,8 +81,8 @@ public class GameplayController {
 		if (hasMoved) {
 			timeHP--;
 			if (timeHP == 0) {
-				knight.decrementHP();
-				timeHP = DOT_HP;
+				knight.decrementHP(HPPerDrain);
+				timeHP = framesPerDrain;
 			}
 		}
 		gameStateAdvanced = false;
@@ -114,8 +108,15 @@ public class GameplayController {
 		} else if (RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.DASH2){
 			nextActionIndex++;
 		}
-		ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)  - RhythmController.totalOffset / 2)/((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
-		board.setDistanceToBeat(Math.abs(ticker.indicatorOffsetRatio - 0.5f));
+		if (RhythmController.getTick(nextActionIndex) < RhythmController.getTick(prevActionIndex) && currentTick < RhythmController.getTick(prevActionIndex)){
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength()) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength());
+		} else if (RhythmController.getTick(nextActionIndex) < RhythmController.getTick(prevActionIndex)) {
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex) + RhythmController.getTrackLength());
+		} else {
+			ticker.indicatorOffsetRatio = ((float)currentTick - (float)RhythmController.getTick(prevActionIndex)) / ((float)RhythmController.getTick(nextActionIndex) - (float)RhythmController.getTick(prevActionIndex));
+		}
+		board.setDistanceToBeat(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
+//		System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 
 		int currentActionIndex;
 		// Keep clearing the action ahead of us! Simple! :D
@@ -139,6 +140,20 @@ public class GameplayController {
 					}
 				}
 
+				long nextTick = RhythmController.getTick(nextActionIndex);
+				long prevTick = RhythmController.getTick(prevActionIndex);
+
+				float distToClosestBeat = 0;
+				if (prevTick < currentTick && currentTick < nextTick) { // prevTick < currentTick < nextTick
+					distToClosestBeat = (float)(currentTick - prevTick) / (float)(nextTick - prevTick);
+				} else if (prevTick < currentTick && nextTick < currentTick) { // nextTick < prevTick < currentTick
+					distToClosestBeat = (float) (currentTick - prevTick) / (float)(nextTick + RhythmController.getTrackLength() - prevTick);
+				} else { // currentTick < nextTick < prevTick
+					distToClosestBeat = (float) (currentTick + RhythmController.getTrackLength() - prevTick) / (nextTick + RhythmController.getTrackLength() - prevTick);
+				}
+				if (distToClosestBeat > 0.5f) distToClosestBeat = 1 - distToClosestBeat;
+//				System.out.println(distToClosestBeat);
+
 				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
 					if (knight.isAlive()) damagePlayer();
 				} else {
@@ -148,13 +163,10 @@ public class GameplayController {
 //							double a = 0;
 //						}
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
-//						moved++;
-							if (knight.getPosition().y == 4) {
-								double a = 0;
-							}
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
+//							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							Vector2 vel = new Vector2(0, 0);
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
@@ -180,7 +192,9 @@ public class GameplayController {
 							RhythmController.playSuccess();
 
 							// Display visual feedback to show success
-							if (knight.isAlive()) knight.showSuccess();
+							if (knight.isAlive && !(knight.getState() == Knight.KnightState.ATTACKING)) {
+								knight.showSuccess();
+							}
 							// Set current tile type to SUCCESS
 							board.setSuccess((int)knight.getPosition().x, (int)knight.getPosition().y);
 							RhythmController.playSuccess();
@@ -190,6 +204,8 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
+//							System.out.println(0.5f - Math.abs(ticker.indicatorOffsetRatio - 0.5f));
 							switch (keyEvent.code) {
 								case PlayerController.CONTROL_MOVE_RIGHT:
 									knight.setDirection(Knight.KnightDirection.RIGHT);
@@ -209,7 +225,7 @@ public class GameplayController {
 							if ((keyEvent.code & PlayerController.CONTROL_RELEASE) != 0) break;
 							RhythmController.setCompleted(currentActionIndex, true);
 							RhythmController.setPlayerAction(currentActionIndex, keyEvent.code);
-							ticker.glowBeat(RhythmController.convertToTickerBeatNumber(currentActionIndex, ticker), 15);
+							ticker.glowBeat(currentActionIndex % ticker.numExpandedActions, 15);
 							if (RhythmController.getPlayerAction(currentActionIndex) != RhythmController.getPlayerAction(currentActionIndex - 1)) {
 								if (knight.isAlive()) damagePlayer();
 							} else {
@@ -233,7 +249,9 @@ public class GameplayController {
 								RhythmController.playSuccess();
 
 								// Display visual feedback to show success
-								if (knight.isAlive()) knight.showSuccess();
+								if (knight.isAlive && !(knight.getState() == Knight.KnightState.ATTACKING)) {
+									knight.showSuccess();
+								}
 								hasMoved = true;
 //							knight.setDashing();
 								// Set current tile type to SUCCESS
@@ -258,10 +276,18 @@ public class GameplayController {
 		nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
 
 		if (nextActionIndex < prevActionIndex) {
-			if (RhythmController.getTrackLength() - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
-				currentActionIndex = prevActionIndex;
+			if (RhythmController.getTick(prevActionIndex) > currentTick) {
+				if (RhythmController.getTick(nextActionIndex) - currentTick > currentTick + RhythmController.getTrackLength() - RhythmController.getTick(prevActionIndex)) {
+					currentActionIndex = prevActionIndex;
+				} else {
+					currentActionIndex = nextActionIndex;
+				}
 			} else {
-				currentActionIndex = nextActionIndex;
+				if (RhythmController.getTrackLength() - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
+					currentActionIndex = prevActionIndex;
+				} else {
+					currentActionIndex = nextActionIndex;
+				}
 			}
 		} else {
 			if (RhythmController.getTick(nextActionIndex) - currentTick > currentTick - RhythmController.getTick(prevActionIndex)) {
@@ -316,9 +342,44 @@ public class GameplayController {
 					break;
 			}
 			((EnemyController)controls[i]).nextAction();
+
+			// For animation of enemy
+			if (vel.x > 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.RIGHT);
+			} else if(vel.x < 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.LEFT);
+			} else if(vel.y > 0){
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.BACK);
+			} else{
+				((Enemy)gameObjects.get(i)).setFacing(Enemy.EnemyDirection.FRONT);
+			}
+
 			gameObjects.get(i).setVelocity(vel);
 		}
 	}
+
+    /* Sets HPPerDrain and framesPerDrain for curent level */
+    public static void setHPConstants(int hp, int frames, int lossPerMiss){
+        if (hp <= 0 ){
+            System.out.println("Can't have a negative HP drain. Setting to default of 1");
+            HPPerDrain = 1;
+        }else{
+            HPPerDrain = hp;
+        }
+        if (frames <=0){
+            System.out.println("Can't have a negative number of frames. Setting to default of 3");
+            framesPerDrain = 3;
+        }else{
+            framesPerDrain = frames;
+        }
+        if (lossPerMiss < 0){
+            System.out.println("Can't have negative lossPerMiss. Setting to default");
+            Knight.setHPLossPerMiss(10);
+        }else{
+            Knight.setHPLossPerMiss(lossPerMiss);
+        }
+    }
+
 
 	public boolean isGameOver() {
 		return gameOver;

@@ -19,26 +19,32 @@ public class Knight extends GameObject {
     private int facingFact = 0;
     public static final String KNIGHT_DASH_FILE = "images/spriteSheets/knightDash.png";
     public static final String KNIGHT_NORMAL_FILE = "images/spriteSheets/knightsheet.png";
-    public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFull.png";
+    public static final String KNIGHT_HP_FULL_FILE = "images/knightHpFullSheet.png";
     public static final String KNIGHT_HP_EMPTY_FILE = "images/knightHpEmpty.png";
     public static final String KNIGHT_HP_ICON = "images/hpicon.png";
+    public static final String LIGHT_SPLASH_FILE = "images/tiles/lightSplashSheet.png";
     public static Texture knightTexture;
     public static Texture knightDashTexture;
     public static Texture knightHpFullTexture;
     public static Texture knightHpEmptyTexture;
     public static Texture knightHpIconTexture;
+    public static Texture lightSplashTexture;
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
     protected int knightHP;
     protected int INITIAL_HP = 160;
+    protected int HP_KILL_BOOST = 50;
+    private static int  hpDamageAmount = 5;
 
     // Used for animating the knight
     private FilmStrip sprite;
     private FilmStrip spriteHP;
     private FilmStrip spriteDash;
+    private FilmStrip spriteLight;
     // The number of frames before a sprite refreshes
     private int animDelay = 5;
+    private int animDelayShort = 2;
     private int curTime = 5;
     private int curFrame = 0;
 
@@ -86,10 +92,22 @@ public class Knight extends GameObject {
     private int FALL_LEFT_START = 90;
     private int FALL_RIGHT_START = 95;
 
+    private int SWORD_START = 100;
+    private int SWORD_UP_START = 105;
+    private int SWORD_LEFT_START = 110;
+    private int SWORD_RIGHT_START = 115;
+
     // Sheet constants
-    private int SPRITE_ROWS = 20;
+    private int SPRITE_ROWS = 24;
     private int SPRITE_COLS = 5;
-    private int SPRITE_TOT = 100;
+    private int SPRITE_TOT = 120;
+
+    // Light Splash Sheet
+    private int L_ROWS = 1;
+    private int L_COLS = 12;
+    private int L_TOT = 12;
+    private int curFrameL = 0;
+    private int curTimeL = animDelayShort;
 
     private boolean isInvulnerable;
     private boolean isDashing = false;
@@ -111,6 +129,10 @@ public class Knight extends GameObject {
 
         // Used for animating the knight's dash afterimages
         spriteDash = new FilmStrip(knightTexture, SPRITE_ROWS, SPRITE_COLS, SPRITE_TOT);
+
+        // Used for animating the visual feedback light splash
+        spriteLight = new FilmStrip(lightSplashTexture, L_ROWS, L_COLS, L_TOT);
+        spriteLight.setFrame(11);
     }
 
     public void update() {
@@ -168,7 +190,7 @@ public class Knight extends GameObject {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
-                if (curFrame >= (this.facingFact * 5 + 4)) {
+                if (curFrame >= ((this.facingFact * 5) + 4)) {
                     curFrame = this.facingFact * 5;
                 }
                 curTime = animDelay;
@@ -193,7 +215,7 @@ public class Knight extends GameObject {
             curTime--;
             if (curTime == 0) {
                 curFrame++;
-                // Finished animating the success frames
+                // Finished animating the success frame
                 if (curFrame >= (this.facingFact * 5 + 4)) {
                     curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
@@ -207,11 +229,11 @@ public class Knight extends GameObject {
             if (curTime == 0) {
                 curFrame++;
                 // Finished animating the attack frames
-                if (curFrame >= (this.facingFact * 5 + 44)) {
+                if (curFrame >= (this.facingFact / 2 * 5 + 104)) {
                     curFrame = this.facingFact * 5;
                     this.setState(KnightState.NORMAL);
                 }
-                curTime = animDelay;
+                curTime = animDelayShort;
             } else {
                 sprite.setFrame(curFrame);
             }
@@ -271,8 +293,33 @@ public class Knight extends GameObject {
 //            }
 //            canvas.draw(spriteDash, oldLoc.x, oldLoc.y, canvas.tileSize, canvas.tileSize);
 //        }
+
+        // Draw light splash visual feedback
+        if (this.state == KnightState.MOVING) {
+            animateSplash();
+            canvas.draw(spriteLight, loc.x - canvas.tileSize, loc.y - canvas.tileSize, canvas.tileSize*3, canvas.tileSize*3);
+        }
+
         // Draw main knight
-        canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+        // Position offsets for moving "halfway" when attacking an enemy
+        if (this.getState() == KnightState.ATTACKING) {
+            switch(this.facing) {
+                case FRONT:
+                    canvas.draw(sprite, loc.x, loc.y - canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+                    break;
+                case BACK:
+                    canvas.draw(sprite, loc.x, loc.y + canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+                    break;
+                case LEFT:
+                    canvas.draw(sprite, loc.x - canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+                    break;
+                case RIGHT:
+                    canvas.draw(sprite, loc.x + canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+                    break;
+            }
+        }
+        else canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+
 
         // Drawing code for the Knight HP
         HP_SIZE = (int)((float)canvas.HP_SIZE / 1.5f);
@@ -285,8 +332,19 @@ public class Knight extends GameObject {
             }
         }
 
-        spriteHP = new FilmStrip(knightHpFullTexture, 1, 1);
+        spriteHP = new FilmStrip(knightHpFullTexture, 3, 1, 3);
         for (int i = 0; i < this.knightHP; i++) {
+
+            // For drawing different colored segments
+//            if (((float) i)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
+//            else if ((float) i/INITIAL_HP < 0.5 && ((float) i)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
+//            else spriteHP.setFrame(2);
+
+            // For changing color as HP decreases
+            if (((float) knightHP)/INITIAL_HP >= 0.5) spriteHP.setFrame(0);
+            else if ((float) knightHP/INITIAL_HP < 0.5 && ((float) knightHP)/INITIAL_HP >= 0.2) spriteHP.setFrame(1);
+            else spriteHP.setFrame(2);
+
             canvas.draw(spriteHP, (i + 1) * HP_SIZE / 7f, 0, barWidth, HP_SIZE);
             if (i == this.knightHP - 1) {
                 spriteHP = new FilmStrip(knightHpEmptyTexture, 1, 1);
@@ -300,6 +358,20 @@ public class Knight extends GameObject {
         HP_SIZE = canvas.HP_SIZE;
         FilmStrip spriteHpIcon = new FilmStrip(knightHpIconTexture, 1, 1);
         canvas.draw(spriteHpIcon, 0, 0, HP_SIZE, HP_SIZE);
+    }
+
+    public void animateSplash() {
+        curTimeL --;
+        if (curTimeL == 0) {
+            curFrameL ++;
+            // the animation loop is finished
+            if (curFrameL > 11) {
+                curFrameL = 0;
+            }
+            curTimeL = animDelayShort;
+        } else {
+            spriteLight.setFrame(curFrameL);
+        }
     }
 
     /**
@@ -316,6 +388,7 @@ public class Knight extends GameObject {
         manager.load(KNIGHT_HP_FULL_FILE, Texture.class);
         manager.load(KNIGHT_HP_EMPTY_FILE, Texture.class);
         manager.load(KNIGHT_HP_ICON, Texture.class);
+        manager.load(LIGHT_SPLASH_FILE, Texture.class);
     }
 
     /**
@@ -368,6 +441,14 @@ public class Knight extends GameObject {
         } else {
             knightHpIconTexture = null; //Failed to load
         }
+
+        // load light splash icon
+        if (manager.isLoaded(LIGHT_SPLASH_FILE)) {
+            lightSplashTexture = manager.get(LIGHT_SPLASH_FILE, Texture.class);
+            lightSplashTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } else {
+            lightSplashTexture = null; //Failed to load
+        }
     }
 
     /**
@@ -398,6 +479,10 @@ public class Knight extends GameObject {
             knightHpIconTexture = null;
             manager.unload(KNIGHT_HP_ICON);
         }
+        if (lightSplashTexture != null) {
+            lightSplashTexture = null;
+            manager.unload(LIGHT_SPLASH_FILE);
+        }
     }
 
     public void setFalling() {
@@ -427,7 +512,7 @@ public class Knight extends GameObject {
      * GameplayController will handle invulnerability
      */
     public void takeDamage() {
-        this.knightHP -= 1;
+        this.knightHP -= hpDamageAmount;
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
@@ -465,8 +550,8 @@ public class Knight extends GameObject {
         RhythmController.playDamage();
     }
 
-    public void decrementHP() {
-        this.knightHP--;
+    public void decrementHP(int amount) {
+        this.knightHP -= amount;
         if (this.knightHP < 0) {
             this.knightHP = 0;
         }
@@ -492,6 +577,10 @@ public class Knight extends GameObject {
         }
     }
 
+    public static void setHPLossPerMiss(int h){
+        hpDamageAmount = h;
+    }
+
     /** Called whenever the player successfully inputs a move on the beat */
     public void showSuccess() {
         if (this.knightHP < INITIAL_HP) {
@@ -514,7 +603,33 @@ public class Knight extends GameObject {
                 curFrame = IDLE_RIGHT_START;
                 break;
         }
+        curTime = animDelay;
         this.state = KnightState.MOVING;
+    }
+
+    public void setAttacking() {
+        if (this.knightHP < INITIAL_HP) {
+            this.knightHP += HP_KILL_BOOST;
+            if (this.knightHP > INITIAL_HP) {
+                this.knightHP = INITIAL_HP;
+            }
+        }
+        curTime = animDelayShort;
+        switch (this.facing) {
+            case FRONT:
+                curFrame = SWORD_START;
+                break;
+            case BACK:
+                curFrame = SWORD_UP_START;
+                break;
+            case LEFT:
+                curFrame = SWORD_LEFT_START;
+                break;
+            case RIGHT:
+                curFrame = SWORD_RIGHT_START;
+                break;
+        }
+        this.state = KnightState.ATTACKING;
     }
 
     public void setDashing() {

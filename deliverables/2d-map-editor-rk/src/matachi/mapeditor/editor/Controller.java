@@ -280,6 +280,12 @@ public class Controller implements ActionListener, GUIInformation {
 
                 level.put("tileNum", 1);
 
+                level.put("HPDecrease", 1);
+
+                level.put("FramesPerHPLoss", 3);
+
+                level.put("HPLossPerMiss", 5);
+
                 //finished adding objects, now to save the file
                 FileWriter file = new FileWriter(chooser.getSelectedFile());
 

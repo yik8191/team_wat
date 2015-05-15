@@ -12,7 +12,6 @@
 
 package edu.teamWat.rhythmKnights.alpha;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -54,36 +53,40 @@ public class GameMode implements Screen{
         COMPLETE,
         /** Player has paused the game */
         PAUSE,
+        /** Player is dee-ee-dee dead */
 		LOSE
 	}
 
 	// GRAPHICS AND SOUND RESOURCES
 	// Path names to texture and sound assets
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
+    private static String[] MENU_FILES = {"images/menus/replay.png",
+            "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
     private static int numBackgrounds = 7;
-	private static String FONT_FILE = "fonts/TimesRoman.ttf";
-	private static int FONT_SIZE = 24;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
 	private static Texture[] backgrounds = new Texture[numBackgrounds];
-	/** background image for level 1 */
-	// private static Texture level1;
-	/** The font for giving messages to the player*/
-	private static BitmapFont displayFont;
+	private static Texture[] menus = new Texture[4];
+
     //TODO: Replace this with an actual texture
     private Texture tileTexture;
     private static final String TILE_FILE = "images/tiles/tileFull1.png";
-
-    private String[] menu = {"Replay", "Next", "Select"};
-
 
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
 
     private int curLevel = -1;
     private int numLevels = 1;
 
-	/**
+    private int DEFAULT_FRAMES = 180;
+    private int framesRemaining = DEFAULT_FRAMES;
+
+    private static BitmapFont displayFont;
+    private static String FONT_FILE = "fonts/TimesRoman.ttf";
+    private static int TUTORIAL_FONT_SIZE = 50;
+    private static int FONT_SIZE = 50;
+
+    /**
 	 * Preloads the assets for this game.
 	 *
 	 * All instances of the game use the same assets, so this is a static method.
@@ -96,11 +99,15 @@ public class GameMode implements Screen{
 	 */
 	public static void PreLoadContent(AssetManager manager){
         //Populate background list then load them
+        BKGD_FILES.clear();
         for (int i=0; i<numBackgrounds; i++){
             BKGD_FILES.add("images/backgrounds/bg"+(i+1)+".png");
             manager.load(BKGD_FILES.get(i), Texture.class);
         }
 
+        for (int i=0; i<4; i++){
+            manager.load(MENU_FILES[i], Texture.class);
+        }
 
 		// Load the font
 		FreetypeFontLoader.FreeTypeFontLoaderParameter size2Params = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -141,6 +148,15 @@ public class GameMode implements Screen{
             }
         }
 
+        for (int i=0; i<4; i++){
+            if (manager.isLoaded(MENU_FILES[i])){
+                menus[i] = manager.get(MENU_FILES[i], Texture.class);
+                menus[i].setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            }else{
+                menus[i] = null;
+            }
+        }
+
 		// Allocate the font
 		if (manager.isLoaded(FONT_FILE)) {
 			displayFont = manager.get(FONT_FILE, BitmapFont.class);
@@ -170,6 +186,13 @@ public class GameMode implements Screen{
             if (backgrounds[i] != null) {
                 backgrounds[i] = null;
                 manager.unload(BKGD_FILES.get(i));
+            }
+        }
+
+        for (int i=0; i<4; i++){
+            if (menus[i] != null){
+                menus[i] = null;
+                manager.unload(MENU_FILES[i]);
             }
         }
 
@@ -217,10 +240,10 @@ public class GameMode implements Screen{
 	 * view has already been initialized by the root class.
 	 */
 	public GameMode(GameCanvas canvas) {
-        this.BKGD_FILES.clear();
-        for (int i=1; i<=this.numBackgrounds; i++){
-            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
-        }
+//        this.BKGD_FILES.clear();
+//        for (int i=1; i<=this.numBackgrounds; i++){
+//            this.BKGD_FILES.add("images/backgrounds/bg"+i+".png");
+//        }
 
 		this.canvas = canvas;
 		active = false;
@@ -268,6 +291,11 @@ public class GameMode implements Screen{
 			case PLAY:
                 if (playerController.getEscape()){
                     this.gameState = GameState.PAUSE;
+                    bounds.clear();
+                    canvas.setMenuConstants(2);
+                    for (int i = 0; i < 2; i++) {
+                        bounds.add(canvas.getButtonBounds(i));
+                    }
                     playerController.setListenForInput(false);
                     playerController.setEscape(false);
                     break;
@@ -277,6 +305,7 @@ public class GameMode implements Screen{
                     else if (!knight.isActive()) reset();
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
                         gameState = GameState.WIN;
+                        framesRemaining = DEFAULT_FRAMES;
                         bounds.clear();
                         canvas.setMenuConstants(3);
                         for (int i = 0; i < 3; i++) {
@@ -291,17 +320,22 @@ public class GameMode implements Screen{
                 if ((this.curLevel+1) % (this.numLevels+1) == 0){
                     gameState = GameState.COMPLETE;
                 }else {
+                    framesRemaining -= 1;
+                    if (framesRemaining <= 0){
+                        this.curLevel ++;
+                        gameState = GameState.INTRO;
+                    }
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
                             //Replay level
                             gameState = GameState.INTRO;
-                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
                             //next level
                             this.curLevel++;
                             gameState = GameState.INTRO;
                             RhythmController.stopMusic();
-                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
+                        } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
                             //level select
                             listener.exitScreen(this, 1);
                             RhythmController.stopMusic();
@@ -322,6 +356,18 @@ public class GameMode implements Screen{
                     playerController.setListenForInput(true);
                     playerController.setEscape(false);
                     break;
+                }
+                Vector2 click = playerController.getClick();
+                if (click.x != -1) {
+                    if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
+                        //Replay level
+                        gameState = GameState.INTRO;
+                    } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
+                        //level select
+                        listener.exitScreen(this, 1);
+                        RhythmController.stopMusic();
+                        return false;
+                    }
                 }
 			case LOSE:
 				// Print level failed message!
@@ -365,27 +411,46 @@ public class GameMode implements Screen{
             //TODO: make sure this background is a good one
             canvas.drawBackground(backgrounds[0], 1,1);
 
-            BitmapFont font = new BitmapFont();
-            float scale = (float)canvas.menuTileSize/(float)tileTexture.getHeight();
+            String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
+
+            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()/2-displayFont.getBounds(message).height/2);
+            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
+            //for (int i : new int[]{0,1,2}){
+                //draw replay, select, then next
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
-                loc.y = canvas.getHeight() - loc.y - canvas.menuTileSize;
+                loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
                 com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-                canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
-                font.setScale(2);
-                canvas.drawText(menu[i], font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
+                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }else if (gameState == GameState.PAUSE) {
+            //TODO: Make sure this is a good background (again)
             canvas.draw(backgrounds[0],1,1);
-            BitmapFont font = new BitmapFont();
-            font.setScale(5);
-            canvas.drawText("GAME IS PAUSED", font, 100, 100);
+            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            int[] text = new int[]{3,1};
+            for (int i=0; i<=1; i++){
+            //for (int i : new int[]{3, 1}){
+                //draw restart then select
+                Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
+                loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
+                com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
+            }
         }else{
                 //draw the level
-                canvas.draw(backgrounds[this.backNum - 1], 0, 0);
-                gameplayController.board.draw(canvas);
-                gameplayController.ticker.draw(canvas);
-                gameplayController.gameObjects.draw(canvas);
+            canvas.draw(backgrounds[this.backNum - 1], 0, 0);
+            gameplayController.board.draw(canvas);
+            gameplayController.ticker.draw(canvas);
+            gameplayController.gameObjects.draw(canvas);
+            if (this.curLevel == 1){
+                BitmapFont font = new BitmapFont();
+                font.setScale(3);
+                String message = "Press a key to move";
+                canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
+            }
         }
         canvas.end();
 	}
@@ -405,6 +470,13 @@ public class GameMode implements Screen{
 
             bounds.clear();
             for (int i = 0; i < 3; i++) {
+                bounds.add(canvas.getButtonBounds(i));
+            }
+        }else if (gameState == GameState.PAUSE){
+            canvas.setMenuConstants(2);
+
+            bounds.clear();
+            for (int i = 0; i < 2; i++) {
                 bounds.add(canvas.getButtonBounds(i));
             }
         }

@@ -155,8 +155,19 @@ public class JSONReader {
             for (int j = 1; j < objects.size() + 1; j++) {
                 JSONObject curObj = (JSONObject)objects.get(j - 1);
                 //get where enemy starts
-                x = ((Long)curObj.get("x")).intValue();
-                y = ((Long)curObj.get("y")).intValue();
+                try{
+                    x = ((Long)curObj.get("x")).intValue();
+                }catch (NullPointerException e){
+                    System.out.println("No x location for object "+j+", setting to 0");
+                    x = 0;
+                }
+
+                try{
+                    y = ((Long)curObj.get("y")).intValue();
+                }catch (NullPointerException e){
+                    System.out.println("No y location for object "+j+", setting to 0");
+                    y = 0;
+                }
 
                 //get path for object
                 String pathString = ((String)curObj.get("path")).toUpperCase();
@@ -183,24 +194,34 @@ public class JSONReader {
                             path[i] = InputController.CONTROL_SHOOT;
                             break;
                         default:
-                            System.out.println("unrecognized character '" + c + "'");
+                            System.out.println("unrecognized character '" + c + "' at location "+i+", setting to NO_ACTION");
+                            path[i] = InputController.CONTROL_NO_ACTION;
+                            break;
                     }
                 }
                 String type = (String)curObj.get("type");
+                boolean found = false;
                 if (type.equals("skeleton")) {
                     gameObjects.add(new Enemy(j, x, y, Enemy.EnemyType.SKELETON));
+                    found =true;
                 } else if (type.equals("slime")) {
                     gameObjects.add(new Enemy(j, x, y, Enemy.EnemyType.SLIME));
+                    found = true;
                 } else if (type.equals("platform")) {
                     gameObjects.add(new DynamicTile(j, x, y));
+                    found = true;
                 } else {
-                    System.out.println("Invalid type '" + type + "' of object #" + (j + 1));
+                    System.out.println("Invalid type '" + type + "' of object #" + (j + 1)+", not doing anything");
                 }
-                controls[j] = new EnemyController(j, gameObjects, path);
+                if (found) {
+                    controls[j] = new EnemyController(j, gameObjects, path);
+                }
             }
         } else {
             System.out.println("No objects found! did you mean to do that?");
         }
+
+
 
         GameplayController.gameObjects = gameObjects;
         GameplayController.controls = controls;
@@ -209,45 +230,95 @@ public class JSONReader {
 
     public static Ticker initializeTicker() {
 
-        String tickerActions = (String)level.get("ticker");
-        Ticker.TickerAction[] actionArray = new Ticker.TickerAction[tickerActions.length()];
-        for (int i = 0; i < tickerActions.length(); i++) {
-            char c = tickerActions.charAt(i);
-            switch (c) {
-                case 'M':
-                    actionArray[i] = Ticker.TickerAction.MOVE;
-                    break;
-                case 'D':
-                    actionArray[i] = Ticker.TickerAction.DASH;
-                    break;
-                case 'F':
-                    actionArray[i] = Ticker.TickerAction.FIREBALL;
-                    break;
-                case 'R':
-                    actionArray[i] = Ticker.TickerAction.FREEZE;
-                    break;
-                default:
-                    System.out.println("Unrecognized character '" + c + "' for ticker at location " + i + ", setting it to MOVE");
-                    actionArray[i] = Ticker.TickerAction.MOVE;
-                    break;
+
+        try{
+            String tickerActions = (String) level.get("ticker");
+            Ticker.TickerAction[] actionArray = new Ticker.TickerAction[tickerActions.length()];
+            for (int i = 0; i < tickerActions.length(); i++) {
+                char c = tickerActions.charAt(i);
+                switch (c) {
+                    case 'M':
+                        actionArray[i] = Ticker.TickerAction.MOVE;
+                        break;
+                    case 'D':
+                        actionArray[i] = Ticker.TickerAction.DASH;
+                        break;
+                    case 'F':
+                        actionArray[i] = Ticker.TickerAction.FIREBALL;
+                        break;
+                    case 'R':
+                        actionArray[i] = Ticker.TickerAction.FREEZE;
+                        break;
+                    default:
+                        System.out.println("Unrecognized character '" + c + "' for ticker at location " + i + ", setting it to MOVE");
+                        actionArray[i] = Ticker.TickerAction.MOVE;
+                        break;
+                }
             }
+            return new Ticker(actionArray);
+        }catch (NullPointerException e){
+            System.out.println("Could not find ticker in level. Setting to default");
+            return new Ticker(new Ticker.TickerAction[]{Ticker.TickerAction.MOVE,
+                    Ticker.TickerAction.MOVE,
+                    Ticker.TickerAction.MOVE,
+                    Ticker.TickerAction.MOVE});
         }
-        return new Ticker(actionArray);
     }
 
     public static FileHandle getAudioHandle() {
-        String audio = (String)level.get("audio");
-        return Gdx.files.internal("music/" + audio);
+        try{
+            String audio = (String)level.get("audio");
+            return Gdx.files.internal("music/" + audio);
+        }catch (NullPointerException e){
+            System.out.println("Could not find audio in level. Setting to default");
+            return Gdx.files.internal("music/1_ttrack1_MM_60.mid");
+        }
     }
 
     public static int getBackground(){
-        int n = ((Long)level.get("backNum")).intValue();
-        return n;
+
+        try{
+            return ((Long) level.get("backNum")).intValue();
+        }catch (NullPointerException e){
+            System.out.println("Could not find backNum in level. Setting to default");
+            return 1;
+        }
     }
 
     public static int getTileSprite(){
-        return  ((Long)level.get("tileNum")).intValue();
+        try{
+            return ((Long)level.get("tileNum")).intValue();
+        }catch (NullPointerException e){
+            System.out.println("Could not find tileNum in level. Setting to default");
+            return 1;
+        }
     }
 
+    public static int getHP(){
+        try{
+            return ((Long)level.get("HPDecrease")).intValue();
+        }catch (NullPointerException e){
+            System.out.println("Could not find HPDecrease in level. Setting to default");
+            return 1;
+        }
+    }
+
+    public static int getFrames(){
+        try{
+            return ((Long)level.get("FramesPerHPLoss")).intValue();
+        }catch (NullPointerException e){
+            System.out.println("Could not find FramesPerHPLoss in level. Setting to default");
+            return 3;
+        }
+    }
+
+    public static int getLossPerMiss() {
+        try{
+            return ((Long)level.get("HPLossPerMiss")).intValue();
+        }catch (NullPointerException e){
+            System.out.println("Could not find HPLossPerMiss in level. Setting to default");
+            return 10;
+        }
+    }
 
 }

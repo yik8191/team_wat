@@ -10,17 +10,48 @@ test:
 playtest:
 	$(JRE) -cp $(CLASSPATH) TestTrack
 
+miditest:
+	$(JC) -cp $(CLASSPATH) MidiTest.java
+
+playmiditest:
+	$(JRE) -cp $(CLASSPATH) MidiTest
+
 tuttracks:
 	$(JC) -cp $(CLASSPATH) TutorialTrack.java
 
 savetuts:
 	$(JRE) -cp $(CLASSPATH) TutorialTrack
 
+etuttracks:
+	$(JC) -cp $(CLASSPATH) ETutorialTrack.java
+
+saveetuts:
+	$(JRE) -cp $(CLASSPATH) ETutorialTrack
+
+dtuttracks:
+	$(JC) -cp $(CLASSPATH) DTutorialTrack.java
+
+savedtuts:
+	$(JRE) -cp $(CLASSPATH) DTutorialTrack
+
 w1tracks:
 	$(JC) -cp $(CLASSPATH) World1Track.java
 
 savew1s:
 	$(JRE) -cp $(CLASSPATH) World1Track
+
+w2tracks:
+	$(JC) -cp $(CLASSPATH) World2Track.java
+
+savew2s:
+	$(JRE) -cp $(CLASSPATH) World2Track
+
+w3tracks:
+	$(JC) -cp $(CLASSPATH) World3Track.java
+
+savew3s:
+	$(JRE) -cp $(CLASSPATH) World3Track
+
 
 track1:
 	$(JC) -cp $(CLASSPATH) GameTrack1.java
