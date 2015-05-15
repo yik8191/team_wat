@@ -122,6 +122,7 @@ public class Knight extends GameObject {
     public boolean notDancing = true;
     private boolean doneFirstHalf = false;
     private boolean reverse = false;
+    private boolean fallWhenDone = false;
 
     public Knight(int id, float x, float y) {
         this.id = id;
@@ -148,6 +149,11 @@ public class Knight extends GameObject {
         // Used for animating the visual feedback light splash
         spriteLight2 = new FilmStrip(lightSplashTexture2, L_ROWS, L_COLS, L_TOT);
         spriteLight2.setFrame(11);
+    }
+
+    public void updateHP(Vector2 times){
+        //used to initialize HP
+        this.knightHP = (int)(this.INITIAL_HP*(1-times.x/times.y));
     }
 
     public void update() {
@@ -247,7 +253,13 @@ public class Knight extends GameObject {
                 // Finished animating the attack frames
                 if (curFrame >= (this.facingFact / 2 * 5 + 104)) {
                     curFrame = this.facingFact * 5;
-                    this.setState(KnightState.NORMAL);
+                    if (fallWhenDone) {
+                        fallWhenDone = false;
+                        this.isAlive = true;
+                        this.setFalling();
+                    } else {
+                        this.setState(KnightState.NORMAL);
+                    }
                 }
                 curTime = animDelayShort;
             } else {
@@ -553,6 +565,15 @@ public class Knight extends GameObject {
                     curFrame = FALL_RIGHT_START;
                     break;
             }
+        }
+    }
+
+    public void setFallingAfterAttacking() {
+        if (this.state == KnightState.ATTACKING) {
+            isAlive = false;
+            fallWhenDone = true;
+        } else {
+            setFalling();
         }
     }
 

@@ -8,12 +8,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.controllers.PlayerController;
+import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
@@ -37,6 +39,10 @@ public class SelectMode implements Screen, InputProcessor {
     /** Number of levels, how many buttons to create */
     private static int numLevels;
 
+    public static final String MENU_FILE = "music/mainmenu.ogg";
+
+    protected static Music menuMusic;
+
     private boolean active;
 
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
@@ -53,7 +59,7 @@ public class SelectMode implements Screen, InputProcessor {
      */
     public SelectMode(GameCanvas canvas, int levels) {
         this.canvas = canvas;
-        this.numLevels = levels;
+        numLevels = levels;
 
         active = false;
 
@@ -63,12 +69,13 @@ public class SelectMode implements Screen, InputProcessor {
         // Load the next two images immediately.
         background = new Texture(BACKGROUND_FILE);
 
-        canvas.setSelectConstants(this.numLevels);
+        canvas.setSelectConstants(numLevels);
 
         for (int i=0;i<numLevels; i++){
             bounds.add(canvas.getButtonBounds(i));
         }
 
+        playMenuMusic();
         Gdx.input.setInputProcessor(this);
     }
 
@@ -88,6 +95,7 @@ public class SelectMode implements Screen, InputProcessor {
             manager.load(LEVEL_FILES.get(i-1), Texture.class);
         }
         levelButtons = new Texture[numLevels];
+        manager.load(MENU_FILE, Music.class);
     }
 
     public static void LoadContent(AssetManager manager){
@@ -99,6 +107,12 @@ public class SelectMode implements Screen, InputProcessor {
             } else {
                 levelButtons[i] = null;
             }
+        }
+
+        if (manager.isLoaded(MENU_FILE)) {
+            menuMusic = manager.get(MENU_FILE, Music.class);
+        } else {
+            menuMusic = null; // Failed to load
         }
     }
 
@@ -192,6 +206,7 @@ public class SelectMode implements Screen, InputProcessor {
 
             // We are are ready, notify our listener
             if ((levelNum !=-1) && (listener != null)) {
+                stopMenuMusic();
                 listener.exitScreen(this, levelNum);
             }
         }
@@ -247,6 +262,18 @@ public class SelectMode implements Screen, InputProcessor {
         // Useless if called in outside animation loop
         active = false;
     }
+
+    public static void playMenuMusic() {
+        menuMusic.play();
+        menuMusic.setLooping(true);
+    }
+
+    public static void stopMenuMusic() {
+        if (menuMusic.isPlaying()) {
+            menuMusic.stop();
+        }
+    }
+
 
     /**
      * Sets the ScreenListener for this mode

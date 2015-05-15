@@ -62,7 +62,7 @@ public class GameMode implements Screen{
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
     private static String[] MENU_FILES = {"images/menus/replay.png",
             "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
-    private static int numBackgrounds = 7;
+    private static int numBackgrounds = 8;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
@@ -78,8 +78,7 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
-    //private int DEFAULT_FRAMES = 179;
-    private int DEFAULT_FRAMES = 5000;
+    private int DEFAULT_FRAMES = 179;
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
@@ -284,7 +283,6 @@ public class GameMode implements Screen{
 		switch (gameState) {
 			case INTRO:
 				gameState = GameState.PLAY;
-
                 gameplayController.initialize(this.curLevel);
                 this.backNum = JSONReader.getBackground();
                 canvas.setOffsets(gameplayController.board.getWidth(), gameplayController.board.getHeight());
@@ -299,6 +297,7 @@ public class GameMode implements Screen{
                     for (int i = 0; i < 2; i++) {
                         bounds.add(canvas.getButtonBounds(i));
                     }
+                    selection = 0;
                     playerController.setListenForInput(false);
                     playerController.setEscape(false);
                     break;
@@ -330,6 +329,10 @@ public class GameMode implements Screen{
 
                         } else play();
                         break;
+                    }else{
+                        Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
+                        knight.updateHP(gameplayController.board.getTimes());
+                        break;
                     }
                 }
             case WIN:
@@ -340,17 +343,18 @@ public class GameMode implements Screen{
                     if (framesRemaining <= 0){
                         this.curLevel ++;
                         gameState = GameState.INTRO;
+                        return false;
                     }
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
-                            //Replay level
-                            gameState = GameState.INTRO;
+                            reset();
                         } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
                             //next level
                             this.curLevel++;
                             gameState = GameState.INTRO;
                             RhythmController.stopMusic();
+                            return false;
                         } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
                             //level select
                             listener.exitScreen(this, 1);
@@ -373,7 +377,7 @@ public class GameMode implements Screen{
                             //pressed the space bar so process whichever button this is
                             if (selection == 0){
                                 //Replay level
-                                gameState = GameState.INTRO;
+                                reset();
                             }else if (selection == 1) {
                                 //level select
                                 listener.exitScreen(this, 1);
@@ -488,8 +492,8 @@ public class GameMode implements Screen{
 
 	/** This method resets the game */
 	protected void reset() {
-		gameState = GameState.INTRO;
-		// NO INITIALIZATION CODE HERE. That's taken care of in update.
+        gameState = GameState.PLAY;
+        gameplayController.reset();
 	}
 
 	/**
@@ -506,12 +510,13 @@ public class GameMode implements Screen{
 		if (this.gameState == GameState.WIN){
             //draw level complete menu
             //TODO: make sure this background is a good one
-            canvas.drawBackground(backgrounds[0], 1,1);
+            canvas.drawBackground(backgrounds[7], 1,1);
 
             String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
 
-            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()/2-displayFont.getBounds(message).height/2);
-            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2,
+                    canvas.getHeight()/2-displayFont.getBounds(message).height/2-(canvas.pauseMenuHeight/2+15));
+            float scale = (float)canvas.pauseMenuHeight/(float)menus[0].getHeight();
             int[] text = new int[]{0,1,2};
             for (int i=0; i<3; i++){
                 //draw replay, select, then next
@@ -528,7 +533,7 @@ public class GameMode implements Screen{
         }else if (gameState == GameState.PAUSE) {
             //TODO: Make sure this is a good background (again)
             canvas.draw(backgrounds[0],1,1);
-            float scale = (float)canvas.pauseMenuSize/(float)tileTexture.getHeight();
+            float scale = (float)canvas.pauseMenuHeight/(float)menus[0].getHeight();
             int[] text = new int[]{3,1};
             for (int i=0; i<=1; i++){
                 //draw restart then select
@@ -543,7 +548,7 @@ public class GameMode implements Screen{
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }else{
-                //draw the level
+            //draw the level
             canvas.draw(backgrounds[this.backNum - 1], 0, 0);
             gameplayController.board.draw(canvas);
             gameplayController.ticker.draw(canvas);

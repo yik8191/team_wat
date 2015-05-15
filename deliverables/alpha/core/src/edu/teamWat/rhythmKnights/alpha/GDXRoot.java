@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.*;
 import com.badlogic.gdx.assets.loaders.*;
 import com.badlogic.gdx.assets.loaders.resolvers.*;
 
+import edu.teamWat.rhythmKnights.alpha.controllers.RhythmController;
 import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
@@ -138,8 +139,8 @@ public class GDXRoot extends Game implements ScreenListener {
             Gdx.app.error("RhythmKnights", "Exit with error code " + exitCode, new RuntimeException());
             Gdx.app.exit();
         } else if (screen == loading){
+	        SelectMode.LoadContent(manager);
             selecting = new SelectMode(canvas, this.numLevels);
-            SelectMode.LoadContent(manager);
             selecting.setScreenListener(this);
             setScreen(selecting);
             loading.dispose();
