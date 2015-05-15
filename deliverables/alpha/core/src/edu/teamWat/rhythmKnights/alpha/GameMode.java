@@ -313,6 +313,12 @@ public class GameMode implements Screen{
                             if (knight.notDancing) {
                                 knight.setDancing();
                                 knight.setInvulnerable(true);
+                            }else{
+                                //on goal and dancing so gain health
+                                knight.knightHP+=3;
+                                if (knight.knightHP > knight.INITIAL_HP){
+                                    knight.knightHP = knight.INITIAL_HP;
+                                }
                             }
                             play();
                             if (knight.doneDancing) {
