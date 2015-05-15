@@ -13,25 +13,15 @@ import java.util.ArrayList;
 
 
 public class RhythmController {
-
-//	static private float period;  // 6000/tempo = length of beat in ms
-
-	/** Length of period in which player can make a valid move */
-	static float actionWindowRadius = 0.15f;
 	/** Offset to translate intervals in time */
 	private static long totalOffset;
 	/** Offset from perceived beat in time in the music */
-//	static float finalActionOffset = 0.5f;
-
-//	static long startTime;
 
 	/** Location of music files */
-//	public static final String MUSIC_FILE = "music/game2longer.ogg";
 	public static final String HIT_FILE = "sounds/hit.ogg";
 	public static final String DMG_FILE = "sounds/dmg.ogg";
 
 	/** Music player objects */
-//	static Music music;
 	static Sequence sequence;
 	static Sequencer sequencer;
 
@@ -55,13 +45,11 @@ public class RhythmController {
 	public static int numActions;
 
 	public static void PreloadContent(AssetManager manager) {
-//		manager.load(MUSIC_FILE, Music.class);
 		manager.load(HIT_FILE, Sound.class);
 		manager.load(DMG_FILE, Sound.class);
 	}
 
 	public static void LoadContent(AssetManager manager) {
-
 		try {
 			sequencer = MidiSystem.getSequencer();
 			sequencer.open();

@@ -117,6 +117,7 @@ public class Knight extends GameObject {
     public boolean notDancing = true;
     private boolean doneFirstHalf = false;
     private boolean reverse = false;
+    private boolean fallWhenDone = false;
 
     public Knight(int id, float x, float y) {
         this.id = id;
@@ -238,7 +239,13 @@ public class Knight extends GameObject {
                 // Finished animating the attack frames
                 if (curFrame >= (this.facingFact / 2 * 5 + 104)) {
                     curFrame = this.facingFact * 5;
-                    this.setState(KnightState.NORMAL);
+                    if (fallWhenDone) {
+                        fallWhenDone = false;
+                        this.isAlive = true;
+                        this.setFalling();
+                    } else {
+                        this.setState(KnightState.NORMAL);
+                    }
                 }
                 curTime = animDelayShort;
             } else {
@@ -526,6 +533,15 @@ public class Knight extends GameObject {
                     curFrame = FALL_RIGHT_START;
                     break;
             }
+        }
+    }
+
+    public void setFallingAfterAttacking() {
+        if (this.state == KnightState.ATTACKING) {
+            isAlive = false;
+            fallWhenDone = true;
+        } else {
+            setFalling();
         }
     }
 

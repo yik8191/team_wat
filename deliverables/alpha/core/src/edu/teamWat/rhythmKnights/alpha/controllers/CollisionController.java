@@ -129,7 +129,7 @@ public class CollisionController {
 								hasPlayerMoved = true;
 							} else if (!board.isOffScreen((int)proposedPos.x, (int)proposedPos.y)) {
 								knight.setPosition(proposedPos);
-								knight.setFalling();
+								knight.setFallingAfterAttacking();
 							}
 						}
 					}
