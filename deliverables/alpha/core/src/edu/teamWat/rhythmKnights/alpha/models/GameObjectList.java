@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.math.Vector2;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.GameObject;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
@@ -93,13 +94,13 @@ public class GameObjectList implements Iterable<GameObject>{
 	 *
 	 * @param canvas the drawing context
 	 */
-	public void draw(GameCanvas canvas) {
+	public void draw(GameCanvas canvas, Vector2 times) {
 		//draw all objects
 		for (GameObject gameObject : this) {
             if (gameObject.getId() != 0)
-			    gameObject.draw(canvas);
+			    gameObject.draw(canvas, times);
 		}
-        this.get(0).draw(canvas);
+        this.get(0).draw(canvas, times);
 	}
 	
 

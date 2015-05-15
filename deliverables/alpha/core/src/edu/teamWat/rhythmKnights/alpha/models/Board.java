@@ -40,6 +40,7 @@ public class Board {
 
     private int setupFrame = 0;
     private int diagonal = 0;
+    public  boolean doneDrawing = false;
 
     private static ArrayList<String> TILE_FILES = new ArrayList<String>();
 
@@ -95,10 +96,17 @@ public class Board {
         this.tiles[x][y].isSuccess = true;
     }
 
+    public Vector2 getTimes(){
+        return new Vector2(Math.max((this.width+this.height+5)-diagonal, 0), this.width+this.height+5);
+    }
+
     public void draw(GameCanvas canvas){
         setupFrame++;
-        setupFrame %= 2;
+        setupFrame %= 1;
         diagonal++;
+        if (diagonal > this.width+this.height+5){
+            doneDrawing = true;
+        }
         for (int i=0; i<this.width; i++){
             for (int j=0; j<this.height; j++){
                 Tile curTile = tiles[i][j];

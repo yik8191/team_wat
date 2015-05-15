@@ -303,32 +303,34 @@ public class GameMode implements Screen{
                     playerController.setEscape(false);
                     break;
                 }else{
-                    Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
-                    if (gameplayController.isGameOver()) reset();
-                    else if (!knight.isActive()) reset();
-                    else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
-                        // Animate victory dance
-                        playerController.setListenForInput(false);
-                        gameplayController.hasMoved = false;
-                        if (knight.notDancing) {
-                            knight.setDancing();
-                            knight.setInvulnerable(true);
-                        }
-                        play();
-                        if (knight.doneDancing) {
-                            gameState = GameState.WIN;
-                            framesRemaining = DEFAULT_FRAMES;
-                            bounds.clear();
-                            canvas.setMenuConstants(3);
-                            selection = 2;
-                            for (int i = 0; i < 3; i++) {
-                                bounds.add(canvas.getButtonBounds(i));
+                    if (gameplayController.board.doneDrawing) {
+                        Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
+                        if (gameplayController.isGameOver()) reset();
+                        else if (!knight.isActive()) reset();
+                        else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
+                            // Animate victory dance
+                            playerController.setListenForInput(false);
+                            gameplayController.hasMoved = false;
+                            if (knight.notDancing) {
+                                knight.setDancing();
+                                knight.setInvulnerable(true);
                             }
                             play();
-                        }
+                            if (knight.doneDancing) {
+                                gameState = GameState.WIN;
+                                framesRemaining = DEFAULT_FRAMES;
+                                bounds.clear();
+                                canvas.setMenuConstants(3);
+                                selection = 2;
+                                for (int i = 0; i < 3; i++) {
+                                    bounds.add(canvas.getButtonBounds(i));
+                                }
+                                play();
+                            }
 
-                    } else play();
-                    break;
+                        } else play();
+                        break;
+                    }
                 }
             case WIN:
                 if ((this.curLevel+1) % (this.numLevels+1) == 0){
@@ -545,7 +547,7 @@ public class GameMode implements Screen{
             canvas.draw(backgrounds[this.backNum - 1], 0, 0);
             gameplayController.board.draw(canvas);
             gameplayController.ticker.draw(canvas);
-            gameplayController.gameObjects.draw(canvas);
+            gameplayController.gameObjects.draw(canvas, gameplayController.board.getTimes());
             if (this.curLevel == 1){
                 String message = "Tap an arrow key (or WASD) to the beat to move!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
