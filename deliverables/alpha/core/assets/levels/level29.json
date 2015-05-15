@@ -153,7 +153,7 @@
   {  "path":"UD",  "x":2,  "y":3,  "type":"slime"}],
 "width":19,
 "tileNum":1,
-"HPLossPerMiss":5,
+"HPLossPerMiss":125,
 "audio":"29_MMMDDMM_108.mid",
 "FramesPerHPLoss":3,
 "height":11,

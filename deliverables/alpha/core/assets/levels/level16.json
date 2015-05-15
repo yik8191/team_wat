@@ -111,4 +111,4 @@
 "tileNum":1,
 "HPDecrease":1,
 "FramesPerHPLoss":3,
-"HPLossPerMiss":5}
+"HPLossPerMiss":30}

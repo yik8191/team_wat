@@ -70,7 +70,7 @@
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMM",
 "backNum":2,
-"objects":[  {  "path":"DDUU",  "x":4,  "y":4,  "type":"slime"},
+"objects":[  {  "path":"DUUD",  "x":4,  "y":3,  "type":"slime"},
   {  "path":"UUDD",  "x":8,  "y":2,  "type":"slime"}],
 "width":13,
 "tileNum":1,
@@ -80,4 +80,4 @@
 "y":4},
 "HPDecrease":1,
 "FramesPerHPLoss":4,
-"HPLossPerMiss":5}
+"HPLossPerMiss":100}
