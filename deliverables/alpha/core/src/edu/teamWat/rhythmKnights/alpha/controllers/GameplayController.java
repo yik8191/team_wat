@@ -107,6 +107,7 @@ public class GameplayController {
 		long currentTick = RhythmController.getSequencePosition();
 		int prevActionIndex = RhythmController.getClosestEarlierActionIndex(currentTick);
 		int nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
+		RhythmController.clearNextAction(nextActionIndex);
 		ticker.setBeat(RhythmController.convertToTickerBeatNumber(prevActionIndex, ticker));
 		if (RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.DASH2) {
 			prevActionIndex--;

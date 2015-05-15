@@ -245,7 +245,7 @@ public class RhythmController {
 		completedTicks[j] = false;
 		playerActions[j] = PlayerController.CONTROL_NO_ACTION;
 		if (tickerActions[j] == Ticker.TickerAction.FIREBALL || tickerActions[j] == Ticker.TickerAction.DASH) {
-			clearNextAction(j+1);
+			clearNextAction(j);
 		}
 	}
 
