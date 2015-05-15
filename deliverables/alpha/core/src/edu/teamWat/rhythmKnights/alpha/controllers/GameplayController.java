@@ -39,6 +39,8 @@ public class GameplayController {
 
 	public int initHP;
 
+	public int startBeatNumber;
+
 	public GameplayController() {
 	}
 
@@ -66,6 +68,7 @@ public class GameplayController {
 		gameOver = false;
 		initHP = hp;
 		knight.knightHP = 1;
+		startBeatNumber = 0;
 		try {
 			RhythmController.init(audiohandle, ticker);
 		} catch (Exception e) {
@@ -120,7 +123,7 @@ public class GameplayController {
 		// Keep clearing the action ahead of us! Simple! :D
 		RhythmController.clearNextAction(nextActionIndex);
 
-		if (knight.isAlive()) {
+		if (knight.isAlive() && RhythmController.startBeatCount == 0) {
 			for (PlayerController.KeyEvent keyEvent : playerController.keyEvents) {
 				prevActionIndex = RhythmController.getClosestEarlierActionIndex(keyEvent.time);
 				nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
@@ -284,6 +287,10 @@ public class GameplayController {
 			if (RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.DASH2 && RhythmController.getTickerAction(prevActionIndex) != Ticker.TickerAction.FIREBALL2) {
 				advanceGameState();
 			}
+		}
+		if (RhythmController.startBeatCount > 0 && RhythmController.getSequencePosition() > RhythmController.startBeatTimes[startBeatNumber]){
+			RhythmController.startBeatCount--;
+			startBeatNumber++;
 		}
 	}
 

@@ -38,6 +38,9 @@ public class RhythmController {
 	private static Ticker.TickerAction[] tickerActions;
 	private static int[] playerActions;
 
+	public static long[] startBeatTimes;
+	public static int startBeatCount;
+
 	/** Track length */
 	private static long trackLength;
 
@@ -101,14 +104,13 @@ public class RhythmController {
 		MidiEvent event = null;
 		MidiEvent prevEvent = null;
 		boolean addHalfBeat = false;
+		startBeatCount = 0;
+		startBeatTimes = new long[4];
 
 		for (int i = 0; i < track.size(); i++) {
 			tempEvent = track.get(i);
 			MidiMessage message = tempEvent.getMessage();
 			if (message instanceof ShortMessage) {
-
-//				System.out.println(((ShortMessage)message).getCommand() + " " + tempEvent.getTick());
-
 				if (((ShortMessage)message).getCommand() == NOTE_ON) {
 					prevEvent = event;
 					event = tempEvent;
@@ -117,6 +119,10 @@ public class RhythmController {
 						addHalfBeat = false;
 					}
 					tempTickTimes.add(event.getTick());
+					if (startBeatCount < 4) {
+						startBeatTimes[startBeatCount] = event.getTick();
+						startBeatCount++;
+					}
 					switch (ticker.getAction()) {
 						case MOVE:
 							tempTickerActions.add(Ticker.TickerAction.MOVE);
@@ -141,7 +147,6 @@ public class RhythmController {
 		}
 
 		trackLength = sequence.getTickLength();
-//		trackLength = 128 * 32;
 
 		numActions = tempTickTimes.size();
 
@@ -159,7 +164,7 @@ public class RhythmController {
 
 		ticker.period = tickTimes[ticker.numExpandedActions];
 
-		totalOffset =(long)(200 * ((float)sequence.getTickLength() / (float)(sequence.getMicrosecondLength() / 1000.0f)));
+		totalOffset =(long)(200 * ((float)sequence.getTickLength() / (sequence.getMicrosecondLength() / 1000.0f)));
 
 		InputStream is = audiohandle.read();
 
@@ -173,6 +178,7 @@ public class RhythmController {
 	public static void launch() {
 		sequencer.stop();
 		sequencer.start();
+		while(sequencer.getTickPosition() - totalOffset < 0) {	}
 	}
 
 	/**
