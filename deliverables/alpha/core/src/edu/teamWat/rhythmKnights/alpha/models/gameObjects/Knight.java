@@ -32,8 +32,8 @@ public class Knight extends GameObject {
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
-    protected int knightHP;
-    protected int INITIAL_HP = 160;
+    public int knightHP;
+    public int INITIAL_HP = 160;
     protected int HP_KILL_BOOST = 50;
     private static int  hpDamageAmount = 5;
 

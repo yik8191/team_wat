@@ -181,7 +181,9 @@ public class Enemy extends GameObject{
             }
             curTime = delay;
         } else {
-            sprite.setFrame(curFrame);
+            if (curFrame < SPRITE_TOT) {
+                sprite.setFrame(curFrame);
+            }
         }
     }
 
