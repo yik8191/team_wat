@@ -547,7 +547,7 @@ public class GameMode implements Screen{
             gameplayController.ticker.draw(canvas);
             gameplayController.gameObjects.draw(canvas);
             if (this.curLevel == 1){
-                String message = "Tap an arrow key (or WASD) to move!";
+                String message = "Tap an arrow key (or WASD) to the beat to move!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }else if (this.curLevel == 2){
                 String message = "HP drains once you start moving to the beat!";
