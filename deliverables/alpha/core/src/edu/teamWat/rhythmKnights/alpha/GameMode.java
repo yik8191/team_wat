@@ -304,15 +304,23 @@ public class GameMode implements Screen{
                     if (gameplayController.isGameOver()) reset();
                     else if (!knight.isActive()) reset();
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
-                        gameState = GameState.WIN;
-                        framesRemaining = DEFAULT_FRAMES;
-                        bounds.clear();
-                        canvas.setMenuConstants(3);
-                        for (int i = 0; i < 3; i++) {
-                            bounds.add(canvas.getButtonBounds(i));
-                        }
+                        // Animate victory dance
                         playerController.setListenForInput(false);
+                        if (knight.notDancing) {
+                            knight.setDancing();
+                        }
                         play();
+                        if (knight.doneDancing) {
+                            gameState = GameState.WIN;
+                            framesRemaining = DEFAULT_FRAMES;
+                            bounds.clear();
+                            canvas.setMenuConstants(3);
+                            for (int i = 0; i < 3; i++) {
+                                bounds.add(canvas.getButtonBounds(i));
+                            }
+                            play();
+                        }
+
                     } else play();
                     break;
                 }
