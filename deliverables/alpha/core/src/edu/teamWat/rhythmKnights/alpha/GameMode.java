@@ -517,8 +517,9 @@ public class GameMode implements Screen{
 
 	/** This method resets the game */
 	protected void reset() {
-        gameState = GameState.PLAY;
-        gameplayController.reset();
+        gameState = GameState.INTRO;
+//        gameState = GameState.PLAY;
+//        gameplayController.reset();
 	}
 
 	/**
