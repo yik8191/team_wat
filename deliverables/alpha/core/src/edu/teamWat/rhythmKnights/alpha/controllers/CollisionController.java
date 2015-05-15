@@ -9,8 +9,6 @@
  */
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
-import java.util.Random;
-
 import com.badlogic.gdx.math.*;
 
 import edu.teamWat.rhythmKnights.alpha.models.*;
@@ -39,6 +37,8 @@ public class CollisionController {
 	private Vector2 tmp;
 	/** Whether the player has moved */
 	public boolean hasPlayerMoved;
+
+	private Knight knight;
 	
 	/**
 	 * Creates a CollisionController for the given models.
@@ -63,181 +63,126 @@ public class CollisionController {
 			}
 		}
 	}
-		
-	/**
-	 * Updates all of the game objects and projectiles, moving them forward.
-	 *
-	 */
+
 	public void update() {
-		// update dynamic tiles 
+		knight = (Knight)gameobjs.getPlayer();
 		updateBoard();
-		// initialize boolean
+		moveKnight();
+		moveEnemies();
+	}
+
+	void moveKnight() {
 		hasPlayerMoved = false;
-		// Move only the player
-		if (gameobjs.getPlayer().isAlive()){
-			moveIfSafe(gameobjs.getPlayer());
-		}
-		
-		// Test collisions between game objects.
-		int length = gameobjs.size();
-		int ii = 0; int jj;
-		// handle player movement first
-		for (jj = ii + 1; jj < length; jj++) {
-			checkForCollision(gameobjs.get(ii), gameobjs.get(jj));
-		}
-		
-		// clear player velocity
-		tmp.x = 0; tmp.y = 0;
-		gameobjs.getPlayer().setVelocity(tmp);
-		
-		// Move everything else
-		for (GameObject g: gameobjs){
-			if (g.isAlive()){
-				moveIfSafe(g);
+		if (knight.getVelocity().len() ==  1) {
+			Vector2 proposedPos = new Vector2();
+			proposedPos.set(knight.getPosition()).add(knight.getVelocity());
+			boolean enemyHit = false;
+			for (GameObject enemy : gameobjs) {
+				if (enemy != knight && !(enemy instanceof DynamicTile)) {
+					if (enemy.getPosition().x == proposedPos.x && enemy.getPosition().y == proposedPos.y) {
+						((Enemy)enemy).setDead();
+						knight.setAttacking();
+						enemyHit = true;
+					}
+				}
 			}
-		}
-		// handle all enemy movement first
-		for (ii = 1; ii < length - 1; ii++) {
-			for (jj = ii + 1; jj < length; jj++) {
-				checkForCollision(gameobjs.get(ii), gameobjs.get(jj));
-			}
-		}
-		
-		// handle final interaction between enemy and player
-		ii = 0;
-		for (jj = ii + 1; jj < length; jj ++){
-			checkForCollision(gameobjs.get(jj), gameobjs.get(ii));
-		}
-		
-		// Test collisions between game objects and projectiles
-		for (GameObject g : gameobjs) {
-			for (Projectile p : projs) {
-				checkForCollision(g, p);
-			}
-		}
-		
-		// update dynamic tiles 
-		updateBoard();
-	}
-
-
-	/** 
-	 * Moves the game object according to its velocity
-	 * 
-	 * This only does something if the new position is safe. 
-	 * Otherwise, the game object stays in place.
-	 * 
-	 * @param g The ship to move.
-	 */
-	private void moveIfSafe(GameObject g) {
-		
-		boolean nonzerov = (g.getVelocity().x != 0 || g.getVelocity().y != 0);
-		tmp.set(g.getPosition());
-		
-		// Test add velocity
-		tmp.add(g.getVelocity());
-		boolean safeAfter  = board.isSafeAt((int)tmp.x, (int)tmp.y);
-
-		if (safeAfter) {
-			// update boolean only if the player actually can make a move
-			if ((g instanceof Knight) && nonzerov){
-				hasPlayerMoved = true;
-				g.setPosition(tmp);
-			} else {
-				g.setPosition(tmp);
-			}
-		} else {
-			if ((g instanceof Knight) && nonzerov) {
-				g.setPosition(tmp);
-				((Knight)g).setFalling();
-			}
-		}
-		if ((g instanceof DynamicTile) && nonzerov){
-			board.setTile((int) g.getPosition().x, (int) g.getPosition().y, Board.Tile.tileType.OBSTACLE);
-			// move player with DynamicTile if necessary
-			if (g.getPosition().x == gameobjs.getPlayer().getPosition().x && g.getPosition().y == gameobjs.getPlayer().getPosition().y){
-				gameobjs.getPlayer().setPosition(tmp);
-				((Knight) gameobjs.getPlayer()).setInvulnerable(true);
-			}
-			g.setPosition(tmp);
-			
-		}
-	}
-
-	
-	/**
-	 * Bounces a game object back to its original position.*/
-	private void bounceBackGameObject(GameObject g){
-		tmp.set(g.getVelocity());
-		tmp.x = -tmp.x; tmp.y = -tmp.y;
-		g.setVelocity(tmp);
-		moveIfSafe(g);
-		tmp.x = 0; tmp.y = 0;
-		g.setVelocity(tmp);
-	}
-	
-	/**
-	 * Handles collisions between game objects, 
-	 *
-	 * @param g1 The collider - the one moving
-	 * @param g2 The collidee - the one getting hit
-	 */
-	private void checkForCollision(GameObject g1, GameObject g2) {
-		// Do nothing if either game object is off the board.
-		if (!g1.isAlive() || !g2.isAlive()) {
-			return;
-		}
-
-		// Get the tiles for each game object
-		int g1x = (int) g1.getPosition().x;
-		int g1y = (int) g1.getPosition().y;
-		int g2x = (int) g2.getPosition().x;
-		int g2y = (int) g2.getPosition().y;
-
-		// If the two game objects occupy the same tile,
-		if (g1x == g2x && g1y == g2y) {
-			if (g1 instanceof Knight){
-				// damage the enemy if it is not a dynamictile
-				if (!(g2 instanceof DynamicTile)){
-					// This is now done in Enemy
-					// g2.setAlive(false);
-					// Used to set the model to animate death
-					((Enemy) g2).setDead();
-					// bounce back the player
-					bounceBackGameObject(g1);
+			if (!enemyHit) {
+				if (board.isSafeAt((int)proposedPos.x, (int)proposedPos.y)) {
+					knight.setPosition(proposedPos);
 					hasPlayerMoved = true;
-					// Used to set the model to animate attack
-					((Knight) g1).setAttacking();
+				} else if (!board.isOffScreen((int)proposedPos.x, (int)proposedPos.y)) {
+					knight.setPosition(proposedPos);
+					knight.setFalling();
 				}
-			} else if (g2 instanceof Knight && g1 instanceof Enemy){
-				// damage the player if enemy ran into player
-				if (!((Knight) g2).isInvulnerable()) {
-					// Used to set the model to animate attack
-					((Enemy) g1).setAttacking();
-					((Knight) g2).takeDamage();
-					((Knight) g2).setInvulnerable(true);
+			}
+		} else if (knight.getVelocity().len() == 2) {
+			Vector2 proposedPos = new Vector2();
+			Vector2 halfPos = new Vector2();
+			proposedPos.set(knight.getPosition()).add(knight.getVelocity());
+			halfPos.set(knight.getVelocity()).scl(0.5f).add(knight.getPosition());
+			for (GameObject enemy : gameobjs) {
+				boolean enemyHit = false;
+				if (enemy != knight && !(enemy instanceof DynamicTile)) {
+					if (enemy.getPosition().x == proposedPos.x && enemy.getPosition().y == proposedPos.y) {
+						((Enemy)enemy).setDead();
+						knight.setAttacking();
+						enemyHit = true;
+					} else if (enemy.getPosition().x == halfPos.x && enemy.getPosition().y == halfPos.y){
+						((Enemy)enemy).setDead();
+						knight.setAttacking();
+					}
 				}
-				// bounce back the other object
-				bounceBackGameObject(g1);
-			} else if (g1.isCharacter() && g2.isCharacter()) {
-				// bounce back both characters 
-				bounceBackGameObject(g1);
-				bounceBackGameObject(g2);
+				if (enemyHit) {
+					proposedPos.set(halfPos);
+					for (GameObject enemy2 : gameobjs) {
+						boolean enemyHit2 = false;
+						if (enemy2 != knight && !(enemy2 instanceof DynamicTile)) {
+							if (enemy2.getPosition().x == proposedPos.x && enemy2.getPosition().y == proposedPos.y) {
+								((Enemy)enemy2).setDead();
+								knight.setAttacking();
+								enemyHit2 = true;
+							}
+						}
+						if (!enemyHit2) {
+							if (board.isSafeAt((int)proposedPos.x, (int)proposedPos.y)) {
+								knight.setPosition(proposedPos);
+								hasPlayerMoved = true;
+							} else if (!board.isOffScreen((int)proposedPos.x, (int)proposedPos.y)) {
+								knight.setPosition(proposedPos);
+								knight.setFalling();
+							}
+						}
+					}
+				} else {
+					if (board.isSafeAt((int)proposedPos.x, (int)proposedPos.y)) {
+						knight.setDashing();
+						knight.setPosition(proposedPos);
+						hasPlayerMoved = true;
+					} else if (!board.isOffScreen((int)proposedPos.x, (int)proposedPos.y)) {
+						knight.setPosition(proposedPos);
+						knight.setFalling();
+					} else {
+						if (board.isSafeAt((int)halfPos.x, (int)halfPos.y)){
+							knight.setPosition(halfPos);
+							hasPlayerMoved = true;
+						} else if (!board.isOffScreen((int)halfPos.x, (int)halfPos.y)) {
+							knight.setPosition(halfPos);
+							knight.setFalling();
+						}
+					}
+				}
 			}
 		}
+		knight.getVelocity().set(0, 0);
 	}
 
-	private void checkForCollision(GameObject g, Projectile p) {
-		// Do nothing if either game object is off the board.
-		if (!g.isAlive() || !p.isAlive()) {
-			return;
+	void moveEnemies() {
+		for (GameObject g : gameobjs) {
+			if (g instanceof Enemy && g.isAlive()) {
+				Enemy enemy = (Enemy) g;
+				if (enemy.isKindaDead()) continue;
+				Vector2 proposedPos = new Vector2();
+				proposedPos.set(enemy.getPosition()).add(enemy.getVelocity());
+				boolean canMove = true;
+				for (int i = 0; i < gameobjs.size(); i++) {
+					GameObject gameObject = gameobjs.get(i);
+					if (gameObject.getPosition().x == proposedPos.x && gameObject.getPosition().y == proposedPos.y) {
+						if (gameObject instanceof Knight) {
+							knight.takeDamage();
+							enemy.setAttacking();
+							canMove = false;
+						} else if (gameObject instanceof Enemy) {
+							canMove = false;
+						}
+					}
+				}
+				if (canMove) {
+					if (board.isSafeAt((int)proposedPos.x, (int)proposedPos.y)) {
+						enemy.setPosition(proposedPos);
+					}
+				}
+				enemy.getVelocity().set(0, 0);
+			}
 		}
-
-		// Get the tiles for each game object
-		int gx = (int) g.getPosition().x;
-		int gy = (int) g.getPosition().y;
-		int px = (int) p.getPosition().x;
-		int py = (int) p.getPosition().y;
-		// TODO : figure out damage
 	}
 }
