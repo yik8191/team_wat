@@ -28,6 +28,7 @@ import edu.teamWat.rhythmKnights.alpha.utils.ScreenListener;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -62,7 +63,7 @@ public class GameMode implements Screen{
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
     private static String[] MENU_FILES = {"images/menus/replay.png",
             "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
-    private static int numBackgrounds = 8;
+    private static int numBackgrounds = 19;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
@@ -87,6 +88,8 @@ public class GameMode implements Screen{
     private static int FONT_SIZE = 50;
 
     private int selection = 0;
+
+    private int bgn = 0;
 
     /**
 	 * Preloads the assets for this game.
@@ -329,6 +332,10 @@ public class GameMode implements Screen{
                             play();
                             if (knight.doneDancing) {
                                 gameState = GameState.WIN;
+                                Random r = new Random();
+                                int min = 7;
+                                int max = 18;
+                                bgn  = r.nextInt(max - min + 1) + min;
                                 framesRemaining = DEFAULT_FRAMES;
                                 bounds.clear();
                                 canvas.setMenuConstants(3);
@@ -524,7 +531,7 @@ public class GameMode implements Screen{
 		if (this.gameState == GameState.WIN){
             //draw level complete menu
             //TODO: make sure this background is a good one
-            canvas.drawBackground(backgrounds[7], 1,1);
+            canvas.drawBackground(backgrounds[bgn], 1,1);
 
             String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
 
