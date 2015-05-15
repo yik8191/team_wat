@@ -40,6 +40,7 @@ public class RhythmController {
 
 	public static long[] startBeatTimes;
 	public static int startBeatCount;
+	public static int hackyBeatCount;
 
 	/** Track length */
 	private static long trackLength;
@@ -142,6 +143,7 @@ public class RhythmController {
 				}
 			}
 		}
+		hackyBeatCount = startBeatCount;
 		if (addHalfBeat) {
 			tempTickTimes.add(event.getTick() + (event.getTick() - prevEvent.getTick()) / 2);
 		}
@@ -178,6 +180,7 @@ public class RhythmController {
 	public static void launch() {
 		sequencer.stop();
 		sequencer.start();
+		startBeatCount = hackyBeatCount;
 		while(sequencer.getTickPosition() - totalOffset < 0) {	}
 	}
 

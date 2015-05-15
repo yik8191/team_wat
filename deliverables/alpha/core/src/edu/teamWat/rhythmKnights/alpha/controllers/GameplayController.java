@@ -11,6 +11,8 @@ import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
 import javafx.scene.effect.Light;
 
+import java.awt.*;
+
 public class GameplayController {
 	/** Reference to the game board */
 	public Board board;
@@ -375,6 +377,7 @@ public class GameplayController {
         knight.setInvulnerable(true);
         hasMoved = false;
         gameOver = false;
+	    startBeatNumber = 0;
         RhythmController.stopMusic();
         try {
             RhythmController.init(audiohandle, ticker);
@@ -383,6 +386,10 @@ public class GameplayController {
         }
         RhythmController.launch();
     }
+
+	public void drawStartTicks(Canvas canvas) {
+
+	}
 
 
 	public boolean isGameOver() {

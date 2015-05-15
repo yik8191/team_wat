@@ -580,6 +580,7 @@ public class GameMode implements Screen{
             }
             String message = "Level "+this.curLevel;
             canvas.drawText(message, displayFont, 30, canvas.getHeight()-displayFont.getBounds(message).height);
+
         }
         canvas.end();
 	}
