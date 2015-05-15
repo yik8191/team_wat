@@ -32,8 +32,8 @@ public class Knight extends GameObject {
 
     // Constants relating to Knight HP
     private static int HP_SIZE;
-    protected int knightHP;
-    protected int INITIAL_HP = 160;
+    public int knightHP;
+    public int INITIAL_HP = 160;
     protected int HP_KILL_BOOST = 50;
     private static int  hpDamageAmount = 5;
 
@@ -139,6 +139,11 @@ public class Knight extends GameObject {
         // Used for animating the visual feedback light splash
         spriteLight = new FilmStrip(lightSplashTexture, L_ROWS, L_COLS, L_TOT);
         spriteLight.setFrame(11);
+    }
+
+    public void updateHP(Vector2 times){
+        //used to initialize HP
+        this.knightHP = (int)(this.INITIAL_HP*(1-times.x/times.y));
     }
 
     public void update() {

@@ -312,6 +312,10 @@ public class Board {
 				!isObstacleTile(x,y));
 	}
 
+    public boolean isOffScreen(int x, int y) {
+        return !(x >= 0 && y >= 0 && x < width && y < height);
+    }
+
     public void setDistanceToBeat(float ratio) {
         distanceToBeat = ratio;
     }

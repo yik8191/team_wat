@@ -37,6 +37,8 @@ public class GameplayController {
 	private int timeHP = framesPerDrain;
 	public boolean hasMoved = false;
 
+	public int initHP;
+
 	public GameplayController() {
 	}
 
@@ -62,6 +64,8 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		hasMoved = false;
 		gameOver = false;
+		initHP = hp;
+		knight.knightHP = 1;
 		try {
 			RhythmController.init(audiohandle, ticker);
 		} catch (Exception e) {
@@ -79,7 +83,15 @@ public class GameplayController {
 				knight.decrementHP(HPPerDrain);
 				timeHP = framesPerDrain;
 			}
+		} else {
+//			// Animate hp filling
+//			if (knight.knightHP < knight.INITIAL_HP) {
+//				knight.knightHP+=3;
+//			} else {
+//				knight.knightHP = knight.INITIAL_HP;
+//			}
 		}
+
 		gameStateAdvanced = false;
 
 		board.updateColors();

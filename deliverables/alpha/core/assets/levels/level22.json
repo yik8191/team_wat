@@ -127,9 +127,9 @@
 "objects":[{  "path":"LRRL",  "x":9,  "y":7,  "type":"slime"}],
 "width":17,
 "tileNum":1,
-"HPLossPerMiss":5,
+"HPLossPerMiss":75,
 "audio":"25_MDD_120.mid",
-"FramesPerHPLoss":30,
+"FramesPerHPLoss":3,
 "height":9,
 "player":{"x":1,
 "y":1}}

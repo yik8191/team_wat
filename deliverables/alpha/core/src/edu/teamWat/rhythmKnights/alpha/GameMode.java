@@ -329,6 +329,9 @@ public class GameMode implements Screen{
 
                         } else play();
                         break;
+                    }else{
+                        Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
+                        knight.updateHP(gameplayController.board.getTimes());
                     }
                 }
             case WIN:
