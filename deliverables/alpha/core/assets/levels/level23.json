@@ -131,8 +131,8 @@
 "width":17,
 "tileNum":1,
 "HPLossPerMiss":100,
-"audio":"w-4_MDMD_120.mid",
-"FramesPerHPLoss":3,
+"audio":"22_MDMD_108.mid",
+"FramesPerHPLoss":4,
 "height":9,
 "player":{"x":2,
 "y":2}}

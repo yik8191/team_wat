@@ -195,7 +195,7 @@ public class Ticker {
             tint.a = 1.0f - tint.a;
             canvas.draw(indicatorSprite, tint, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX - totalWidth, loc.y, 0, indicatorScaling, indicatorScaling);
         } else {
-            canvas.draw(indicatorSprite, Color.WHITE, TICK_SQUARE_SIZE / 2, TICK_SQUARE_SIZE / 2, startX + indicatorX, indicatorY, 0, indicatorScaling, indicatorScaling);
+            canvas.draw(indicatorSprite, Color.WHITE, TICK_SQUARE_SIZE / 2  , TICK_SQUARE_SIZE / 2, startX + indicatorX, indicatorY, 0, indicatorScaling, indicatorScaling);
         }
     }
 

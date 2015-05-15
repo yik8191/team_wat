@@ -24,7 +24,7 @@ public class Enemy extends GameObject{
 
     // The number of frames before a sprite refreshes
     protected final int animDelay = 5;
-    protected final int animDelayShort = 1;
+    protected final int animDelayShort = 3;
     private int curTime = 5;
     private int curFrame = 0;
 
@@ -33,10 +33,11 @@ public class Enemy extends GameObject{
     protected final int IDLE_END = IDLE_START+2;
     protected final int DEAD_START = IDLE_END+1;
     protected final int DEAD_END = DEAD_START+3;
+    protected final int ATTACK_START = IDLE_START+8;
 
     protected final int SPRITE_ROWS = 4;
-    protected final int SPRITE_COLS = 8;
-    protected final int SPRITE_TOT = 32;
+    protected final int SPRITE_COLS = 12;
+    protected final int SPRITE_TOT = 48;
 
     // Used for enemy's currently facing direction
     // front = 0, back = 1, left = 2, right = 3
@@ -112,7 +113,30 @@ public class Enemy extends GameObject{
 
         setAnimate();
         Vector2 loc = canvas.boardToScreen(animatedPosition.x, animatedPosition.y);
-        canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+
+//        if (this.state == EnemyState.ATTACKING) {
+//            switch(this.facingFact) {
+//                // Front
+//                case 1:
+//                    canvas.draw(sprite, loc.x, loc.y + canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+//                    break;
+//                // Back
+//                case 2:
+//                    canvas.draw(sprite, loc.x, loc.y - canvas.tileSize/2, canvas.tileSize, canvas.tileSize);
+//                    break;
+//                // Left
+//                case 3:
+//                    canvas.draw(sprite, loc.x + canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+//                    break;
+//                // Right
+//                case 4:
+//                    canvas.draw(sprite, loc.x - canvas.tileSize/2, loc.y, canvas.tileSize, canvas.tileSize);
+//                    break;
+//            }
+//        } else {
+            canvas.draw(sprite, loc.x, loc.y, canvas.tileSize, canvas.tileSize);
+//        }
+
     }
 
 
@@ -121,22 +145,25 @@ public class Enemy extends GameObject{
         int numFrames;
         int startFrame = 0;
         int endFrame = 0;
+        int delay = 2;
         switch(this.state) {
             case IDLE:
                 numFrames = 2;
                 startFrame = this.facingFact*SPRITE_COLS;
                 endFrame = startFrame + numFrames;
+                delay = animDelay;
                 break;
             case DEAD:
                 numFrames = 4;
                 startFrame = this.facingFact*SPRITE_COLS + DEAD_START;
                 endFrame = startFrame + numFrames;
+                delay = animDelay;
                 break;
             case ATTACKING:
-                // To be filled when we have attacking sprites!
-                numFrames = 0;
-                startFrame = 0;
-                startFrame = 0;
+                numFrames = 4;
+                startFrame = this.facingFact*SPRITE_COLS + ATTACK_START;
+                endFrame = startFrame + numFrames;
+                delay = animDelayShort;
                 break;
         }
 
@@ -148,9 +175,11 @@ public class Enemy extends GameObject{
                 curFrame = facingFact*SPRITE_COLS;
                 if (this.state == EnemyState.DEAD) {
                     this.setAlive(false);
+                } else if (this.state == EnemyState.ATTACKING) {
+                    this.state = EnemyState.IDLE;
                 }
             }
-            curTime = animDelay;
+            curTime = delay;
         } else {
             sprite.setFrame(curFrame);
         }
@@ -181,6 +210,12 @@ public class Enemy extends GameObject{
         this.curFrame = facingFact*SPRITE_COLS + DEAD_START;
     }
 
+    /** Used for setting the enemy to display the attacking animation */
+    public void setAttacking() {
+        this.state = EnemyState.ATTACKING;
+        this.curTime = animDelayShort;
+        this.curFrame = facingFact*SPRITE_COLS + ATTACK_START;
+    }
 
     //	/**
 //	 * Moves the knight based on the input code*/

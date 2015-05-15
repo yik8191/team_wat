@@ -91,10 +91,10 @@
 "objects":[],
 "width":12,
 "tileNum":1,
-"audio":"w-6_MDMD_96.mid",
+"audio":"18_MDMD_120.mid",
 "height":9,
 "player":{"x":6,
 "y":4},
 "HPDecrease":1,
 "FramesPerHPLoss":3,
-"HPLossPerMiss":5}
+"HPLossPerMiss":40}

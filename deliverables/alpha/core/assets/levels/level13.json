@@ -94,11 +94,11 @@
 "backNum":2,
 "objects":[],
 "width":15,
-"audio":"w-1_MMMD_120.mid",
+"audio":"13_MMMD_80.mid",
 "height":7,
 "player":{"x":1,
 "y":3},
 "tileNum":1,
 "HPDecrease":1,
 "FramesPerHPLoss":3,
-"HPLossPerMiss":5}
+"HPLossPerMiss":30}

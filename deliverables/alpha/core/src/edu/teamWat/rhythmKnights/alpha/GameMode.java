@@ -78,13 +78,15 @@ public class GameMode implements Screen{
     private int curLevel = -1;
     private int numLevels = 1;
 
-    private int DEFAULT_FRAMES = 180;
+    private int DEFAULT_FRAMES = 179;
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
     private static String FONT_FILE = "fonts/TimesRoman.ttf";
     private static int TUTORIAL_FONT_SIZE = 50;
     private static int FONT_SIZE = 50;
+
+    private int selection = 0;
 
     /**
 	 * Preloads the assets for this game.
@@ -304,15 +306,23 @@ public class GameMode implements Screen{
                     if (gameplayController.isGameOver()) reset();
                     else if (!knight.isActive()) reset();
                     else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
-                        gameState = GameState.WIN;
-                        framesRemaining = DEFAULT_FRAMES;
-                        bounds.clear();
-                        canvas.setMenuConstants(3);
-                        for (int i = 0; i < 3; i++) {
-                            bounds.add(canvas.getButtonBounds(i));
-                        }
+                        // Animate victory dance
                         playerController.setListenForInput(false);
+                        if (knight.notDancing) {
+                            knight.setDancing();
+                        }
                         play();
+                        if (knight.doneDancing) {
+                            gameState = GameState.WIN;
+                            framesRemaining = DEFAULT_FRAMES;
+                            bounds.clear();
+                            canvas.setMenuConstants(3);
+                            for (int i = 0; i < 3; i++) {
+                                bounds.add(canvas.getButtonBounds(i));
+                            }
+                            play();
+                        }
+
                     } else play();
                     break;
                 }
@@ -352,6 +362,7 @@ public class GameMode implements Screen{
                 return false;
             case PAUSE:
                 if (playerController.getEscape()){
+                    //escape was pressed, resume game
                     this.gameState = GameState.PLAY;
                     playerController.setListenForInput(true);
                     playerController.setEscape(false);
@@ -359,6 +370,7 @@ public class GameMode implements Screen{
                 }
                 Vector2 click = playerController.getClick();
                 if (click.x != -1) {
+                    //clicked the screen, so process it
                     if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
                         //Replay level
                         gameState = GameState.INTRO;
@@ -368,6 +380,39 @@ public class GameMode implements Screen{
                         RhythmController.stopMusic();
                         return false;
                     }
+                }else{
+                    //no click, check for button presses
+                    char c = PlayerController.getKeyPush();
+                    switch (c){
+                        case 'L':
+                            //since there are only two buttons, just switch between the two
+                            selection += 1;
+                            selection %= 2;
+                            System.out.println("Found left press, selection is now "+selection);
+                            break;
+                        case 'R':
+                            selection += 1;
+                            selection %= 2;
+                            System.out.println("Found right press, selection is now "+selection);
+                            break;
+                        case 'S':
+                            System.out.println("Found space press");
+                            //pressed the space bar so process whichever button this is
+                            if (selection == 0){
+                                //first box aka restart level
+                                System.out.println("Selection = "+selection+", restarting");
+                                gameState = GameState.INTRO;
+                            }else{
+                                //selection == 1
+                                //second box aka go to level select
+                                System.out.println("Selection = "+selection+", level select");
+                                listener.exitScreen(this, 1);
+                                RhythmController.stopMusic();
+                                return false;
+                            }
+                            break;
+                    }
+
                 }
 			case LOSE:
 				// Print level failed message!
@@ -435,8 +480,12 @@ public class GameMode implements Screen{
                 //draw restart then select
                 Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
                 loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
-                com.badlogic.gdx.graphics.Color c = new com.badlogic.gdx.graphics.Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
-                //canvas.draw(tileTexture, c, 0, 0, loc.x, loc.y, 0, scale, scale);
+                Color c;
+                if (selection == i) {
+                    c = new Color(.8f,.3f,.4f,1f);
+                }else{
+                    c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+                }
                 canvas.draw(menus[text[i]], c, 0, 0, loc.x, loc.y, 0, scale, scale);
             }
         }else{

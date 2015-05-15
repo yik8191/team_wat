@@ -97,10 +97,12 @@ public class Knight extends GameObject {
     private int SWORD_LEFT_START = 110;
     private int SWORD_RIGHT_START = 115;
 
+    private int DANCE_START = 120;
+
     // Sheet constants
-    private int SPRITE_ROWS = 24;
+    private int SPRITE_ROWS = 26;
     private int SPRITE_COLS = 5;
-    private int SPRITE_TOT = 120;
+    private int SPRITE_TOT = 130;
 
     // Light Splash Sheet
     private int L_ROWS = 1;
@@ -111,6 +113,10 @@ public class Knight extends GameObject {
 
     private boolean isInvulnerable;
     private boolean isDashing = false;
+    public boolean doneDancing = false;
+    public boolean notDancing = true;
+    private boolean doneFirstHalf = false;
+    private boolean reverse = false;
 
     public Knight(int id, float x, float y) {
         this.id = id;
@@ -275,6 +281,34 @@ public class Knight extends GameObject {
             } else {
                 sprite.setFrame(curFrame);
             }
+        } else if (this.state == KnightState.DANCING) {
+            curTime--;
+            if (curTime == 0) {
+                if (reverse) {
+                    curFrame--;
+                } else {
+                    curFrame++;
+                }
+                // the animation loop is finished
+                if (curFrame > 124 && !doneFirstHalf) {
+                    reverse = true;
+                } else if (curFrame < 118) {
+                    doneFirstHalf = true;
+                }
+                if (doneFirstHalf) {
+                    reverse = false;
+                    if (curFrame > 129) {
+                        this.doneDancing = true;
+                        this.setState(KnightState.NORMAL);
+                        this.doneFirstHalf = false;
+                    }
+                }
+                curTime = animDelayShort+1;
+            } else {
+                if (!(curFrame > 129)) {
+                    sprite.setFrame(curFrame);
+                }
+            }
         } else {
             sprite.setFrame(0);
         }
@@ -361,9 +395,9 @@ public class Knight extends GameObject {
     }
 
     public void animateSplash() {
-        curTimeL --;
+        curTimeL--;
         if (curTimeL == 0) {
-            curFrameL ++;
+            curFrameL++;
             // the animation loop is finished
             if (curFrameL > 11) {
                 curFrameL = 0;
@@ -371,9 +405,9 @@ public class Knight extends GameObject {
             curTimeL = animDelayShort;
         } else {
             spriteLight.setFrame(curFrameL);
+
         }
     }
-
     /**
      * Preloads the assets for the Knight.
      *
@@ -506,6 +540,13 @@ public class Knight extends GameObject {
         }
     }
 
+    public void setDancing() {
+        this.setState(KnightState.DANCING);
+        this.notDancing = false;
+        this.curFrame = DANCE_START;
+        this.curTime = animDelayShort;
+    }
+
     /**
      * Decrements the player health by 1
      *
@@ -516,6 +557,7 @@ public class Knight extends GameObject {
         if (this.knightHP <= 0) {
             this.isAlive = false;
             this.setState(KnightState.DEAD);
+            RhythmController.playDamage();
             switch (this.facing) {
                 case FRONT:
                     curFrame = DEAD_START;
@@ -530,24 +572,25 @@ public class Knight extends GameObject {
                     curFrame = DEAD_RIGHT_START;
                     break;
             }
+        }else {
+            curTime = animDelay;
+            switch (this.facing) {
+                case FRONT:
+                    curFrame = HURT_START;
+                    break;
+                case BACK:
+                    curFrame = HURT_UP_START;
+                    break;
+                case LEFT:
+                    curFrame = HURT_LEFT_START;
+                    break;
+                case RIGHT:
+                    curFrame = HURT_RIGHT_START;
+                    break;
+            }
+            this.state = KnightState.TAKINGDMG;
+            RhythmController.playDamage();
         }
-        curTime = animDelay;
-        switch (this.facing) {
-            case FRONT:
-                curFrame = HURT_START;
-                break;
-            case BACK:
-                curFrame = HURT_UP_START;
-                break;
-            case LEFT:
-                curFrame = HURT_LEFT_START;
-                break;
-            case RIGHT:
-                curFrame = HURT_RIGHT_START;
-                break;
-        }
-        this.state = KnightState.TAKINGDMG;
-        RhythmController.playDamage();
     }
 
     public void decrementHP(int amount) {
@@ -674,7 +717,9 @@ public class Knight extends GameObject {
         /** Knight is falling into an empty tile */
         FALLING,
         /** Knight is dead */
-        DEAD
+        DEAD,
+        /** Knight has completed the level */
+        DANCING
     }
 
     // Used in animating the sprite of the knight

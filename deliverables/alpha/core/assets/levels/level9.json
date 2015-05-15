@@ -54,15 +54,15 @@
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMM",
 "backNum":2,
-"objects":[  {  "path":"LLRR",  "x":7,  "y":4,  "type":"slime"},
+"objects":[  {  "path":"LLRR",  "x":6,  "y":4,  "type":"slime"},
   {  "path":"RRLL",  "x":9,  "y":4,  "type":"slime"},
   {  "path":"LLRR",  "x":4,  "y":3,  "type":"slime"}],
 "width":13,
 "tileNum":1,
-"audio":"e-3_MMMM_80.mid",
+"audio":"09_MMMM_120.mid",
 "height":7,
 "player":{"x":1,
 "y":1},
 "HPDecrease":1,
 "FramesPerHPLoss":3,
-"HPLossPerMiss":5}
+"HPLossPerMiss":100}

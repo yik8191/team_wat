@@ -212,6 +212,8 @@ public class CollisionController {
 			} else if (g2 instanceof Knight && g1 instanceof Enemy){
 				// damage the player if enemy ran into player
 				if (!((Knight) g2).isInvulnerable()) {
+					// Used to set the model to animate attack
+					((Enemy) g1).setAttacking();
 					((Knight) g2).takeDamage();
 					((Knight) g2).setInvulnerable(true);
 				}

@@ -70,14 +70,14 @@
   {  "x":12,  "y":0,  "type":"obstacle"}],
 "ticker":"MMMM",
 "backNum":2,
-"objects":[  {  "path":"DDUU",  "x":4,  "y":4,  "type":"slime"},
+"objects":[  {  "path":"DUUD",  "x":4,  "y":3,  "type":"slime"},
   {  "path":"UUDD",  "x":8,  "y":2,  "type":"slime"}],
 "width":13,
 "tileNum":1,
-"audio":"e-2_MMMM_72.mid",
+"audio":"08_MMMM_120.mid",
 "height":7,
 "player":{"x":1,
 "y":4},
 "HPDecrease":1,
 "FramesPerHPLoss":4,
-"HPLossPerMiss":5}
+"HPLossPerMiss":100}
