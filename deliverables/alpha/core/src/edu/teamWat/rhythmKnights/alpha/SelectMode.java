@@ -4,6 +4,7 @@
 package edu.teamWat.rhythmKnights.alpha;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import edu.teamWat.rhythmKnights.alpha.controllers.PlayerController;
 import edu.teamWat.rhythmKnights.alpha.utils.*;
 import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 
@@ -39,6 +41,8 @@ public class SelectMode implements Screen, InputProcessor {
 
     private ArrayList<int[]> bounds = new ArrayList<int[]>();
     private int levelNum = -1;
+
+    private int selection = 0;
 
     /**
      * Creates a SelectMode with the default size and position.
@@ -118,7 +122,27 @@ public class SelectMode implements Screen, InputProcessor {
      * @param delta Number of seconds since last animation frame
      */
     private void update(float delta) {
-        //do nothing
+        //check for arrow key presses
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+            selection -= 1;
+            selection += numLevels;
+            selection %= numLevels;
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+            //TODO: make this better
+            selection += canvas.menuMaxWTiles;
+            selection %= numLevels;
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+            selection += 1;
+            selection %= numLevels;
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+            //TODO: Add this
+            selection -= canvas.menuMaxWTiles;
+            selection += numLevels;
+            selection %= numLevels;
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            //pressed the space bar so proceed to appropriate level
+            this.levelNum = selection+1;
+        }
     }
 
     public static void setNumLevels(int l){numLevels = l;}
@@ -132,15 +156,17 @@ public class SelectMode implements Screen, InputProcessor {
     private void draw() {
         canvas.begin();
         canvas.draw(background, 0, 0);
-        BitmapFont font = new BitmapFont();
         float scale = (float)canvas.menuTileHeight/(float)levelButtons[0].getHeight();
         for (int i=0; i<numLevels; i++){
             Vector2 loc = new Vector2(bounds.get(i)[0], bounds.get(i)[1]);
             loc.y = canvas.getHeight() - loc.y - canvas.menuTileHeight;
-            Color c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+            Color c;
+            if (selection == i) {
+                c = new Color(.8f,.3f,.4f,1f);
+            }else{
+                c = new Color(69f / 255f, 197f / 255f, 222f / 255f, 1);
+            }
             canvas.draw(levelButtons[i], c, 0, 0, loc.x, loc.y, 0, scale, scale);
-            font.setScale(2);
-            //canvas.drawText("Level \n" + (i + 1), font, loc.x + canvas.menuTileSize / 5, loc.y + canvas.menuTileSize * 3 /5);
         }
         canvas.end();
     }
