@@ -184,6 +184,7 @@ public class Knight extends GameObject {
                 this.facingFact = 6;
                 break;
         }
+        this.curFrame = facingFact*5;
     }
 
     public KnightDirection getDirection() {
