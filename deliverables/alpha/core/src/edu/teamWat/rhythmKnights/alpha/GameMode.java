@@ -304,8 +304,14 @@ public class GameMode implements Screen{
                 }else{
                     if (gameplayController.board.doneDrawing) {
                         Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
-                        if (gameplayController.isGameOver()) reset();
-                        else if (!knight.isActive()) reset();
+                        if (gameplayController.isGameOver()){
+                            reset();
+                            return false;
+                        }
+                        else if (!knight.isActive()) {
+                            reset();
+                            return false;
+                        }
                         else if (gameplayController.board.isGoalTile((int) knight.getPosition().x, (int) knight.getPosition().y)) {
                             // Animate victory dance
                             playerController.setListenForInput(false);
@@ -354,6 +360,7 @@ public class GameMode implements Screen{
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
                         if (canvas.pointInBox((int) click.x, (int) click.y, 0)) {
+                            //replay this level
                             reset();
                         } else if (canvas.pointInBox((int) click.x, (int) click.y, 2)) {
                             //next level
@@ -384,6 +391,7 @@ public class GameMode implements Screen{
                             if (selection == 0){
                                 //Replay level
                                 reset();
+                                return false;
                             }else if (selection == 1) {
                                 //level select
                                 listener.exitScreen(this, 1);

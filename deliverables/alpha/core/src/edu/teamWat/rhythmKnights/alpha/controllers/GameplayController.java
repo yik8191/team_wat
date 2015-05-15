@@ -378,6 +378,7 @@ public class GameplayController {
         hasMoved = false;
         gameOver = false;
 	    startBeatNumber = 0;
+        playerController.setListenForInput(true);
         RhythmController.stopMusic();
         try {
             RhythmController.init(audiohandle, ticker);
