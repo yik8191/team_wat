@@ -82,7 +82,7 @@ public class GameMode implements Screen{
     private int framesRemaining = DEFAULT_FRAMES;
 
     private static BitmapFont displayFont;
-    private static String FONT_FILE = "fonts/TimesRoman.ttf";
+    private static String FONT_FILE = "fonts/RobotoSlab-Regular.ttf";
     private static int TUTORIAL_FONT_SIZE = 50;
     private static int FONT_SIZE = 50;
 
@@ -496,8 +496,14 @@ public class GameMode implements Screen{
             gameplayController.gameObjects.draw(canvas);
             if (this.curLevel == 1){
                 BitmapFont font = new BitmapFont();
-                font.setScale(3);
-                String message = "Press a key to move";
+                font.setScale(2);
+                String message = "Tap an arrow key (or WASD) to move!";
+                canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
+            }
+            if (this.curLevel == 7){
+                BitmapFont font = new BitmapFont();
+                font.setScale(2);
+                String message = "Move into an enemy tile to attack!";
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
         }
