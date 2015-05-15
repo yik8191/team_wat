@@ -62,7 +62,7 @@ public class GameMode implements Screen{
     private static ArrayList<String> BKGD_FILES = new ArrayList<String>(); //7
     private static String[] MENU_FILES = {"images/menus/replay.png",
             "images/menus/select.png", "images/menus/next.png", "images/menus/restart.png"};
-    private static int numBackgrounds = 7;
+    private static int numBackgrounds = 8;
     private static int backNum = 0;
 	// Asset loading is handled statically so these are static variables
 	/** The background image for the game */
@@ -507,7 +507,7 @@ public class GameMode implements Screen{
 		if (this.gameState == GameState.WIN){
             //draw level complete menu
             //TODO: make sure this background is a good one
-            canvas.drawBackground(backgrounds[0], 1,1);
+            canvas.drawBackground(backgrounds[7], 1,1);
 
             String message = "NEXT LEVEL IN " + (framesRemaining/60+1);
 
