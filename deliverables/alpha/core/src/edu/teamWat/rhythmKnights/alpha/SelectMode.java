@@ -63,7 +63,7 @@ public class SelectMode implements Screen, InputProcessor {
         // Load the next two images immediately.
         background = new Texture(BACKGROUND_FILE);
 
-        canvas.setMenuConstants(this.numLevels);
+        canvas.setSelectConstants(this.numLevels);
 
         for (int i=0;i<numLevels; i++){
             bounds.add(canvas.getButtonBounds(i));
@@ -139,7 +139,7 @@ public class SelectMode implements Screen, InputProcessor {
             selection -= canvas.menuMaxWTiles;
             selection += numLevels;
             selection %= numLevels;
-        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             //pressed the space bar so proceed to appropriate level
             this.levelNum = selection+1;
         }
@@ -202,7 +202,7 @@ public class SelectMode implements Screen, InputProcessor {
      * @param height The new height in pixels
      */
     public void resize(int width, int height) {
-        canvas.setMenuConstants(this.numLevels);
+        canvas.setSelectConstants(this.numLevels);
 
         bounds.clear();
         for (int i=0;i<numLevels; i++){
@@ -267,7 +267,7 @@ public class SelectMode implements Screen, InputProcessor {
      * @return whether to hand the event to other listeners.
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("Mouse clicked at " + screenX + ", " + screenY);
+        System.out.println("Click at "+screenX+", "+screenY);
         for (int i=0; i<numLevels; i++){
             if (canvas.pointInBox(screenX, screenY, i)){
                 this.levelNum = i+1;
@@ -333,6 +333,12 @@ public class SelectMode implements Screen, InputProcessor {
      * @return whether to hand the event to other listeners.
      */
     public boolean mouseMoved(int screenX, int screenY) {
+        for (int i=0; i<numLevels; i++){
+            if (canvas.pointInBox(screenX, screenY, i)){
+                selection = i;
+                return false;
+            }
+        }
         return true;
     }
 

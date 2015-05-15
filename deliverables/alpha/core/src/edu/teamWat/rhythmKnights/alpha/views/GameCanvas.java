@@ -52,12 +52,12 @@ public class GameCanvas {
     //constants for drawing menus
 
     public int menuMaxWTiles = 5;
-    public int menuMaxHTiles = 5;
+    public int menuMaxHTiles = 6;
     public int pauseMenuSize = 150;
 
-    private int menuTileSpacing = 30;
+    public  int menuTileSpacing = 15;
     public  int menuTileHeight = 100;
-    private float menuTileRatio = 250/100; //width/height
+    private float menuTileRatio = 250f/100f; //width/height
     private int menuTilesPerRow = 1;
     private int menuTilesPerCol = 1;
     private int menuXStart = 0;
@@ -589,28 +589,50 @@ public class GameCanvas {
         int[] bounds = new int[4];
 
         //left x
-        bounds[0] = (x*((int)(menuTileHeight*menuTileRatio)+menuTileSpacing) + menuXStart);
+        bounds[0] = x*((int)(menuTileHeight*menuTileRatio)+menuTileSpacing) + menuXStart;
         //top y
-        bounds[1] = (y*(menuTileHeight+menuTileSpacing)) + menuYStart;
+        bounds[1] = y*      (menuTileHeight               +menuTileSpacing) + menuYStart;
 
         //right x
         bounds[2] = bounds[0] + (int)(menuTileHeight*menuTileRatio);
         //bottom y
         bounds[3] = bounds[1] + menuTileHeight;
 
-//        System.out.println("Left: " + bounds[0]);
-//        System.out.println("Right: " + bounds[2]);
-//        System.out.println("Top: " + bounds[1]);
-//        System.out.println("Bottom: " + bounds[3]);
-
         return bounds;
     }
 
-    public void setMenuConstants(int numLevels){
-        menuTilesPerRow = Math.min(menuMaxWTiles, numLevels);
-        menuXStart = (getWidth()/2) - ((menuTilesPerRow*(int)(menuTileHeight*menuTileRatio)) + ((menuTilesPerRow-1)*menuTileSpacing))/2;
-
-        menuTilesPerCol = Math.min(menuMaxHTiles, numLevels/menuTilesPerRow+1);
+    public void setMenuConstants(int x){
+        menuTilesPerRow = Math.min(menuMaxWTiles, x);
+        menuTilesPerCol = Math.min(menuMaxHTiles, x/menuTilesPerRow+1);
+        menuXStart = (getWidth()/2)  - ((menuTilesPerRow*(int)(menuTileHeight*menuTileRatio)) + ((menuTilesPerRow-1)*menuTileSpacing))/2;
         menuYStart = (getHeight()/2) - ((menuTilesPerCol*menuTileHeight) + ((menuTilesPerCol - 1)*menuTileSpacing))/2;
+
+
+    }
+
+    public void setSelectConstants(int numLevels){
+        menuTilesPerRow = Math.min(menuMaxWTiles, numLevels);
+        menuTilesPerCol = Math.min(menuMaxHTiles, numLevels/menuTilesPerRow+1);
+
+        int maxWidth = getWidth()*4/5;
+        int maxHeight = getHeight()*4/5;
+
+        //find details if we do spacing on width
+        int singleWidth = (maxWidth - (menuTileSpacing*(menuTilesPerRow-1)))/menuTilesPerRow;
+        int totalHeight = (int)((singleWidth/menuTileRatio)*menuTilesPerCol) + (menuTilesPerCol-1)*menuTileSpacing;
+
+        if (totalHeight > maxHeight){
+            //height is too big so do something else
+            int singleHeight = (maxHeight - (menuTileSpacing*(menuTilesPerCol-1)))/menuTilesPerCol;
+            menuTileHeight = singleHeight;
+            menuXStart = (getWidth()/2)  - ((menuTilesPerRow*(int)(menuTileHeight*menuTileRatio)) + ((menuTilesPerRow-1)*menuTileSpacing))/2;
+            menuYStart = (getHeight()/2) - ((menuTilesPerCol*menuTileHeight) + ((menuTilesPerCol - 1)*menuTileSpacing))/2;
+        }else{
+            //height is fine, make it as wide as possible
+            menuTileHeight = (int)(singleWidth/menuTileRatio);
+            menuXStart = (getWidth()/2)  - ((menuTilesPerRow*(int)(menuTileHeight*menuTileRatio)) + ((menuTilesPerRow-1)*menuTileSpacing))/2;
+            menuYStart = (getHeight()/2) - ((menuTilesPerCol*menuTileHeight) + ((menuTilesPerCol - 1)*menuTileSpacing))/2;
+        }
+
     }
 }

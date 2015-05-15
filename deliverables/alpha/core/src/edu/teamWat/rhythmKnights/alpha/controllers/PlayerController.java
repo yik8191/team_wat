@@ -24,6 +24,8 @@ public class PlayerController implements InputController, InputProcessor {
     //variables used by GameMode
     private int clickX = -1;
     private int clickY = -1;
+    private int moveX = -1;
+    private int moveY = -1;
     private boolean escapePressed = false;
     private boolean listenForInput = true;
     private static int curKey = -1;
@@ -50,7 +52,6 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-        System.out.println("keyDown");
         if (listenForInput) {
             switch (keycode) {
                 case Keys.ESCAPE:
@@ -126,6 +127,9 @@ public class PlayerController implements InputController, InputProcessor {
             case Keys.SPACE:
                 c = 'S';
                 break;
+            case Keys.ENTER:
+                c = 'S';
+                break;
         }
         curKey = -1;
         return c;
@@ -186,6 +190,13 @@ public class PlayerController implements InputController, InputProcessor {
     public Vector2 getClick(){
         return new Vector2(clickX, clickY);
     }
+
+    public Vector2 getMove(){
+        Vector2 v = new Vector2(moveX, moveY);
+        moveX = -1;
+        moveY = -1;
+        return v;
+    }
     public boolean getEscape() { return this.escapePressed;}
     public void    setEscape(boolean a){ this.escapePressed = a;}
     public void    setListenForInput(boolean b){this.listenForInput = b;}
@@ -204,7 +215,9 @@ public class PlayerController implements InputController, InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
+		this.moveX = screenX;
+        this.moveY = screenY;
+        return false;
 	}
 
 	@Override
