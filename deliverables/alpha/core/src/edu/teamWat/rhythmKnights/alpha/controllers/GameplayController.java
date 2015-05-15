@@ -81,13 +81,6 @@ public class GameplayController {
 				knight.decrementHP(HPPerDrain);
 				timeHP = framesPerDrain;
 			}
-		} else {
-//			// Animate hp filling
-//			if (knight.knightHP < knight.INITIAL_HP) {
-//				knight.knightHP+=3;
-//			} else {
-//				knight.knightHP = knight.INITIAL_HP;
-//			}
 		}
 
 		gameStateAdvanced = false;
