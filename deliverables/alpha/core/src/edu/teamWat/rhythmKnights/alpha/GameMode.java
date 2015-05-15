@@ -297,6 +297,7 @@ public class GameMode implements Screen{
                     for (int i = 0; i < 2; i++) {
                         bounds.add(canvas.getButtonBounds(i));
                     }
+                    selection = 0;
                     playerController.setListenForInput(false);
                     playerController.setEscape(false);
                     break;
@@ -331,6 +332,7 @@ public class GameMode implements Screen{
                     }else{
                         Knight knight = (Knight) gameplayController.gameObjects.getPlayer();
                         knight.updateHP(gameplayController.board.getTimes());
+                        break;
                     }
                 }
             case WIN:
@@ -341,6 +343,7 @@ public class GameMode implements Screen{
                     if (framesRemaining <= 0){
                         this.curLevel ++;
                         gameState = GameState.INTRO;
+                        return false;
                     }
                     Vector2 click = playerController.getClick();
                     if (click.x != -1) {
@@ -351,6 +354,7 @@ public class GameMode implements Screen{
                             this.curLevel++;
                             gameState = GameState.INTRO;
                             RhythmController.stopMusic();
+                            return false;
                         } else if (canvas.pointInBox((int) click.x, (int) click.y, 1)) {
                             //level select
                             listener.exitScreen(this, 1);
