@@ -108,6 +108,8 @@ public class RhythmController {
 		startBeatCount = 0;
 		startBeatTimes = new long[4];
 
+		ticker.reset();
+
 		for (int i = 0; i < track.size(); i++) {
 			tempEvent = track.get(i);
 			MidiMessage message = tempEvent.getMessage();
@@ -250,7 +252,7 @@ public class RhythmController {
 	 * @param i the action whose FOLLOWING action should be cleared.
 	 */
 	public static void clearNextAction(int i) {
-		int j = (i+1) % numActions;
+		int j = (i + 1) % numActions;
 		completedTicks[j] = false;
 		playerActions[j] = PlayerController.CONTROL_NO_ACTION;
 		if (tickerActions[j] == Ticker.TickerAction.FIREBALL || tickerActions[j] == Ticker.TickerAction.DASH) {

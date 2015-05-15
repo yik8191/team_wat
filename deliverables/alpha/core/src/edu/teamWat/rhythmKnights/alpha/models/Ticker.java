@@ -101,7 +101,7 @@ public class Ticker {
         glowFrame = new int[numExpandedActions];
 	}
 
-	public void reset(TickerAction[] actions) {
+	public void reset() {
 		beat = 0;
 	}
 
@@ -313,10 +313,6 @@ public class Ticker {
 
     public void glowBeat(int beatNumber, int intensity) {
         glowFrame[beatNumber] = intensity;
-    }
-
-    public void setBeat(int beat) {
-        this.beat = beat;
     }
 
 	public enum TickerAction {

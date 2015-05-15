@@ -43,6 +43,7 @@ public class GameplayController {
 	private int timeHP = framesPerDrain;
 	public boolean hasMoved = false;
 	public boolean startLoopDone = false;
+	public boolean canPlayerMove = false;
 
 	public int initHP;
 
@@ -138,6 +139,7 @@ public class GameplayController {
 		hasMoved = false;
 		gameOver = false;
 		startLoopDone = false;
+		canPlayerMove = false;
 		initHP = hp;
 		knight.knightHP = 1;
 		startBeatNumber = 0;
@@ -176,7 +178,6 @@ public class GameplayController {
 		int prevActionIndex = RhythmController.getClosestEarlierActionIndex(currentTick);
 		int nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
 		RhythmController.clearNextAction(nextActionIndex);
-		ticker.setBeat(RhythmController.convertToTickerBeatNumber(prevActionIndex, ticker));
 		if (RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(prevActionIndex) == Ticker.TickerAction.DASH2) {
 			prevActionIndex--;
 		} else if (RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.FIREBALL2 || RhythmController.getTickerAction(nextActionIndex) == Ticker.TickerAction.DASH2){
@@ -195,18 +196,24 @@ public class GameplayController {
 		// Keep clearing the action ahead of us! Simple! :D
 		RhythmController.clearNextAction(nextActionIndex);
 
-		if (knight.isAlive() && RhythmController.startBeatCount == 0) {
+		if (knight.isAlive() && canPlayerMove) {
 			for (PlayerController.KeyEvent keyEvent : playerController.keyEvents) {
 				prevActionIndex = RhythmController.getClosestEarlierActionIndex(keyEvent.time);
 				nextActionIndex = (prevActionIndex + 1) % RhythmController.numActions;
-				if (nextActionIndex < prevActionIndex) {
-					if (RhythmController.getTrackLength() - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
+				if (nextActionIndex > prevActionIndex) {
+					if (keyEvent.time - RhythmController.getTick(prevActionIndex) < RhythmController.getTick(nextActionIndex) - keyEvent.time) {
+						currentActionIndex = prevActionIndex;
+					} else {
+						currentActionIndex = nextActionIndex;
+					}
+ 				} else if (RhythmController.getTick(prevActionIndex) < keyEvent.time) {
+					if (keyEvent.time - RhythmController.getTick(prevActionIndex) < RhythmController.getTick(nextActionIndex) + RhythmController.getTrackLength() - keyEvent.time){
 						currentActionIndex = prevActionIndex;
 					} else {
 						currentActionIndex = nextActionIndex;
 					}
 				} else {
-					if (RhythmController.getTick(nextActionIndex) - keyEvent.time > keyEvent.time - RhythmController.getTick(prevActionIndex)) {
+					if (keyEvent.time + RhythmController.getTrackLength() - RhythmController.getTick(prevActionIndex) < RhythmController.getTick(nextActionIndex)  - keyEvent.time) {
 						currentActionIndex = prevActionIndex;
 					} else {
 						currentActionIndex = nextActionIndex;
@@ -381,6 +388,7 @@ public class GameplayController {
 	public void moveEnemies() {
 		Vector2 vel = new Vector2();
 		for (int i = 1; i < controls.length; i++) {
+			if (((Enemy)gameObjects.get(i)).isKindaDead()) continue;
 			vel.set(0, 0);
 			switch (controls[i].getAction()) {
 				case InputController.CONTROL_MOVE_RIGHT:
@@ -486,6 +494,7 @@ public class GameplayController {
 				break;
 			case 0:
 				dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[3]);
+				if (dist > period * 0.75f) canPlayerMove = true;
 				if (dist > period) {
 					startLoopDone = true;
 					break;

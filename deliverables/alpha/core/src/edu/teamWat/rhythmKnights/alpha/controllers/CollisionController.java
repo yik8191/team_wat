@@ -75,7 +75,7 @@ public class CollisionController {
 			proposedPos.set(knight.getPosition()).add(knight.getVelocity());
 			boolean enemyHit = false;
 			for (GameObject enemy : gameobjs) {
-				if (enemy != knight && !(enemy instanceof DynamicTile)) {
+				if (enemy != knight && !(enemy instanceof DynamicTile) && !((Enemy)enemy).isKindaDead()) {
 					if (enemy.getPosition().x == proposedPos.x && enemy.getPosition().y == proposedPos.y) {
 						((Enemy)enemy).setDead();
 						knight.setAttacking();
@@ -99,7 +99,7 @@ public class CollisionController {
 			halfPos.set(knight.getVelocity()).scl(0.5f).add(knight.getPosition());
 			for (GameObject enemy : gameobjs) {
 				boolean enemyHit = false;
-				if (enemy != knight && !(enemy instanceof DynamicTile)) {
+				if (enemy != knight && !(enemy instanceof DynamicTile) && !((Enemy)enemy).isKindaDead()) {
 					if (enemy.getPosition().x == proposedPos.x && enemy.getPosition().y == proposedPos.y) {
 						((Enemy)enemy).setDead();
 						knight.setAttacking();
@@ -113,7 +113,7 @@ public class CollisionController {
 					proposedPos.set(halfPos);
 					for (GameObject enemy2 : gameobjs) {
 						boolean enemyHit2 = false;
-						if (enemy2 != knight && !(enemy2 instanceof DynamicTile)) {
+						if (enemy2 != knight && !(enemy2 instanceof DynamicTile) && !((Enemy)enemy).isKindaDead()) {
 							if (enemy2.getPosition().x == proposedPos.x && enemy2.getPosition().y == proposedPos.y) {
 								((Enemy)enemy2).setDead();
 								knight.setAttacking();
