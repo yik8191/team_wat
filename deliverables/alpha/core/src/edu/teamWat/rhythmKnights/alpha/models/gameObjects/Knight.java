@@ -298,7 +298,7 @@ public class Knight extends GameObject {
                 }
                 if (doneFirstHalf) {
                     reverse = false;
-                    if (curFrame > 129) {
+                    if (curFrame >= 129) {
                         this.doneDancing = true;
                         this.setState(KnightState.NORMAL);
                         this.doneFirstHalf = false;
