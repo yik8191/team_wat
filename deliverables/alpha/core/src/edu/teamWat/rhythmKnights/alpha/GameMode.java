@@ -12,6 +12,7 @@
 
 package edu.teamWat.rhythmKnights.alpha;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -127,6 +128,7 @@ public class GameMode implements Screen{
 		Ticker.PreLoadContent(manager);
 		DynamicTile.PreLoadContent(manager);
 		RhythmController.PreloadContent(manager);
+        GameplayController.PreLoadContent(manager);
 	}
 
 	/**
@@ -176,6 +178,7 @@ public class GameMode implements Screen{
 		Ticker.LoadContent(manager);
 		DynamicTile.LoadContent(manager);
 		RhythmController.LoadContent(manager);
+        GameplayController.LoadContent(manager);
 	}
 
 	/**
@@ -213,6 +216,7 @@ public class GameMode implements Screen{
 		Ticker.UnloadContent(manager);
 		DynamicTile.UnloadContent(manager);
 		RhythmController.UnloadContent(manager);
+        GameplayController.UnloadContent(manager);
 	}
 
 	// CONSTANTS
@@ -594,8 +598,8 @@ public class GameMode implements Screen{
                 canvas.drawText(message, displayFont, canvas.getWidth()/2-displayFont.getBounds(message).width/2, canvas.getHeight()*3/4-displayFont.getBounds(message).height/2);
             }
             String message = "Level "+this.curLevel;
-            canvas.drawText(message, displayFont, 30, canvas.getHeight()-displayFont.getBounds(message).height);
-
+            canvas.drawText(message, displayFont, 30, canvas.getHeight() - displayFont.getBounds(message).height);
+            gameplayController.drawStartTicks(canvas);
         }
         canvas.end();
 	}

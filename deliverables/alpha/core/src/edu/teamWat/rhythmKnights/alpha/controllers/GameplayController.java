@@ -1,6 +1,9 @@
 package edu.teamWat.rhythmKnights.alpha.controllers;
 
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.files.FileHandle;
 import edu.teamWat.rhythmKnights.alpha.JSONReader;
 import edu.teamWat.rhythmKnights.alpha.models.*;
 import edu.teamWat.rhythmKnights.alpha.models.gameObjects.*;
+import edu.teamWat.rhythmKnights.alpha.views.GameCanvas;
 import javafx.scene.effect.Light;
 
 import java.awt.*;
@@ -38,13 +42,78 @@ public class GameplayController {
     private static int HPPerDrain = 1;
 	private int timeHP = framesPerDrain;
 	public boolean hasMoved = false;
+	public boolean startLoopDone = false;
 
 	public int initHP;
 
 	public int startBeatNumber;
 
-	public GameplayController() {
+
+	/**DRAWING CODE*/
+	public static final String TICK_ONE_FILE = "images/1.png";
+	public static final String TICK_TWO_FILE = "images/2.png";
+	public static final String TICK_THREE_FILE = "images/3.png";
+	public static final String TICK_DANCE_FILE = "images/dance.png";
+
+	public static Texture tickOne;
+	public static Texture tickTwo;
+	public static Texture tickThree;
+	public static Texture tickDance;
+
+	public static void PreLoadContent(AssetManager manager) {
+		manager.load(TICK_ONE_FILE, Texture.class);
+		manager.load(TICK_TWO_FILE, Texture.class);
+		manager.load(TICK_THREE_FILE, Texture.class);
+		manager.load(TICK_DANCE_FILE, Texture.class);
 	}
+
+	public static void LoadContent(AssetManager manager) {
+		if (manager.isLoaded(TICK_ONE_FILE)) {
+			tickOne = manager.get(TICK_ONE_FILE, Texture.class);
+			tickOne.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			tickOne = null;  // Failed to load
+		}
+		if (manager.isLoaded(TICK_TWO_FILE)) {
+			tickTwo = manager.get(TICK_TWO_FILE, Texture.class);
+			tickTwo.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			tickTwo = null;  // Failed to load
+		}
+		if (manager.isLoaded(TICK_THREE_FILE)) {
+			tickThree = manager.get(TICK_THREE_FILE, Texture.class);
+			tickThree.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			tickThree = null;  // Failed to load
+		}
+		if (manager.isLoaded(TICK_DANCE_FILE)) {
+			tickDance = manager.get(TICK_DANCE_FILE, Texture.class);
+			tickDance.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		} else {
+			tickDance = null;  // Failed to load
+		}
+	}
+
+	public static void UnloadContent(AssetManager manager) {
+		if (tickOne != null) {
+			tickOne = null;
+			manager.unload(TICK_ONE_FILE);
+		}
+		if (tickTwo != null) {
+			tickTwo = null;
+			manager.unload(TICK_TWO_FILE);
+		}
+		if (tickThree != null) {
+			tickThree = null;
+			manager.unload(TICK_THREE_FILE);
+		}
+		if (tickDance != null) {
+			tickDance = null;
+			manager.unload(TICK_DANCE_FILE);
+		}
+	}
+
+	public GameplayController() {}
 
 	public void initialize(int levelNum) {
 
@@ -68,6 +137,7 @@ public class GameplayController {
 		knight.setInvulnerable(true);
 		hasMoved = false;
 		gameOver = false;
+		startLoopDone = false;
 		initHP = hp;
 		knight.knightHP = 1;
 		startBeatNumber = 0;
@@ -142,9 +212,6 @@ public class GameplayController {
 						currentActionIndex = nextActionIndex;
 					}
 				}
-
-				long nextTick = RhythmController.getTick(nextActionIndex);
-				long prevTick = RhythmController.getTick(prevActionIndex);
 
 				if ((keyEvent.code & InputController.CONTROL_RELEASE) == 0 && RhythmController.getCompleted(currentActionIndex)) {
 					if (knight.isAlive()) damagePlayer();
@@ -386,10 +453,57 @@ public class GameplayController {
             e.printStackTrace();
         }
         RhythmController.launch();
+	    startLoopDone = false;
     }
 
-	public void drawStartTicks(Canvas canvas) {
-
+	public void drawStartTicks(GameCanvas canvas) {
+		if (startLoopDone) return;
+		long period = RhythmController.startBeatTimes[1] - RhythmController.startBeatTimes[0];
+		switch (RhythmController.startBeatCount) {
+			case 3:
+				long dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[0]);
+				if (dist > period) break;
+				Color tint = new Color();
+				tint.set(Color.WHITE);
+				tint.a = 1 - ((float)dist / (float)period);
+				canvas.draw(tickThree, tint, tickThree.getWidth() / 2, tickThree.getHeight() / 2, canvas.getWidth() / 2, canvas.getHeight() / 2, 0, 1, 1);
+				break;
+			case 2:
+				dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[1]);
+				if (dist > period) break;
+				tint = new Color();
+				tint.set(Color.WHITE);
+				tint.a = 1 - ((float)dist / (float)period);
+				canvas.draw(tickTwo, tint, tickThree.getWidth() / 2, tickThree.getHeight() / 2, canvas.getWidth() / 2, canvas.getHeight() / 2, 0, 1, 1);
+				break;
+			case 1:
+				dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[2]);
+				if (dist > period) break;
+				tint = new Color();
+				tint.set(Color.WHITE);
+				tint.a = 1 - ((float)dist / (float)period);
+				canvas.draw(tickOne, tint, tickThree.getWidth() / 2, tickThree.getHeight() / 2, canvas.getWidth() / 2, canvas.getHeight() / 2, 0, 1, 1);
+				break;
+			case 0:
+				dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[3]);
+				if (dist > period) {
+					startLoopDone = true;
+					break;
+				}
+				tint = new Color();
+				tint.set(Color.WHITE);
+				tint.a = 1 - ((float)dist / (float)period);
+				canvas.draw(tickDance, tint, tickThree.getWidth() / 2, tickThree.getHeight() / 2, canvas.getWidth() / 2, canvas.getHeight() / 2, 0, 3, 3);
+				break;
+			default:
+				dist = Math.abs(RhythmController.getSequencePosition() - RhythmController.startBeatTimes[0]);
+				if (dist > period) break;
+				tint = new Color();
+				tint.set(Color.WHITE);
+				tint.a = 1 - ((float)dist / (float)period);
+				canvas.draw(tickThree, tint, tickThree.getWidth() / 2, tickThree.getHeight() / 2, canvas.getWidth() / 2, canvas.getHeight() / 2, 0, 1, 1);
+				break;
+		}
 	}
 
 
